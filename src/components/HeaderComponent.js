@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Navbar, NavbarToggler,  Nav, NavbarBrand, Jumbotron, Collapse, NavLink, NavItem } from 'reactstrap';
+import {Navbar, NavbarToggler,  Nav, NavbarBrand, Jumbotron, Collapse, NavItem } from 'reactstrap';
+import {NavLink} from 'react-router-dom';
 import logo from '../img/logo.png';
 
 const Header =(props) =>{
@@ -17,10 +18,10 @@ const Header =(props) =>{
             <NavbarToggler onClick={toggleNavbar} className="mr-2" />
             <Collapse isOpen={!collapsed} navbar>
                 <Nav navbar className="ml-auto">
-                    <NavItem><NavLink href="#">Trang chủ</NavLink></NavItem>
-                    <NavItem><NavLink href="#">Về chúng tôi</NavLink></NavItem>
-                    <NavItem><NavLink href="#">Tính năng</NavLink></NavItem>
-                    <NavItem><NavLink href="#">Giá cả</NavLink></NavItem>
+                    <NavItem><NavLink className="nav-link" to="/Home">Trang chủ</NavLink></NavItem>
+                    <NavItem><NavLink className="nav-link" to="/AboutUs">Về chúng tôi</NavLink></NavItem>
+                    <NavItem><NavLink className="nav-link" to="/Function">Tính năng</NavLink></NavItem>
+                    <NavItem><NavLink className="nav-link" to="/Price">Giá cả</NavLink></NavItem>
                 </Nav>
             </Collapse>
             </Navbar>

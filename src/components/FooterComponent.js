@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../img/logo.png';
-
+import {Link} from 'react-router-dom';
 const Footer =(props) =>{
     return (
         <React.Fragment>
@@ -20,9 +20,9 @@ const Footer =(props) =>{
                     <div class="col-4 col-sm-3 ">
                         <h5>Liên kết</h5>
                         <ul class="list-unstyled">
-                            <li><a href="/">Trang chủ</a></li>
-                            <li><a href="/">Giới thiệu</a></li>
-                            <li><a href="/">Truy cập</a></li>
+                            <li><Link to="/Home">Trang chủ</Link></li>
+                            <li><Link to="/AboutUs">Về chúng tôi</Link></li>
+                            <li><Link to="/Function">Tính năng</Link></li>
                         </ul>
                     </div>
                 </div>
