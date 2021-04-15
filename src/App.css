@@ -12,9 +12,9 @@
 .navBar{
     font-size: large;
 }
-.jumbotron {
+.jumbotronn {
+    margin-top: 50px;
     padding: 20px 0px 20px 0px;
-    margin: 0px auto;
     background: #f5f5f5;
     color: #0f0f0f;
     text-align: center;
@@ -86,3 +86,7 @@
     left: 50%;
 }
 
+.textContent{
+    color: #888888;
+    text-align: justify;
+}

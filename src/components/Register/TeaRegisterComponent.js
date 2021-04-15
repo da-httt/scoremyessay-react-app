@@ -1,9 +1,12 @@
 import React from 'react';
-import { Button, Form, Label, Input, FormGroup, CustomInput, FormText,  } from 'reactstrap';
+import { Button, Form, Label, Input, FormGroup, CustomInput, FormText} from 'reactstrap';
+import Footer from '../HomePage/FooterComponent';
+import Header from '../HomePage/HeaderComponent';
 
 const TeaRegister = (props) =>{
     return(
         <React.Fragment>
+            <Header/>
             <div class="container bg-signup">
             <Form>
                 <div className="row align-items-center">
@@ -24,7 +27,7 @@ const TeaRegister = (props) =>{
                             <Input type="tel" name="phone" id="phone" required/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="birthday">Ngày sinh *</Label>
+                            <Label for="birthday">Ngày tháng năm sinh *</Label>
                             <Input type="date" name="birthday" id="birthday" required/>
                         </FormGroup>
                     </div>  
@@ -41,6 +44,7 @@ const TeaRegister = (props) =>{
                             <option>Hướng dẫn viên du lịch</option>
                             <option>Biên dịch viên</option>
                             <option>Doanh nhân</option>
+                            <option>Khác</option>
                             </Input>
                         </FormGroup>
                         <FormGroup>
@@ -54,17 +58,26 @@ const TeaRegister = (props) =>{
                                 Hãy đính kèm các chứng chỉ của mình trong một lần chọn!
                             </FormText>
                         </FormGroup>
+
                         
 
                     </div>
                 </div>
                 <div className="row align-items-center">
+                    <Label check className="mr-auto ml-auto"><Input type="checkbox" /> Chấp nhận mọi điều khoản và chính sách</Label>
+                    
+                </div>
+                <div className="row align-items-center mt-3">
+                    
                     <Button color="primary" type="submit" className="mr-auto ml-auto" >Đăng ký</Button>
                 </div>
                 
             </Form>
-            </div>    
+            </div>  
+            <Footer/>  
         </React.Fragment>
     );
 }
 export default TeaRegister;
+
+

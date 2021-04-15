@@ -6,17 +6,23 @@ import IntroVideo from './HomePage/IntroVideo';
 import WhyBox from './HomePage/WhyComponent';
 import imgStudent from '../img/student1.jpg';
 import imgTeacher from '../img/teacher1.jpg';
+import Header from './HomePage/HeaderComponent';
+import Footer from './HomePage/FooterComponent';
 
 const HomePage = (props) =>{
     return(
+        
         <React.Fragment>
+        <Header/>
         <div className="container-fluid content">
             <div className="row">
                 <div class="col-12 col-sm-3 offset-sm-3">
                     <CardLogin 
                         image={imgStudent} 
                         nameCard="Học sinh" 
-                        contentCard="Cải thiện những kỹ năng viết bài và nhận điểm số từ ScoreMyEssay!">
+                        contentCard="Cải thiện những kỹ năng viết bài và nhận điểm số từ ScoreMyEssay!"
+                        linkSignUp="/RegisterforStudent"
+                        linkSignIn="/HomeStudentPage">
                     </CardLogin>
                 </div>
                 <div class="col-12 col-sm-3">
@@ -39,7 +45,9 @@ const HomePage = (props) =>{
                 <ContactUs/>
             </div>
         </div>
+        <Footer/>
         </React.Fragment>
+        
     );
 }
 export default HomePage;
