@@ -1,5 +1,5 @@
 import React from 'react';
-import video from 'F:/scoremyessay-react-app/src/video/introVideo.mp4';
+import video from '../../video/introVideo.mp4';
 
 const IntroVideo = (props) =>{
     return(

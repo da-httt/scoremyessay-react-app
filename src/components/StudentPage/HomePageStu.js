@@ -1,9 +1,8 @@
 import './Student.css';
 import { React, useState} from 'react';
 import {  Button, ButtonDropdown, Table, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand, InputGroup, Input, Pagination, PaginationItem, PaginationLink, Form, Label, FormGroup } from 'reactstrap';
-import avt from "F:/scoremyessay-react-app/src/img/avt.png";
+import avt from "../../img/avt.png";
 import { Breadcrumb } from 'antd';
-import infoCircle from "F:/scoremyessay-react-app/src/img/InfoCircle.png";
 const GlobalHeader= (props)=>{
     const {
         username
@@ -98,12 +97,181 @@ const ButtonDrop = (props) => {
     );
   }
 
+const userList=[
+    {
+        id: 1,
+        username: 'pmdung',
+        numOfEssay: '13'
+    },
+    {
+        id: 2,
+        username: 'ntcanh',
+        numOfEssay: '29'
+    },
+    {
+        id: 3,
+        username: 'tdnam',
+        numOfEssay: '17'
+    },
+]
+function UserTable(props){
+    const row= props.userList.map((user) =>
+        <tr key={user.id}> 
+            <th scope="row">{user.id}</th>
+            <td style={{color:'blue'}}>{user.username}</td>
+            <td>{user.numOfEssay}</td>
+        </tr>
+    );
+    return(
+        <Table>
+            <thead>
+                <tr>
+                <th>STT</th>
+                <th>Người dùng</th>
+                <th>Số bài <a className="fa fa-sort fa-custome "></a></th>
+                </tr>
+            </thead>
+            <tbody >
+                {row}
+            </tbody>
+        </Table>
+    );
+}
+
+const essayList = [
+    {
+        id: 1,
+        kind: 'IELTS Writting',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đang chấm',
+        time: '29-3-2021 8:00:02',
+        score: 'N/A',
+    },
+    {
+        id: 2,
+        kind: 'IELTS Writting',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đã chấm',
+        time: '29-1-2021 8:00:02',
+        score: '8',
+    },
+    {
+        id: 3,
+        kind: 'Basic',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đã hủy',
+        time: '29-3-2020 8:00:02',
+        score: 'N/A',
+    },
+    {
+        id: 4,
+        kind: 'IELTS Writting',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đang chấm',
+        time: '29-3-2021 8:00:02',
+        score: 'N/A',
+    },
+    {
+        id: 5,
+        kind: 'IELTS Writting',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đã chấm',
+        time: '29-1-2021 8:00:02',
+        score: '7,5',
+    },
+    {
+        id: 6,
+        kind: 'Basic',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đã hủy',
+        time: '29-3-2020 8:00:02',
+        score: 'N/A',
+    },
+    {
+        id: 7,
+        kind: 'Basic',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đã hủy',
+        time: '29-3-2020 8:00:02',
+        score: 'N/A',
+    },
+    {
+        id: 8,
+        kind: 'IELTS Writting',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đang chấm',
+        time: '29-3-2021 8:00:02',
+        score: 'N/A',
+    },
+    {
+        id: 9,
+        kind: 'IELTS Writting',
+        title: 'Vel cras auctor at tortor imperdiet .',
+        cost: '3,430,300',
+        status: 'Đã chấm',
+        time: '29-1-2021 8:00:02',
+        score: '7,5',
+    },
+    {
+        id: 9,
+        kind: 'Basic',
+        title: 'Describe about your future home .',
+        cost: '2,300',
+        status: 'Đã chấm',
+        time: '29-1-2021 8:00:02',
+        score: '9,0',
+    },
+]
+
+function EssayTable(props){
+    const row= props.essayList.map((essay) =>
+        <tr key={essay.id}> 
+            <th ><input type="checkbox"/></th>
+            <td style={{color:'blue'}}>{essay.kind}</td>
+            <td>{essay.title}</td>
+            <td>{essay.cost}</td>
+            <td>{essay.status}</td>
+            <td>{essay.time}</td>
+            <td>{essay.score}</td>                       
+        </tr>
+    );
+    return(
+        <Table>
+            <thead>
+                <tr>
+                <th><input type="checkbox"/></th>
+                <th>Dạng bài</th>
+                <th>Mô tả</th>
+                <th>Mức giá <a className="fa fa-sort fa-custome "></a></th>
+                <th>Status</th>
+                <th>Ngày cập nhật <a className="fa fa-sort fa-custome "></a></th>
+                <th>Điểm số <a className="fa fa-sort fa-custome "></a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {row}
+            </tbody>
+        </Table>
+    );
+}
+
 
 const HomeStudent = (props) =>{
+    
+    
     return (
         <div >        
             <GlobalHeader username="Canh Ngo"/>
             <div className="container-fluid detailPage">
+                <div className="container-xxl">
                 <div className="row">
                     <div className="col col-sm-9 " >
                         <div className="container-fluid">
@@ -134,102 +302,7 @@ const HomeStudent = (props) =>{
                                     <div className="col col-2 mb-auto mt-auto "><Button color="primary" block>Tìm kiếm</Button></div>
                                 </div>
                                 <div className="row mt-4">
-                                    <Table>
-                                        <thead>
-                                            <tr>
-                                            <th><input type="checkbox"/></th>
-                                            <th>Dạng bài</th>
-                                            <th>Mô tả</th>
-                                            <th>Mức giá <a className="fa fa-sort fa-custome "></a></th>
-                                            <th>Status</th>
-                                            <th>Ngày cập nhật <a className="fa fa-sort fa-custome "></a></th>
-                                            <th>Điểm số <a className="fa fa-sort fa-custome "></a></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>3,430,300</td>
-                                            <td>Đang chấm</td>
-                                            <td>29-3-2021 8:00:02</td>
-                                            <td>N/A</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>4,430,300</td>
-                                            <td>Đã chấm</td>
-                                            <td>29-9-2020 8:00:02</td>
-                                            <td>7.5</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>3,430,300</td>
-                                            <td>Đã hủy</td>
-                                            <td>29-3-2021 8:00:02</td>
-                                            <td>N/A</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>3,430,300</td>
-                                            <td>Đang chấm</td>
-                                            <td>29-3-2021 8:00:02</td>
-                                            <td>N/A</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>4,430,300</td>
-                                            <td>Đã chấm</td>
-                                            <td>29-9-2020 8:00:02</td>
-                                            <td>7.5</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>3,430,300</td>
-                                            <td>Đã hủy</td>
-                                            <td>29-3-2021 8:00:02</td>
-                                            <td>N/A</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>3,430,300</td>
-                                            <td>Đang chấm</td>
-                                            <td>29-3-2021 8:00:02</td>
-                                            <td>N/A</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>4,430,300</td>
-                                            <td>Đã chấm</td>
-                                            <td>29-9-2020 8:00:02</td>
-                                            <td>7.5</td>
-                                            </tr>
-                                            <tr>
-                                            <th ><input type="checkbox"/></th>
-                                            <td style={{color:'blue'}}>IELTS Writing</td>
-                                            <td>Vel cras auctor at tortor imperdiet .</td>
-                                            <td>3,430,300</td>
-                                            <td>Đã hủy</td>
-                                            <td>29-3-2021 8:00:02</td>
-                                            <td>N/A</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
+                                    <EssayTable essayList={essayList}/>
                                 </div>
                                 <div className="row ">
                                     <Phantrang/>
@@ -289,34 +362,11 @@ const HomeStudent = (props) =>{
                                     <div className=""><a className="fa fa fa-ellipsis-h fa-lg fa-custome "></a></div>
                                 </div>
                                 <div className="row ">
-                                    <Table>
-                                        <thead>
-                                            <tr>
-                                            <th>STT</th>
-                                            <th>Người dùng</th>
-                                            <th>Số bài <a className="fa fa-sort fa-custome "></a></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <th scope="row">1</th>
-                                            <td style={{color:'blue'}}>pmdung</td>
-                                            <td>10</td>
-                                            </tr>
-                                            <tr>
-                                            <th scope="row">2</th>
-                                            <td style={{color:'blue'}}>ntcanh</td>
-                                            <td>29</td>
-                                            </tr>
-                                            <tr>
-                                            <th scope="row">3</th>
-                                            <td style={{color:'blue'}}>tdnam</td>
-                                            <td>17</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
+                                    <UserTable userList={userList}/>
+                                    
                                 </div>
                                 <div className="row mt-2">
+                                    
                                     <Phantrang size="sm"/>
                                 </div>
                                 </div>               
@@ -324,6 +374,8 @@ const HomeStudent = (props) =>{
                         </div>
                     </div>
                 </div>
+                </div>
+                
             </div>
         </div>
         
