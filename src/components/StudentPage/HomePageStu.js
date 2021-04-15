@@ -220,6 +220,15 @@ const essayList = [
         time: '29-1-2021 8:00:02',
         score: '7,5',
     },
+    {
+        id: 9,
+        kind: 'Basic',
+        title: 'Describe about your future home .',
+        cost: '2,300',
+        status: 'Đã chấm',
+        time: '29-1-2021 8:00:02',
+        score: '9,0',
+    },
 ]
 
 function EssayTable(props){
