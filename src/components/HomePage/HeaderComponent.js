@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Navbar, NavbarToggler,  Nav, NavbarBrand, Jumbotron, Collapse, NavItem } from 'reactstrap';
 import {NavLink} from 'react-router-dom';
-import logo from 'F:/scoremyessay-react-app/src/img/logo.png';
+import logo from '../../img/logo.png';
 
 const Header =(props) =>{
     const [collapsed, setCollapsed] = useState(false);

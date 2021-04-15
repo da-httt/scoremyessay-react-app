@@ -16,7 +16,9 @@ const HomePage = (props) =>{
         <Header/>
         <div className="container-fluid content">
             <div className="row">
-                <div class="col-12 col-sm-3 offset-sm-3">
+                <div className="container">
+                <div className="row">
+                <div class="col-12 col-md-3 offset-md-3">
                     <CardLogin 
                         image={imgStudent} 
                         nameCard="Học sinh" 
@@ -25,7 +27,7 @@ const HomePage = (props) =>{
                         linkSignIn="/HomeStudentPage">
                     </CardLogin>
                 </div>
-                <div class="col-12 col-sm-3">
+                <div class="col-12 col-md-3">
                     <CardLogin 
                         image={imgTeacher}
                         nameCard="Giáo viên" 
@@ -33,6 +35,8 @@ const HomePage = (props) =>{
                         linkSignUp="/RegisterforTeacher">
                     </CardLogin>
                 </div>       
+            </div>
+                </div>
             </div>
 
             <div className="row row-why">
