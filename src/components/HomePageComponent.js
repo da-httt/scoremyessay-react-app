@@ -14,41 +14,35 @@ const HomePage = (props) =>{
         
         <React.Fragment>
         <Header/>
-        <div className="container-fluid content">
-            <div className="row">
-                <div className="container">
+            <div className="container">
                 <div className="row">
-                <div class="col-12 col-md-3 offset-md-3">
-                    <CardLogin 
-                        image={imgStudent} 
-                        nameCard="Học sinh" 
-                        contentCard="Cải thiện những kỹ năng viết bài và nhận điểm số từ ScoreMyEssay!"
-                        linkSignUp="/RegisterforStudent"
-                        linkSignIn="/HomeStudentPage">
-                    </CardLogin>
-                </div>
-                <div class="col-12 col-md-3">
-                    <CardLogin 
-                        image={imgTeacher}
-                        nameCard="Giáo viên" 
-                        contentCard="Trở thành người đóng góp cho sự phát triễn của ScoreMyEssay!"
-                        linkSignUp="/RegisterforTeacher">
-                    </CardLogin>
-                </div>       
-            </div>
+                    <div class="col-12 col-md-3 offset-md-3">
+                        <CardLogin 
+                            image={imgStudent} 
+                            nameCard="Học sinh" 
+                            contentCard="Cải thiện những kỹ năng viết bài và nhận điểm số từ ScoreMyEssay!"
+                            linkSignUp="/RegisterforStudent"
+                            linkSignIn="/HomeStudentPage">
+                        </CardLogin>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <CardLogin 
+                            image={imgTeacher}
+                            nameCard="Giáo viên" 
+                            contentCard="Trở thành người đóng góp cho sự phát triễn của ScoreMyEssay!"
+                            linkSignUp="/RegisterforTeacher">
+                        </CardLogin>
+                    </div>       
                 </div>
             </div>
 
-            <div className="row row-why">
+            <div className="row-why">
                 <WhyBox/>
             </div>
-            <div className="row ">
                 <IntroVideo/>
-            </div>
-            <div className="row row-why">
+            <div className="row-why">
                 <ContactUs/>
             </div>
-        </div>
         <Footer/>
         </React.Fragment>
         

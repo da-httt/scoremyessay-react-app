@@ -1,8 +1,4 @@
 
-.row-header {
-    margin: 0px auto;
-    padding: 0px auto;
-}
 .ten-project{
     height: inherit;
     color: #55a2d6;
@@ -11,14 +7,14 @@
 }
 .navBar{
     font-size: large;
+    background-color: white;
+    padding: 0px 200px 0px 200px;
 }
 .jumbotronn {
-    margin-top: 50px;
+    margin-top: 30px;
     padding: 20px 0px 20px 0px;
     background: #f5f5f5;
     color: #0f0f0f;
-    text-align: center;
-    font-size: medium;
 }
 .subtitle{
     color:#888888;
