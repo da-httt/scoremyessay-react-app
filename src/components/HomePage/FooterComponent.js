@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 const Footer =(props) =>{
     return (
         <React.Fragment>
-            <div className="container">
+            <div className="container mt-3">
                 <div class="row">
                     <div class="col-0 col-sm-3">
                             <a class="d-none d-sm-block left" ><img src={logo}  alt="Score My Essay" height="100%" width="100%"></img></a>

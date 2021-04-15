@@ -1,6 +1,6 @@
 import './Student.css';
 import { React, useState} from 'react';
-import {  Button, ButtonDropdown, Table, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand, InputGroup, Input, Pagination, PaginationItem, PaginationLink, Form, Label, FormGroup } from 'reactstrap';
+import {  Button, ButtonDropdown, Table, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand, Input, Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import avt from "../../img/avt.png";
 import { Breadcrumb } from 'antd';
 const GlobalHeader= (props)=>{
@@ -9,22 +9,19 @@ const GlobalHeader= (props)=>{
     }=props;
 
     return(
-        <div>
-            <div className="container">
-            <Navbar light className="navBarDetail" fixed="top" style={{backgroundColor: 'white'}}>
-                <NavbarBrand href="/Home">
-                    <h4 className="ten-project"> ScoreMyEssay</h4>
-                </NavbarBrand>
-                
-                <div className="ml-auto">
-                <ButtonDrop />
-                </div>
-                <img src={avt} height="35px" className="ml-3" alt="Avatar"></img>
-                <h5 className="username  ml-1 mr-2 mt-auto mb-auto">  {username}</h5>
-                
-            </Navbar>
-            </div>  
-        </div>
+        <Navbar light className="navBarDetail" fixed="top">
+            <div style={{marginRight:"560px"}} >
+            <NavbarBrand href="/Home">
+                <h4 className="ten-project"> ScoreMyEssay</h4>
+            </NavbarBrand>
+            </div>
+            <div className="ml-auto" >
+            <ButtonDrop />
+            </div>
+            <img src={avt} height="30px" className="ml-3" alt="Avatar"></img>
+            <h5 className="username  ml-1 mt-auto mb-auto">  {username}</h5>
+        </Navbar>
+        
     );
 }
 
@@ -265,120 +262,116 @@ function EssayTable(props){
 
 
 const HomeStudent = (props) =>{
-    
-    
     return (
         <div >        
             <GlobalHeader username="Canh Ngo"/>
             <div className="container-fluid detailPage">
-                <div className="container-xxl">
-                <div className="row">
-                    <div className="col col-sm-9 " >
-                        <div className="container-fluid">
-                            <div className="row bg-row margin padding" >
-                                
-                                <Breadcrumb  className="mt-1" style={{fontSize: "large"}}>
-                                    <Breadcrumb.Item>
-                                    <a href="/Home">Trang chủ</a>
-                                    </Breadcrumb.Item>
-                                    <Breadcrumb.Item>Quản lý bài viết</Breadcrumb.Item>
-                                </Breadcrumb>
-                            </div>
-                            <div className="row bg-row padding" >
-                                <br/>
-                                <h3>DANH SÁCH BÀI VIẾT</h3>
-                            </div>
-                            <div className="row bg-row margin padding ">
-                            <div className="container-fluid">
-                                <div className="row ">
-                                    <div class="col col-3 mb-3 mt-3">
-                                        <Input placeholder="Nhập tên bài viết cần tìm" />
+                <div class="row">
+                <div className="container-fluid leftCol">
+                                <div className="row bg-row margin padding" >
+                                    
+                                    <Breadcrumb  className="mt-1" style={{fontSize: "large"}}>
+                                        <Breadcrumb.Item>
+                                        <a href="/Home">Trang chủ</a>
+                                        </Breadcrumb.Item>
+                                        <Breadcrumb.Item>Quản lý bài viết</Breadcrumb.Item>
+                                    </Breadcrumb>
+                                </div>
+                                <div className="row bg-row padding" >
+                                    <br/>
+                                    <h3>DANH SÁCH BÀI VIẾT</h3>
+                                </div>
+                                <div className="row bg-row margin padding ">
+                                <div className="container-fluid">
+                                    <div className="row ">
+                                        <div class="col col-3 mb-3 mt-3">
+                                            <Input placeholder="Nhập tên bài viết cần tìm" />
+                                        </div>
+                                        <div className="col col-1 mb-auto mt-auto ml-4" ><Input type="radio" name="sort" checked/> Tất cả</div>
+                                        <div className="col col-1 mb-auto mt-auto "><Input type="radio" name="sort" />Đã chấm </div>
+                                        <div className="col col-1 mb-auto mt-auto " ><Input type="radio" name="sort"/>Đang chấm</div>
+                                        <div className="col col-1 mb-auto mt-auto "><Input type="radio" name="sort"/> Bị hủy</div>
+                                        <div className="col col-2 mb-auto mt-auto ">
+                                            <Button outline color="secondary" block>Đặt lại</Button>
+                                        </div>
+                                        <div className="col col-2 mb-auto mt-auto ">
+                                            <Button color="primary" block>Tìm kiếm</Button>
+                                        </div>
                                     </div>
-                                    <div className="col col-1 mb-auto mt-auto ml-4" ><Input type="radio" name="sort" checked/> Tất cả</div>
-                                    <div className="col col-1 mb-auto mt-auto "><Input type="radio" name="sort" /> Đã chấm </div>
-                                    <div className="col col-1 mb-auto mt-auto " style={{fontSize:'11px'}}><Input type="radio" name="sort"/>Đang chấm</div>
-                                    <div className="col col-1 mb-auto mt-auto "><Input type="radio" name="sort"/> Bị hủy</div>
-                                    <div className="col col-2 mb-auto mt-auto "><Button outline color="secondary" block>Đặt lại</Button></div>
-                                    <div className="col col-2 mb-auto mt-auto "><Button color="primary" block>Tìm kiếm</Button></div>
+                                    <div className="row mt-4">
+                                        <EssayTable essayList={essayList}/>
+                                    </div>
+                                    <div className="row ">
+                                        <Phantrang/>
+                                    </div>
                                 </div>
-                                <div className="row mt-4">
-                                    <EssayTable essayList={essayList}/>
-                                </div>
-                                <div className="row ">
-                                    <Phantrang/>
-                                </div>
+                                    
                             </div>
-                                
-                        </div>
-                        </div>
-                    </div>
+                            </div>
 
-                    <div className="col col-sm-3" >
-                        <div className="container-fluid">
-                            <div className="row  margin" >
-                                <Button color="primary" href="" block large>Thêm bài viết mới</Button>
-                            </div>
-                            <div className="row bg-row margin padding" >
-                                <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số lượng bài viết đã đăng</h5>
-                                <div className="mr-auto ml-auto">
-                                <Table borderless className="text" style={{fontSize:'20px'}} >
-                                <tr><td id="soluong">Số lượng</td><td id="dacham">Đã chấm</td></tr>
-                                <tr>
-                                    <td><label for="soluong">12</label></td>
-                                    <td><label for="dacham">10</label></td>
-                                </tr>
-                                </Table> 
-                                </div>                     
-                            </div>
-                            <div className="row bg-row margin padding" >
-                                <div className="container-fluid">
-                                <div className="row ">
-                                    <div className="col contentPhu">Tổng chi tháng này</div>
-                                    <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
-                                    
+                    <div className="container-fluid rightCol">
+                                <div className="row  margin" >
+                                    <Button color="primary" href="" block large>Thêm bài viết mới</Button>
                                 </div>
-                                <div className="row ">
-                                    <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'$1,500,000'} </div>
+                                <div className="row bg-row margin padding" >
+                                    <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số lượng bài viết đã đăng</h5>
+                                    <div className="mr-auto ml-auto">
+                                    <Table borderless className="text" style={{fontSize:'20px'}} >
+                                    <tr><td id="soluong">Số lượng</td><td id="dacham">Đã chấm</td></tr>
+                                    <tr>
+                                        <td><label for="soluong">12</label></td>
+                                        <td><label for="dacham">10</label></td>
+                                    </tr>
+                                    </Table> 
+                                    </div>                     
                                 </div>
-                                <div className="row ">
-                                    <div className="col" style={{fontSize: '18px'}}>
-                                        So với tháng trước {'10% '} 
-                                        <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
-                                        <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
+                                <div className="row bg-row margin padding" >
+                                    <div className="container-fluid">
+                                    <div className="row ">
+                                        <div className="col contentPhu">Tổng chi tháng này</div>
+                                        <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
+                                        
                                     </div>
-                                </div>
-                                <hr/>
-                                <div className="row ">
-                                    <div className="col" style={{fontSize: '18px'}}>
-                                        Mức chi trung bình theo bài {'$300'} 
+                                    <div className="row ">
+                                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'$1,500,000'} </div>
                                     </div>
+                                    <div className="row ">
+                                        <div className="col" style={{fontSize: '18px'}}>
+                                            So với tháng trước {'10% '} 
+                                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
+                                            <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div className="row ">
+                                        <div className="col" style={{fontSize: '18px'}}>
+                                            Mức chi trung bình theo bài {'$300'} 
+                                        </div>
+                                    </div>
+                                    </div>               
                                 </div>
-                                </div>               
+                                <div className="row bg-row margin padding" >
+                                    <div className="container-fluid">
+                                    <div className="row ">
+                                        <div className="col mb-2" style={{fontSize: '18px'}}> Xếp hạng</div>
+                                        <div className=""><a className="fa fa fa-ellipsis-h fa-lg fa-custome "></a></div>
+                                    </div>
+                                    <div className="row ">
+                                        <UserTable userList={userList}/>
+                                        
+                                    </div>
+                                    <div className="row mt-2">
+                                        
+                                        <Phantrang size="sm"/>
+                                    </div>
+                                    </div>               
+                                </div>
                             </div>
-                            <div className="row bg-row margin padding" >
-                                <div className="container-fluid">
-                                <div className="row ">
-                                    <div className="col mb-2" style={{fontSize: '18px'}}> Xếp hạng</div>
-                                    <div className=""><a className="fa fa fa-ellipsis-h fa-lg fa-custome "></a></div>
-                                </div>
-                                <div className="row ">
-                                    <UserTable userList={userList}/>
-                                    
-                                </div>
-                                <div className="row mt-2">
-                                    
-                                    <Phantrang size="sm"/>
-                                </div>
-                                </div>               
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                
             </div>
+            
+            </div>
+                    
         </div>
-        
     );
 }
 

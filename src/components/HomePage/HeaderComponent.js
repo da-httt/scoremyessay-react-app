@@ -10,8 +10,7 @@ const Header =(props) =>{
     return (
         <React.Fragment>
         <div>
-            <div className="container">
-            <Navbar light expand="sm" className="navBar" fixed="top" style={{backgroundColor: 'white'}}>
+            <Navbar light expand="sm" className="navBar" fixed="top" >
                 <NavbarBrand href="/Home">
                     <h4 className="ten-project"> ScoreMyEssay</h4>
                 </NavbarBrand>
@@ -25,14 +24,13 @@ const Header =(props) =>{
                 </Nav>
             </Collapse>
             </Navbar>
-            </div>     
             <Jumbotron className="jumbotronn">
                 <div className="container">
-                    <div className="row row-header align-items-center">
+                    <div className="row align-items-center">
                         <img src={logo}  alt="Score My Essay" className="img-fluid mr-auto ml-auto" height="40%" width="40%"/>
                     </div>
-                    <div className="row row-header align-items-center">
-                        <h6 class="subtitle">Là phần mềm giúp bạn có thể thuê giảng viên để chấm các bài IELTS writing,
+                    <div className="row align-items-center">
+                        <h6 class="subtitle mr-auto ml-auto">Là phần mềm giúp bạn có thể thuê giảng viên để chấm các bài IELTS writing,
                             giúp thăng hạng band điểm IELTS cho bản thân!</h6>
                     </div>
                 </div>  

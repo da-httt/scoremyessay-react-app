@@ -1,4 +1,5 @@
 import React from 'react';
+import { Jumbotron } from 'reactstrap';
 
 const WhyBox = (props) =>{
     return(
