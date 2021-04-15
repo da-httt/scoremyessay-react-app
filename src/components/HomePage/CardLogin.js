@@ -5,7 +5,8 @@ const CardLogin = (props) =>{
         image,
         nameCard,
         contentCard,
-        linkSignUp
+        linkSignUp,
+        linkSignIn
       } = props;
 
     const [modal, setModal] = useState(false);
@@ -40,7 +41,7 @@ const CardLogin = (props) =>{
                         <Input type="checkbox" /> Lưu tài khoản
                         </Label>
                     </FormGroup>
-                    <Button type="submit" color="primary">Đăng nhập</Button>
+                    <Button type="submit" color="primary" href={linkSignIn}>Đăng nhập</Button>
                     <Button color="link">Quên mật khẩu?</Button>
                     <hr/>
                     <Label >Bạn là {nameCard} mới?</Label><br/>

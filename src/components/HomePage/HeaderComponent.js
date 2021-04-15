@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Navbar, NavbarToggler,  Nav, NavbarBrand, Jumbotron, Collapse, NavItem } from 'reactstrap';
 import {NavLink} from 'react-router-dom';
-import logo from '../img/logo.png';
+import logo from 'F:/scoremyessay-react-app/src/img/logo.png';
 
 const Header =(props) =>{
     const [collapsed, setCollapsed] = useState(false);
@@ -11,8 +11,8 @@ const Header =(props) =>{
         <React.Fragment>
         <div>
             <div className="container">
-            <Navbar light expand="sm" className="navBar">
-                <NavbarBrand href="#">
+            <Navbar light expand="sm" className="navBar" fixed="top" style={{backgroundColor: 'white'}}>
+                <NavbarBrand href="/Home">
                     <h4 className="ten-project"> ScoreMyEssay</h4>
                 </NavbarBrand>
             <NavbarToggler onClick={toggleNavbar} className="mr-2" />
@@ -26,7 +26,7 @@ const Header =(props) =>{
             </Collapse>
             </Navbar>
             </div>     
-            <Jumbotron>
+            <Jumbotron className="jumbotronn">
                 <div className="container">
                     <div className="row row-header align-items-center">
                         <img src={logo}  alt="Score My Essay" className="img-fluid mr-auto ml-auto" height="40%" width="40%"/>

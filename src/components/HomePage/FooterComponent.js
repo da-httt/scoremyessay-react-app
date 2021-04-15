@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../img/logo.png';
+import logo from 'F:/scoremyessay-react-app/src/img/logo.png';
 import {Link} from 'react-router-dom';
 const Footer =(props) =>{
     return (
@@ -12,9 +12,9 @@ const Footer =(props) =>{
                     <div class="col-8 col-sm-5 offset-sm-1 ">
                         <h5>Liên lạc</h5>
                         <address>
-                            <i class="fa fa-envelope "></i> <a href="mailto:scoremyessay@gmail.com">scoremyessay@gmail.com</a><br/>
-                            <i class="fa fa-phone "></i> (+84) 915 469 728 <br/>
-                            <i class="fa fa-home"></i> Danang, Vietnam<br/>
+                            <i className="fa fa-envelope "></i> <a href="mailto:scoremyessay@gmail.com">scoremyessay@gmail.com</a><br/>
+                            <i className="fa fa-phone "></i> (+84) 915 469 728 <br/>
+                            <i className="fa fa-home"></i> Danang, Vietnam<br/>
                         </address>
                     </div>
                     <div class="col-4 col-sm-3 ">

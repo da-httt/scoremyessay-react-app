@@ -1,3 +1,4 @@
+import { Button } from 'reactstrap';
 import React from 'react';
 
 const ContactUs = (props) =>{
@@ -18,7 +19,7 @@ const ContactUs = (props) =>{
                 </div>
                 <div class="row">
                     <div class="col-8 col-sm-4 offset-2 offset-sm-4 mt-2">
-                        <a role="button" class="btn btn-block btn-primary">Liên hệ với chúng tôi!</a>
+                        <Button outline color="primary" block>Liên hệ với chúng tôi!</Button>
                     </div>
                 </div>
             </div>
