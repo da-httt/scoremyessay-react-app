@@ -1,51 +1,9 @@
 import './Student.css';
-import { React, useState} from 'react';
-import {  Button, ButtonDropdown, Table, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand, Input, Pagination, PaginationItem, PaginationLink} from 'reactstrap';
-import avt from "../../img/avt.png";
+import { React} from 'react';
+import {  Button,  Table, Input, Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import { Breadcrumb } from 'antd';
-const GlobalHeader= (props)=>{
-    const {
-        username
-    }=props;
+import GlobalHeader from './GlobalHeaderComponent';
 
-    return(
-        <Navbar light className="navBarDetail" fixed="top">
-            <div style={{marginRight:"560px"}} >
-            <NavbarBrand href="/Home">
-                <h4 className="ten-project"> ScoreMyEssay</h4>
-            </NavbarBrand>
-            </div>
-            <div className="ml-auto" >
-            <ButtonDrop />
-            </div>
-            <img src={avt} height="30px" className="ml-3" alt="Avatar"></img>
-            <h5 className="username  ml-1 mt-auto mb-auto">  {username}</h5>
-        </Navbar>
-        
-    );
-}
-
-const ButtonDrop = (props) => {
-    const [dropdownOpen, setOpen] = useState(false);
-  
-    const toggle = () => setOpen(!dropdownOpen);
-  
-    return (
-      <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} >
-        <DropdownToggle caret className="fa fa-bell-o "  color="info">
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem header>Thông báo mới</DropdownItem>
-          <DropdownItem>Thông báo 1</DropdownItem>
-          <DropdownItem>Thông báo 2</DropdownItem>
-          <DropdownItem divider />
-          <DropdownItem header>Thông báo trước đây</DropdownItem>
-          <DropdownItem>Thông báo 3</DropdownItem>
-          <DropdownItem>Thông báo 4</DropdownItem>
-        </DropdownMenu>
-      </ButtonDropdown>
-    );
-  }
 
   const Phantrang = (props) => {
       const {
@@ -109,6 +67,16 @@ const userList=[
         id: 3,
         username: 'tdnam',
         numOfEssay: '17'
+    },
+    {
+        id: 4,
+        username: 'canhngo',
+        numOfEssay: '2'
+    },
+    {
+        id: 5,
+        username: 'namhunter',
+        numOfEssay: '10'
     },
 ]
 function UserTable(props){
@@ -263,18 +231,17 @@ function EssayTable(props){
 
 const HomeStudent = (props) =>{
     return (
-        <div >        
+        <div >         
             <GlobalHeader username="Canh Ngo"/>
-            <div className="container-fluid detailPage">
+            <div className="container-fluid detailPage" >
                 <div class="row">
                 <div className="container-fluid leftCol">
                                 <div className="row bg-row margin padding" >
-                                    
                                     <Breadcrumb  className="mt-1" style={{fontSize: "large"}}>
                                         <Breadcrumb.Item>
                                         <a href="/Home">Trang chủ</a>
                                         </Breadcrumb.Item>
-                                        <Breadcrumb.Item>Quản lý bài viết</Breadcrumb.Item>
+                                        <Breadcrumb.Item >Quản lý bài viết</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 <div className="row bg-row padding" >
@@ -311,7 +278,7 @@ const HomeStudent = (props) =>{
 
                     <div className="container-fluid rightCol">
                                 <div className="row  margin" >
-                                    <Button color="primary" href="" block large>Thêm bài viết mới</Button>
+                                    <Button color="primary" href="/HomeStudentPage/AddNewWriting" block large>Thêm bài viết mới</Button>
                                 </div>
                                 <div className="row bg-row margin padding" >
                                     <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số lượng bài viết đã đăng</h5>
@@ -350,18 +317,14 @@ const HomeStudent = (props) =>{
                                     </div>
                                     </div>               
                                 </div>
-                                <div className="row bg-row margin padding" >
+                                <div className="row bg-row margin padding" style={{height: '370px'}} >
                                     <div className="container-fluid">
                                     <div className="row ">
                                         <div className="col mb-2" style={{fontSize: '18px'}}> Xếp hạng</div>
                                         <div className=""><a className="fa fa fa-ellipsis-h fa-lg fa-custome "></a></div>
                                     </div>
-                                    <div className="row ">
+                                    <div className="row " >
                                         <UserTable userList={userList}/>
-                                        
-                                    </div>
-                                    <div className="row mt-2">
-                                        
                                         <Phantrang size="sm"/>
                                     </div>
                                     </div>               
@@ -370,8 +333,9 @@ const HomeStudent = (props) =>{
             </div>
             
             </div>
-                    
+                 
         </div>
+        
     );
 }
 
