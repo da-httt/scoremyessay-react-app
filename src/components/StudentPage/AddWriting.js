@@ -3,7 +3,6 @@ import { React,} from 'react';
 import { Breadcrumb } from 'antd';
 import GlobalHeader from './GlobalHeaderComponent';
 import Stepp from './Step';
-import { Form, FormGroup, Label, Col, Input } from 'reactstrap';
 
 const AddNewWriting = (props) =>{
     return (

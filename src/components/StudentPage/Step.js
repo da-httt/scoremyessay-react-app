@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import {Steps, message, Radio, Select, Slider} from 'antd';
-import { Form, FormGroup, Input, Label, Col, CustomInput, FormText, Button, Card, CardHeader, CardTitle, CardText, CardFooter, CardBody } from 'reactstrap';
+import React from 'react';
+import {Steps, Radio, Select, Slider} from 'antd';
+import { Form, FormGroup, Input, Label, Col, CustomInput, FormText, Button, Card, CardHeader, CardText, CardBody } from 'reactstrap';
 
 const { Step } = Steps;
 
@@ -121,10 +121,11 @@ const Second = () => {
               </CardBody>
             </Card>
             
-            <Button outline color="success" block className="mt-2">Xác nhận thanh toán</Button>
+            <Button outline color="success" block className="mb-1 mt-1">Xác nhận thanh toán</Button>
           </div>
         </div>
       </div>
+    
     );
 }
 
@@ -143,7 +144,7 @@ const Stepp = () => {
   return (
     <div className="bg" style={{height: window.innerHeight + 'px'}} >
     <div className="row bg margin padding">
-        <Steps current={current}>
+        <Steps current={current} style={{padding: "10px 160px 10px 160px", display: "inline-flex"}}>
             {steps.map(item => (
             <Step key={item.title} title={item.title} />
             ))}

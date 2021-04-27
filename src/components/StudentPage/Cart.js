@@ -69,60 +69,11 @@ function UserTable(props){
     );
 }
 
-/*const  columnsEssay = [
-    {
-        title: 'Thể loại',
-        dataIndex: 'kind',
-        width: 130,
-        render: kind => <div style={{color: 'blue'}}>{kind}</div>,
-       },
-      {
-        title: 'Đề bài',
-        dataIndex: 'title',
-        width: 360,
-        
-      },
-      {
-        title: 'Giá tiền',
-        dataIndex: 'cost',
-        width: 120,
-       
-      },
-      {
-        title: 'Tình trạng',
-        dataIndex: 'status',
-        width: 120,
-        render: tag => (
-            <>
-              {tag === "Đã chấm" && (<Tag color="success">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đang chấm" && (<Tag color="processing">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đang xử lý" && (<Tag color="warning">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đã hủy" && (<Tag color="error">{tag.toUpperCase()}</Tag>)}
-            </>
-          ),
-       
-      },
-      {
-        title: 'Thời gian',
-        dataIndex: 'time',
-        width: 150,
-       
-      },
-      {
-        title: 'Điểm',
-        dataIndex: 'score',
-        width: 100,
-       
-      },
-
-];
-*/
-
 
 const api= getBaseURL();
 
 
-const HomeStudent = (props) =>{
+const Cart = (props) =>{
     const rowSelection = useState([]);
     const [orders, setOrders] = useState([]);
     const [types, setTypes] = useState([]);
@@ -138,7 +89,7 @@ const HomeStudent = (props) =>{
             setStatus(status);
         }) 
 
-        await api.get('/orders',{
+        await api.get('/orders/saved',{
             headers: {Authorization: getTokenType() + ' ' + getToken()}
         }).then(response => {
             const orders = response.data.data;
@@ -161,41 +112,22 @@ const HomeStudent = (props) =>{
           {
             title: 'Đề bài',
             dataIndex: ['essay','title'],
-            width: 460,
+            width: 560,
             
           },
+          
           {
-            title: 'Thời gian cập nhật',
-            dataIndex: 'updated_date',
+            title: 'Thời gian gửi',
+            dataIndex: 'sent_date',
             width: 160,
            
           },
           {
-            title: 'Tình trạng',
-            dataIndex: 'status_id',
-            width: 100,
-            render: statu => 
-            (
-                <>
-                    {statu === 3 && (<Tag color="success">{status[statu].status_name.toUpperCase()}</Tag>)}
-                    {statu === 2 && (<Tag color="processing">{status[statu].status_name.toUpperCase()}</Tag>)}
-                    {statu === 1 && (<Tag color="warning">{status[statu].status_name.toUpperCase()}</Tag>)}
-                    {statu === 4 && (<Tag color="error">{status[statu].status_name.toUpperCase()}</Tag>)}
-                    {statu === 0 && (<Tag color="magenta">{status[statu].status_name.toUpperCase()}</Tag>)}
-                </>
-            )
-          },
-          {
             title: 'Giá tiền',
             dataIndex: 'total_price',
-            width: 100,
+            width: 120,
            
           },
-          {
-            title: 'Điểm',
-            width:100
-          }
-          
     ];
 
     const columns=[{
@@ -227,35 +159,33 @@ const HomeStudent = (props) =>{
             <div className="container-fluid detailPage" >
                 <div class="row" style={{minHeight: window.innerHeight + 'px'}}>
                 <div className="container-fluid leftCol">
-                    <div className="row bg-row margin padding" >
+                <div className="row bg-row margin padding" >
                         <Breadcrumb  className="mt-1" style={{fontSize: "large"}}>
                             <Breadcrumb.Item>
                             <a href="/Home">Trang chủ</a>
                             </Breadcrumb.Item>
-                            <Breadcrumb.Item >Quản lý bài viết</Breadcrumb.Item>
+                            <Breadcrumb.Item >
+                            <a href="/HomeStudentPage">Quản lý bài viết</a>
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item >Giỏ Hàng</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="row bg-row padding" >
                         <br/>
-                        <h3>DANH SÁCH BÀI VIẾT</h3>
+                        <h3>GIỎ HÀNG CỦA BẠN</h3>
                     </div>
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div class="col col-4 mb-3 mt-3">
+                            <div class="col col-7 mb-3 mt-3">
                                 <Input placeholder="Nhập tên bài viết cần tìm" />
                             </div>
-                            <div className="col col-6 mb-auto mt-auto " >
-                            <Radio.Group  >
-                                {statusList}
-                            </Radio.Group>
-                            </div>
-                            
-                            <div className="col col-2 mb-auto mt-auto ">
+                            <div className="col col-2 mb-auto mt-auto offset-1">
                                 <Button outline color="secondary" block>Đặt lại</Button>
+                            </div>
+                            <div className="col col-2 mb-auto mt-auto ">
                                 <Button color="primary" block>Tìm kiếm</Button>
                             </div>
-                            
                         </div>
                         <div className="row mt-4" style={{height:'705px'}}>
                             
@@ -322,6 +252,6 @@ const HomeStudent = (props) =>{
     );
 }
 
-export default HomeStudent;
+export default Cart;
 
 
