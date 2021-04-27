@@ -13,7 +13,7 @@ const IntroVideo = (props) =>{
                 </div>
                 <div class="row">
                     <div class="col align-self-center">
-                        <video controls autoplay muted loop  width="70%" id="introVideo" class="video mr-auto ml-auto" >
+                        <video controls autoPlay muted loop  width="70%" id="introVideo" class="video mr-auto ml-auto" >
                             <source src={video} type="video/mp4"/>
                         </video>
                     </div>

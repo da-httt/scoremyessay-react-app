@@ -1,4 +1,4 @@
-import './Student.css';
+import './Teacher.css';
 import { React, useState} from 'react';
 import { Badge, Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand} from 'reactstrap';
 import avt from "../../img/avt.png";
@@ -33,15 +33,14 @@ const ButtonDrop = (props) => {
   }
 
 const GlobalHeader= (props)=>{
+    const {
+        username
+    }=props;
 
     const handleLogOut=() =>{
       removeUserSession();
       props.history.push("/Home");
     }
-
-    const {
-        username
-    }=props;
 
     return(
         <Navbar light className="navBarDetail" fixed="top">

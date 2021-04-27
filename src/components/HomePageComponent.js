@@ -21,8 +21,7 @@ const HomePage = (props) =>{
                             image={imgStudent} 
                             nameCard="Học sinh" 
                             contentCard="Cải thiện những kỹ năng viết bài và nhận điểm số từ ScoreMyEssay!"
-                            linkSignUp="/RegisterforStudent"
-                            linkSignIn="/HomeStudentPage">
+                            linkSignUp="/RegisterforStudent">
                         </CardLogin>
                     </div>
                     <div class="col-12 col-md-3">
