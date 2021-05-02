@@ -1,6 +1,6 @@
 import './Teacher.css';
 import { React, useState} from 'react';
-import { Badge, Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand} from 'reactstrap';
+import { Badge, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand} from 'reactstrap';
 import avt from "../../img/avt.png";
 import { removeUserSession } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
@@ -51,7 +51,7 @@ const GlobalHeader= (props)=>{
             </div>
 
             <div className="ml-auto" >
-            <Button color="link" href="/HomeStudentPage/Cart"><i class="fa fa-cart-arrow-down fa-lg" /> Giỏ Hàng</Button>
+            
             <ButtonDrop />
             </div>
             <img src={avt} height="30px" className="ml-3" alt="Avatar"></img>

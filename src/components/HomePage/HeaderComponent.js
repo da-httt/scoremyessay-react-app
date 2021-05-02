@@ -30,7 +30,7 @@ const Header =(props) =>{
                         <img src={logo}  alt="Score My Essay" className="img-fluid mr-auto ml-auto" height="40%" width="40%"/>
                     </div>
                     <div className="row align-items-center">
-                        <h6 class="subtitle mr-auto ml-auto">Là phần mềm giúp bạn có thể thuê giảng viên để chấm các bài IELTS writing,
+                        <h6 className="subtitle mr-auto ml-auto">Là phần mềm giúp bạn có thể thuê giảng viên để chấm các bài IELTS writing,
                             giúp thăng hạng band điểm IELTS cho bản thân!</h6>
                     </div>
                 </div>  

@@ -16,7 +16,7 @@ const HomePage = (props) =>{
         <Header/>
             <div className="container">
                 <div className="row">
-                    <div class="col-12 col-md-3 offset-md-3">
+                    <div className="col-12 col-md-3 offset-md-3">
                         <CardLogin 
                             image={imgStudent} 
                             nameCard="Học sinh" 
@@ -24,7 +24,7 @@ const HomePage = (props) =>{
                             linkSignUp="/RegisterforStudent">
                         </CardLogin>
                     </div>
-                    <div class="col-12 col-md-3">
+                    <div className="col-12 col-md-3">
                         <CardLogin 
                             image={imgTeacher}
                             nameCard="Giáo viên" 

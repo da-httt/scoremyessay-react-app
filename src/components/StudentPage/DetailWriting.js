@@ -171,7 +171,7 @@ const TabComponent=(props)=>{
                                 #{sentenceList.id}: {sentenceList[current].content}
                         </strong>
                             
-                        <p  class=" force-overflow scrollbar" id="style-default">
+                        <p  className=" force-overflow scrollbar" id="style-default">
                             {sentenceList[current].comment}
                         </p> 
                     </Card>
@@ -247,10 +247,6 @@ const TabComponent=(props)=>{
 }
 
 const DetailWriting = (props) =>{
-    //const {
-      //  statusEssay,
-    //}=props;
-
     return (
         <>         
             <GlobalHeader username="Canh Ngo"/>

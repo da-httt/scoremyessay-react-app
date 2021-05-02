@@ -3,8 +3,16 @@ import { React,} from 'react';
 import { Breadcrumb } from 'antd';
 import GlobalHeader from './GlobalHeaderComponent';
 import Stepp from './Step';
+import { withRouter } from 'react-router-dom';
+
 
 const AddNewWriting = (props) =>{
+    const url = window.location.href.split('=');
+    const orderID=Number(url[1]);
+    // if(Number.isNaN(orderID)){
+    //     console.log("rỗng");
+    // }
+    //Kiểm tra số đó có rỗng không để create, còn lại là update
     return (
         <div >        
         <GlobalHeader username="Canh Ngo"/>
@@ -27,7 +35,7 @@ const AddNewWriting = (props) =>{
                         <h3>THÊM BÀI VIẾT MỚI</h3>
                     </div>
                     
-                    <Stepp/>
+                    <Stepp orderID={orderID}/>
                 
                     
                     
@@ -43,6 +51,6 @@ const AddNewWriting = (props) =>{
     );
 }
 
-export default AddNewWriting;
+export default withRouter(AddNewWriting);
 
 

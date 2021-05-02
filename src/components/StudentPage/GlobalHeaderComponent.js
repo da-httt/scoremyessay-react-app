@@ -52,7 +52,7 @@ const GlobalHeader= (props)=>{
             </div>
 
             <div className="ml-auto" >
-            <Button color="link" href="/HomeStudentPage/Cart"><i class="fa fa-cart-arrow-down fa-lg" /> Giỏ Hàng</Button>
+            <Button color="link" href="/HomeStudentPage/Cart"><i className="fa fa-cart-arrow-down fa-lg" /> Giỏ Hàng</Button>
             <ButtonDrop />
             </div>
             <img src={avt} height="30px" className="ml-3" alt="Avatar"></img>
