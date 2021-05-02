@@ -1,7 +1,7 @@
 import './Teacher.css';
 import { React, useState} from 'react';
 import {  Button, Input} from 'reactstrap';
-import { Breadcrumb,Table, Tag } from 'antd';
+import { Breadcrumb,Table } from 'antd';
 import GlobalHeader from './GlobalHeaderComponent';
 
 
@@ -297,7 +297,7 @@ const  columnsEssay = [
       {
         title: 'Đề bài',
         dataIndex: 'title',
-        width: 360,
+        width: 460,
         
       },
       {
@@ -306,32 +306,14 @@ const  columnsEssay = [
         width: 120,
        
       },
+      
       {
-        title: 'Tình trạng',
-        dataIndex: 'status',
-        width: 120,
-        render: tag => (
-            <>
-              {tag === "Đã chấm" && (<Tag color="success">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đang chấm" && (<Tag color="processing">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đang xử lý" && (<Tag color="warning">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đã hủy" && (<Tag color="error">{tag.toUpperCase()}</Tag>)}
-            </>
-          ),
-       
-      },
-      {
-        title: 'Thời gian',
+        title: 'Ngày cập nhật',
         dataIndex: 'time',
         width: 150,
        
       },
-      {
-        title: 'Điểm',
-        dataIndex: 'score',
-        width: 100,
-       
-      },
+      
 
 ];
 
@@ -400,7 +382,7 @@ const AddWritingT = (props) =>{
             <GlobalHeader username="Teacher"/>
             
             <div className="container-fluid detailPage" >
-                <div class="row" style={{minHeight: window.innerHeight + 'px'}}>
+                <div className="row" style={{minHeight: window.innerHeight + 'px'}}>
                 <div className="container-fluid leftCol">
                     <div className="row bg-row margin padding" >
                         <Breadcrumb  className="mt-1" style={{fontSize: "large"}}>
@@ -415,12 +397,12 @@ const AddWritingT = (props) =>{
                     </div>
                     <div className="row bg-row padding" >
                         <br/>
-                        <h3>DANH SÁCH BÀI VIẾT</h3>
+                        <h3>NHẬN BÀI VIẾT MỚI</h3>
                     </div>
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div class="col col-3 mb-3 mt-3">
+                            <div className="col col-3 mb-3 mt-3">
                                 <Input placeholder="Nhập tên bài viết cần tìm" />
                             </div>
                             <div className="col col-1 mb-auto mt-auto ml-4" ><Input type="radio" name="sort" checked/> Tất cả</div>
@@ -444,13 +426,13 @@ const AddWritingT = (props) =>{
 
                 <div className="container-fluid rightCol">
                 <div className="row bg-row margin padding" >
-                    <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số lượng bài viết đã đăng</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số lượng bài viết đã đăng</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columns} dataSource={data} pagination={false}/>
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" >
-                    <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số bài phải chấm</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số bài phải chấm</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columnsSchedule} dataSource={dataSchedule} pagination={false}/>
                     </div>                     
@@ -459,7 +441,7 @@ const AddWritingT = (props) =>{
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col contentPhu">Tổng doanh thu tháng này</div>
-                        <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
+                        <div ><i className="fa fa-info-circle fa-lg fa-custome " ></i></div>
                         
                     </div>
                     <div className="row ">
@@ -484,7 +466,7 @@ const AddWritingT = (props) =>{
                     <div className="container-fluid">
                         <div className="row " style={{height:'52px'}}>
                             <div className="col contentPhu">Đánh giá của học viên</div>
-                            <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
+                            <div ><i className="fa fa-info-circle fa-lg fa-custome " ></i></div>
                             
                         </div>
                         <div className="row ">

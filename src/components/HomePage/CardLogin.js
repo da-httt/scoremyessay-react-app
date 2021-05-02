@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardBody, CardImg, CardText, CardTitle, Button, ModalHeader, ModalBody, Modal, Form, Label, Input, FormGroup, ModalFooter, Alert } from 'reactstrap';
  
 import { withRouter } from 'react-router-dom';
-import { getBaseURL, getRoleID, setRoleID, setUserSession } from '../../Utils/Common';
+import { getBaseURL, setUserSession } from '../../Utils/Common';
 
 
 const api= getBaseURL();
@@ -22,7 +22,7 @@ const CardLogin = (props) =>{
         linkSignUp,
       } = props;
 
-    const handleLogin = (e) =>{
+     const handleLogin = (e) =>{
         setLoading(true);
         e.preventDefault();
 
@@ -31,18 +31,23 @@ const CardLogin = (props) =>{
             password: password 
         })
         .then(response => {
-            setLoading(false);
             setUserSession(response.data.access_token, response.data.token_type);
-            setRoleID();
-            const role = getRoleID();
-            const linkSignIn= "/Home";
-            if (role === 1) linkSignIn = '/HomeStudentPage';
-            else if (role === 2) linkSignIn = '/HomeTeacherPage';
-            else if (role === 0) linkSignIn = '/HomeStudentPage';
-            props.history.push(linkSignIn);
+            api.get('/accounts/me',{
+                headers: {Authorization: 'Bearer ' + response.data.access_token}
+              }).then(response => {
+                localStorage.setItem("roleID", response.data.role_id);
+                const role =  response.data.role_id;
+                let linkSignIn= "/Home";
+                 if (role === 1) linkSignIn = '/HomeStudentPage';
+                else if (role === 2) linkSignIn = '/HomeTeacherPage';
+                else if (role === 0) linkSignIn = '/HomeStudentPage';
+                props.history.push(linkSignIn);
+            }) 
+            
+            
         }).catch((error) => {
             if(error.response){
-                setLoading(false);
+                setLoading(true);
                 if(error.response.status === 401 || error.response.status === 400){
                     setShow(true);
                     setError(error.response.data.detail);
@@ -65,7 +70,7 @@ const CardLogin = (props) =>{
                 <CardImg top width="100%" src={image} alt={nameCard}></CardImg>
                 <CardBody>
                     <CardTitle tag="h4" >Trở thành {nameCard}</CardTitle>
-                    <CardText class="card-text"> 
+                    <CardText className="card-text"> 
                     {contentCard}
                     </CardText>
                     <Button outline color="primary" onClick={toggle}>Let's go</Button>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Label, FormGroup, Input, Col, Row, Alert } from 'reactstrap';
 import Footer from '../HomePage/FooterComponent';
 import Header from '../HomePage/HeaderComponent';
-import axios from 'axios'; 
 import {  Radio } from 'antd';
 import { withRouter } from 'react-router';
 import { getBaseURL } from '../../Utils/Common';
@@ -42,25 +41,29 @@ const StuRegister = (props) =>{
     const [jobs, setJobs] = useState([]); 
     const [genders, setGenders] = useState([]);
     
-    useEffect( async () => {
-        await api.get('/jobs').then(response => {
-            const jobs = response.data.data;
-            setJobs(jobs);
-            
-        })  
-        await api.get('/genders').then(response => {
-            const genders = response.data.data; 
-            setGenders(genders);
-            
-        })  
+    useEffect( () => {
+        async function fetchData(){
+            await api.get('/jobs').then(response => {
+                const jobs = response.data.data;
+                setJobs(jobs);
+                
+            })  
+            await api.get('/genders').then(response => {
+                const genders = response.data.data; 
+                setGenders(genders);
+                
+            }) 
+        }
+        fetchData();
+         
     },[]);
     
     const jobsList = jobs.map((job) => (
-        <option value={job.job_id}>{job.job_name}</option>
+        <option key={job.job_id} value={job.job_id} >{job.job_name}</option>
     ));
 
     const gendersList = genders.map((gender) => (
-        <Radio value={gender.gender_id}>{gender.gender_name}</Radio>
+        <Radio value={gender.gender_id} key={gender.gender_id}>{gender.gender_name}</Radio>
     ));
     
     const checkPassword = () =>{
@@ -96,16 +99,19 @@ const StuRegister = (props) =>{
         })
         .then(response => {
             setLoading(false);
-            props.history.push("/Home");
+            console.log("Sign up successfully!");
+            //props.history.push("/Home");
         }).catch((error) => {
             if(error.response){
                 setLoading(false);
                 if(error.response.status === 401 || error.response.status === 400){
                     setShow(true);
+                    console.log(error.response.data.detail)
                     setError(error.response.data.detail);
                 }
                 else{
                     setShow(true);
+                    console.log("Something went wrong. Please try again later!")
                     setError("Something went wrong. Please try again later!");
                 }
                 
@@ -118,8 +124,8 @@ const StuRegister = (props) =>{
     return(
         <React.Fragment>
             <Header/>
-            <div class="container bg-signup">
-            <Form onSubmit={handleSignUp} >
+            <div className="container bg-signup">
+            <Form >
                 <div className="row align-items-center">
                     <h3 className="ml-auto mr-auto mt-3">Đăng ký trở thành học viên</h3>
                 </div>
@@ -154,11 +160,11 @@ const StuRegister = (props) =>{
                             <Input type="tel" name="tel" id="tel" required onChange={e => setTel(e.target.value)}/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="address">Địa chỉ *</Label>
-                            <Input type="text" name="address" id="address" required onChange={e => setAddress(e.target.value)}/>
+                            <Label for="address">Địa chỉ</Label>
+                            <Input type="text" name="address" id="address" onChange={e => setAddress(e.target.value)}/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="password">Mật khẩu</Label>
+                            <Label for="password">Mật khẩu *</Label>
                             <Row style={{marginRight: '0px'}}>
                             <Col xs="11" style={{paddingRight: '0px'}}><Input type={type} name="password" id="password" required onChange={e => setPassword(e.target.value)} onBlur={checkPassword} onClick={removeError}/></Col>
                             <Col xs="1" style={{padding: '0px'}}>
@@ -166,23 +172,20 @@ const StuRegister = (props) =>{
                             </Row>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="password">Nhập lại mật khẩu</Label>
+                            <Label for="password">Nhập lại mật khẩu* </Label>
                             <Row style={{marginRight: '0px'}}>
-                            <Col xs="11" style={{paddingRight: '0px'}}><Input type={type1} name="password" id="password" required onChange={e => setPasswordAgain(e.target.value)} onBlur={checkPassword} onClick={removeError}/></Col>
+                            <Col xs="11" style={{paddingRight: '0px'}}><Input type={type1} name="passwordAgain" id="passwordAgain" required onChange={e => setPasswordAgain(e.target.value)} onBlur={checkPassword} onClick={removeError}/></Col>
                             <Col xs="1" style={{padding: '0px'}}>
                                 <Button className={classNamePass1}  onClick={handleShowPassword2} style={{height:"38px"}} /></Col>
                             </Row>
                         </FormGroup>
-                        
-                        
-
                     </div>
                 </div>
                 <div className="row align-items-center">
                     <Label check className="mr-auto ml-auto"><Input type="checkbox" required/> Chấp nhận mọi điều khoản và chính sách</Label>
                 </div>
                 <div className="row align-items-center mt-3">
-                    <Button color="primary" type="submit" className="mr-auto ml-auto" >{loading? 'Đang xử lý...' : 'Đăng ký'}</Button>
+                    <Button color="primary" type="submit" className="mr-auto ml-auto" onClick={handleSignUp}>{loading? 'Đang xử lý...' : 'Đăng ký'}</Button>
                 </div>
                 <div className="row align-items-center mt-3">
                  {error && <Alert color='danger' isOpen={show} style={{margin: 'auto'}}>{error}</Alert>}

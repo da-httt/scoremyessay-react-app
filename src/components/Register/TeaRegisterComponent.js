@@ -7,7 +7,7 @@ const TeaRegister = (props) =>{
     return(
         <React.Fragment>
             <Header/>
-            <div class="container bg-signup">
+            <div className="container bg-signup">
             <Form>
                 <div className="row align-items-center">
                     <h3 className="ml-auto mr-auto mt-3">Đăng ký trở thành giảng viên, chuyên gia</h3>

@@ -1,9 +1,10 @@
 import './Student.css';
 import { React, useEffect, useState} from 'react';
 import {  Button, Input} from 'reactstrap';
-import { Breadcrumb,Radio,Table, Tag } from 'antd';
+import { Breadcrumb, Table } from 'antd';
 import GlobalHeader from './GlobalHeaderComponent';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+import { withRouter } from 'react-router';
 
   const columnsUser = [
     {
@@ -77,30 +78,25 @@ const Cart = (props) =>{
     const rowSelection = useState([]);
     const [orders, setOrders] = useState([]);
     const [types, setTypes] = useState([]);
-    const [status, setStatus] = useState([]);
-    useEffect( async () => {
-        await api.get('/types',).then(response => {
-            const types = response.data.data;
-            setTypes(types);
-        })  
-
-        await api.get('/status',).then(response => {
-            const status = response.data.data;
-            setStatus(status);
-        }) 
-
-        await api.get('/orders/saved',{
-            headers: {Authorization: getTokenType() + ' ' + getToken()}
-        }).then(response => {
-            const orders = response.data.data;
-            setOrders(orders);
-            
-        })  
+    
+    useEffect( () => {
+        async function fetchData(){
+            await api.get('/types',).then(response => {
+                const types = response.data.data;
+                setTypes(types);
+            })  
+    
+            await api.get('/orders/saved',{
+                headers: {Authorization: getTokenType() + ' ' + getToken()}
+            }).then(response => {
+                const orders = response.data.data;
+                setOrders(orders);
+                
+            })  
+        }
+        fetchData();
+        
     },[]);
-
-    const statusList = status.map((state) => (
-        <Radio value={state.status_id}>{state.status_name}</Radio>
-    ));
 
     const  columnsEssay = [
         {
@@ -177,7 +173,7 @@ const Cart = (props) =>{
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div class="col col-7 mb-3 mt-3">
+                            <div className="col col-7 mb-3 mt-3">
                                 <Input placeholder="Nhập tên bài viết cần tìm" />
                             </div>
                             <div className="col col-2 mb-auto mt-auto offset-1">
@@ -189,7 +185,14 @@ const Cart = (props) =>{
                         </div>
                         <div className="row mt-4" style={{height:'705px'}}>
                             
-                            <Table columns={columnsEssay} dataSource={orders} pagination={{pageSize:10}} rowSelection={{rowSelection}}/>
+                            <Table rowKey={order => order.order_id} 
+                            columns={columnsEssay} dataSource={orders} 
+                            pagination={{pageSize:10}} rowSelection={{rowSelection}}
+                            onRow={(record, rowIndex) => {
+                                return {
+                                  onClick: event => (props.history.push("/HomeStudentPage/AddNewWriting/?order_id="+record.order_id)),
+                                };
+                              }}/>
                         </div>
                     </div>
                         
@@ -198,10 +201,10 @@ const Cart = (props) =>{
 
                 <div className="container-fluid rightCol">
                 <div className="row  margin" >
-                    <Button color="primary" href="/HomeStudentPage/AddNewWriting" block large>Thêm bài viết mới</Button>
+                    <Button color="primary" href="/HomeStudentPage/AddNewWriting" block >Thêm bài viết mới</Button>
                 </div>
                 <div className="row bg-row margin padding" >
-                    <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số lượng bài viết đã đăng</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số lượng bài viết đã đăng</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columns} dataSource={data} pagination={false} />
                     </div>                     
@@ -210,7 +213,7 @@ const Cart = (props) =>{
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col contentPhu">Tổng chi tháng này</div>
-                        <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
+                        <div className=""><i className="fa fa-info-circle fa-lg fa-custome "></i></div>
                         
                     </div>
                     <div className="row ">
@@ -235,7 +238,7 @@ const Cart = (props) =>{
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col mb-2" style={{fontSize: '18px'}}> Xếp hạng</div>
-                        <div className=""><a className="fa fa fa-ellipsis-h fa-lg fa-custome "></a></div>
+                        <div className=""><i className="fa fa fa-ellipsis-h fa-lg fa-custome "></i></div>
                     </div>
                     <div className="row " >
                         <UserTable/>
@@ -252,6 +255,6 @@ const Cart = (props) =>{
     );
 }
 
-export default Cart;
+export default withRouter(Cart);
 
 

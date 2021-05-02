@@ -13,6 +13,8 @@ import HomeTeacher from './TeacherPage/HomePageTeacher';
 import PublicRoute from '../Utils/PublicRoute';
 import PrivateRoute from '../Utils/PrivateRoute';
 import AddWritingT from './TeacherPage/AddWrittingT';
+import DetailReq from './TeacherPage/DetailRequirements';
+import ScoreEssay from './TeacherPage/ScoreEssay';
 
 class Main extends Component{
 
@@ -26,12 +28,14 @@ class Main extends Component{
                     <Route exact path="/RegisterforStudent" component={() =><StuRegister/>}/>
                     
                     <PrivateRoute exact path="/HomeStudentPage" component={() => <HomeStudent/>} />
-                    <Route exact path="/HomeStudentPage/AddNewWriting" component={() => <AddNewWriting/>}/>
-                    <Route exact path="/HomeStudentPage/DetailWriting" component={() => <DetailWriting/>}/>
+                    <PrivateRoute  path="/HomeStudentPage/AddNewWriting" component={() => <AddNewWriting/>}/>
+                    <Route  path="/HomeStudentPage/DetailWriting" component={() => <DetailWriting/>}/>
                     <Route exact path="/HomeStudentPage/Cart" component={() => <Cart/>}/>
 
                     <PrivateRoute exact path="/HomeTeacherPage" component={() => <HomeTeacher/>}/>
                     <Route exact path="/HomeTeacherPage/AddNewWriting" component={() => <AddWritingT/>}/>
+                    <Route exact path="/HomeTeacherPage/DetailRequirement" component={() => <DetailReq/>}/>
+                    <Route exact path="/HomeTeacherPage/ScoreEssay" component={() => <ScoreEssay/>}/>
 
                     <Route exact path="/test" component={() => <Test/>}/>
                     <Redirect to="/Home"/>

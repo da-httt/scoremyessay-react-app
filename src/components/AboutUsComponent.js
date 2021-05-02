@@ -18,7 +18,7 @@ const CardMember = (props) =>{
             <CardImg top width="100%" src={image} alt={nameCard}></CardImg>
             <CardBody>
                 <CardTitle tag="h5" >{nameCard}</CardTitle>
-                <CardText class="card-text"> 
+                <CardText className="card-text"> 
                 {msv}<br/>
                 {mission}
                 </CardText>

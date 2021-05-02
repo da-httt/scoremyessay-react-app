@@ -4,6 +4,7 @@ import {  Button, Input} from 'reactstrap';
 import { Breadcrumb,Radio,Table, Tag } from 'antd';
 import GlobalHeader from './GlobalHeaderComponent';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+import { withRouter } from 'react-router-dom';
 
   const columnsUser = [
     {
@@ -127,52 +128,70 @@ const HomeStudent = (props) =>{
     const [orders, setOrders] = useState([]);
     const [types, setTypes] = useState([]);
     const [status, setStatus] = useState([]);
-    useEffect( async () => {
-        await api.get('/types',).then(response => {
-            const types = response.data.data;
-            setTypes(types);
-        })  
-
-        await api.get('/status',).then(response => {
-            const status = response.data.data;
-            setStatus(status);
-        }) 
-
-        await api.get('/orders',{
-            headers: {Authorization: getTokenType() + ' ' + getToken()}
-        }).then(response => {
-            const orders = response.data.data;
-            setOrders(orders);
-            
-        })  
+    const [stateOrder,setStateOrder] = useState(1);
+    console.log(rowSelection);
+    useEffect( () => {
+        async function fetchData() {
+            await api.get('/types',).then(response => {
+                const types = response.data.data;
+                setTypes(types);
+            })  
+    
+            await api.get('/status',).then(response => {
+                const status = response.data.data;
+                setStatus(status);
+            }) 
+    
+            await api.get('/orders',{
+                headers: {Authorization: getTokenType() + ' ' + getToken()}
+            }).then(response => {
+                const orders = response.data.data;
+                setOrders(orders);
+                
+            })  
+        }
+        fetchData();
+        
     },[]);
-
+    
     const statusList = status.map((state) => (
+        state.status_id!==0 && (
         <Radio value={state.status_id}>{state.status_name}</Radio>
+        )
     ));
 
     const  columnsEssay = [
         {
+            title: 'ID',
+            dataIndex: 'order_id',
+            key: 'order_id',
+            width: 30,
+        },
+        {
             title: 'Thể loại',
             dataIndex: ['essay','type_id'],
+            key: ['essay','type_id'],
             width: 130,
             render: kind => <div style={{color: 'blue'}}>{types[kind].type_name}</div>,
            },
           {
             title: 'Đề bài',
             dataIndex: ['essay','title'],
+            key: ['essay','title'],
             width: 460,
             
           },
           {
             title: 'Thời gian cập nhật',
             dataIndex: 'updated_date',
+            key: 'updated_date',
             width: 160,
            
           },
           {
             title: 'Tình trạng',
             dataIndex: 'status_id',
+            key: 'status_id',
             width: 100,
             render: statu => 
             (
@@ -181,13 +200,13 @@ const HomeStudent = (props) =>{
                     {statu === 2 && (<Tag color="processing">{status[statu].status_name.toUpperCase()}</Tag>)}
                     {statu === 1 && (<Tag color="warning">{status[statu].status_name.toUpperCase()}</Tag>)}
                     {statu === 4 && (<Tag color="error">{status[statu].status_name.toUpperCase()}</Tag>)}
-                    {statu === 0 && (<Tag color="magenta">{status[statu].status_name.toUpperCase()}</Tag>)}
                 </>
             )
           },
           {
             title: 'Giá tiền',
             dataIndex: 'total_price',
+            key: 'total_price',
             width: 100,
            
           },
@@ -242,24 +261,37 @@ const HomeStudent = (props) =>{
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div class="col col-4 mb-3 mt-3">
+                            <div className="col col-3 mb-3 mt-3">
                                 <Input placeholder="Nhập tên bài viết cần tìm" />
                             </div>
-                            <div className="col col-6 mb-auto mt-auto " >
-                            <Radio.Group  >
+                            <div className="col col-5 mb-auto mt-auto " >
+                            <Radio.Group  defaultValue={stateOrder} onChange={(e)=>{setStateOrder(e.target.value)}}>
                                 {statusList}
                             </Radio.Group>
                             </div>
-                            
                             <div className="col col-2 mb-auto mt-auto ">
                                 <Button outline color="secondary" block>Đặt lại</Button>
+                            </div>
+                            <div className="col col-2 mb-auto mt-auto ">
                                 <Button color="primary" block>Tìm kiếm</Button>
                             </div>
+
+                            
+
                             
                         </div>
                         <div className="row mt-4" style={{height:'705px'}}>
                             
-                            <Table columns={columnsEssay} dataSource={orders} pagination={{pageSize:10}} rowSelection={{rowSelection}}/>
+                            <Table rowKey={order => order.order_id} 
+                            columns={columnsEssay} 
+                            dataSource={orders} 
+                            pagination={{pageSize:10}} 
+                            rowSelection={{rowSelection}}
+                            onRow={(record, rowIndex) => {
+                                return {
+                                  onClick: event => (props.history.push("/HomeStudentPage/DetailWriting?order_id="+record.order_id)),
+                                };
+                              }}/>
                         </div>
                     </div>
                         
@@ -271,7 +303,7 @@ const HomeStudent = (props) =>{
                     <Button color="primary" href="/HomeStudentPage/AddNewWriting" block large>Thêm bài viết mới</Button>
                 </div>
                 <div className="row bg-row margin padding" >
-                    <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số lượng bài viết đã đăng</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số lượng bài viết đã đăng</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columns} dataSource={data} pagination={false} />
                     </div>                     
@@ -280,7 +312,7 @@ const HomeStudent = (props) =>{
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col contentPhu">Tổng chi tháng này</div>
-                        <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
+                        <div ><i className="fa fa-info-circle fa-lg fa-custome " ></i></div>
                         
                     </div>
                     <div className="row ">
@@ -305,7 +337,7 @@ const HomeStudent = (props) =>{
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col mb-2" style={{fontSize: '18px'}}> Xếp hạng</div>
-                        <div className=""><a className="fa fa fa-ellipsis-h fa-lg fa-custome "></a></div>
+                        <div className=""><i className="fa fa fa-ellipsis-h fa-lg fa-custome "></i></div>
                     </div>
                     <div className="row " >
                         <UserTable/>
@@ -322,6 +354,6 @@ const HomeStudent = (props) =>{
     );
 }
 
-export default HomeStudent;
+export default withRouter(HomeStudent);
 
 

@@ -417,7 +417,7 @@ const HomeTeacher = (props) =>{
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div class="col col-3 mb-3 mt-3">
+                            <div className="col col-3 mb-3 mt-3">
                                 <Input placeholder="Nhập tên bài viết cần tìm" />
                             </div>
                             <div className="col col-1 mb-auto mt-auto ml-4" ><Input type="radio" name="sort" checked/> Tất cả</div>
@@ -444,13 +444,13 @@ const HomeTeacher = (props) =>{
                     <Button color="primary" href="/HomeTeacherPage/AddNewWriting" block large>Chấm bài viết mới</Button>
                 </div>
                 <div className="row bg-row margin padding" >
-                    <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số lượng bài viết đã đăng</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số lượng bài viết đã đăng</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columns} dataSource={data} pagination={false}/>
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" >
-                    <h5 ><a class="fa fa-info-circle fa-lg">{' '}</a>  Số bài phải chấm</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số bài phải chấm</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columnsSchedule} dataSource={dataSchedule} pagination={false}/>
                     </div>                     
@@ -459,7 +459,7 @@ const HomeTeacher = (props) =>{
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col contentPhu">Tổng doanh thu tháng này</div>
-                        <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
+                        <div><i className="fa-custome fa fa-info-circle fa-lg" ></i></div>
                         
                     </div>
                     <div className="row ">
@@ -484,14 +484,14 @@ const HomeTeacher = (props) =>{
                     <div className="container-fluid">
                         <div className="row ">
                             <div className="col contentPhu">Đánh giá của học viên</div>
-                            <div className=""><a className="fa fa-info-circle fa-lg fa-custome "></a></div>
+                            <div ><i className="fa-custome fa fa-info-circle fa-lg" ></i></div>
                             
                         </div>
                         <div className="row ">
                             <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'4.95'} </div>
                         </div>
                         <div className="row ">
-                            <div className="col" style={{fontSize: '18px'}} style={{height:'57px'}}>
+                            <div className="col" style={{fontSize: '18px', height:'57px'}}>
                                 So với tháng trước {'10% '} 
                                 <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
                                 <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
