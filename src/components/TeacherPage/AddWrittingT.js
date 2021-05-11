@@ -1,339 +1,77 @@
 import './Teacher.css';
-import { React, useState} from 'react';
-import {  Button, Input} from 'reactstrap';
+import { React, useEffect, useState} from 'react';
+import {  Button, Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
 import { Breadcrumb,Table } from 'antd';
 import GlobalHeader from './GlobalHeaderComponent';
+import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+import { withRouter } from 'react-router-dom';
 
+const api = getBaseURL();
 
-const essayList = [
-    {
-        key: 1,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 2,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đã chấm',
-        time: '29-1-2021 8:00:02',
-        score: '8',
-    },
-    {
-        key: 3,
-        kind: 'Basic',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đã hủy',
-        time: '29-3-2020 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 4,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang xử lý',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 5,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đã chấm',
-        time: '29-1-2021 8:00:02',
-        score: '7,5',
-    },
-    {
-        key: 6,
-        kind: 'Basic',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đã hủy',
-        time: '29-3-2020 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 7,
-        kind: 'Basic',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đã hủy',
-        time: '29-3-2020 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 8,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 9,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đã chấm',
-        time: '29-1-2021 8:00:02',
-        score: '7,5',
-    },
-    {
-        key: 10,
-        kind: 'Basic',
-        title: 'Describe about your future home .',
-        cost: '2,300',
-        status: 'Đã chấm',
-        time: '29-1-2021 8:00:02',
-        score: '9,0',
-    },
-    {
-        key: 11,
-        kind: 'Basic',
-        title: 'Describe about your future home .',
-        cost: '2,300',
-        status: 'Đã chấm',
-        time: '29-1-2021 8:00:02',
-        score: '9,0',
-    },
-    {
-        key: 12,
-        kind: 'Basic',
-        title: 'Describe about your future home .',
-        cost: '2,300',
-        status: 'Đã chấm',
-        time: '29-1-2021 8:00:02',
-        score: '9,0',
-    },
-    {
-        key: 13,
-        kind: 'Basic',
-        title: 'Describe about your future home .',
-        cost: '2,300',
-        status: 'Đã chấm',
-        time: '29-1-2021 8:00:02',
-        score: '9,0',
-    },
-    {
-        key: 14,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 15,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 16,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 17,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 18,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 19,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 20,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 21,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 22,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 23,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 24,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 25,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 26,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 27,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 28,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 29,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 30,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-    {
-        key: 31,
-        kind: 'IELTS Writting',
-        title: 'Vel cras auctor at tortor imperdiet .',
-        cost: '3,430,300',
-        status: 'Đang chấm',
-        time: '29-3-2021 8:00:02',
-        score: 'N/A',
-    },
-]
-
-const  columnsEssay = [
-    {
-        title: 'Thể loại',
-        dataIndex: 'kind',
-        width: 130,
-        render: kind => <div style={{color: 'blue'}}>{kind}</div>,
-       },
-      {
-        title: 'Đề bài',
-        dataIndex: 'title',
-        width: 460,
-        
-      },
-      {
-        title: 'Giá tiền',
-        dataIndex: 'cost',
-        width: 120,
-       
-      },
-      
-      {
-        title: 'Ngày cập nhật',
-        dataIndex: 'time',
-        width: 150,
-       
-      },
-      
-
-];
-
-
-
-function EssayTable(props){
-    const rowSelection = useState([]);
-
-    return(
-        <>
-        <Table columns={columnsEssay} dataSource={essayList} 
-        rowSelection={{rowSelection}}
-        pagination={{pageSize:7}} />
-        </>
-    );
-}
 
 
 
 const AddWritingT = (props) =>{
+    const rowSelection = useState([]);
+    const [orders, setOrders] = useState([]);
+    useEffect( () => {
+        async function fetchData() {
+    
+            await api.get('/orders/waiting',{
+                headers: {Authorization: getTokenType() + ' ' + getToken()}
+            }).then(response => {
+                const orders = response.data.data;
+                setOrders(orders);
+                
+            })  
+        }
+        fetchData();
+        
+    },[]);
+
+    const  columnsEssay = [
+        {
+            title: 'ID',
+            dataIndex: 'order_id',
+            key: 'order_id',
+            width: 20,
+        },
+        {
+            title: 'Tên HS',
+            dataIndex: 'student_id',
+            key: 'student_id',
+            width: 170,
+            render: name => <div style={{color: 'blue'}}>{name}</div>,
+           },
+          {
+            title: 'Tiêu đề bài viết',
+            dataIndex: ['essay','title'],
+            key: ['essay','title'],
+            width: 450,
+            render: title => <div>{title.slice(0,65)}...</div>
+            
+          },
+          {
+            title: 'Mức giá',
+            dataIndex: 'total_price',
+            key: 'total_price',
+            width: 100,
+           
+          },
+          {
+            title: 'Hạn giao bài viết',
+            dataIndex: 'deadline',
+            key: 'deadline',
+            width: 110,
+          },
+          {
+            title: 'Chủ đề',
+            dataIndex: 'topic_name',
+            key: 'topic_name',
+          },
+            
+          
+    ];
     const columns=[{
         title: 'Số lượng',
         dataIndex: 'total',
@@ -379,7 +117,7 @@ const AddWritingT = (props) =>{
     ]
     return (
         <>         
-            <GlobalHeader username="Teacher"/>
+            <GlobalHeader />
             
             <div className="container-fluid detailPage" >
                 <div className="row" style={{minHeight: window.innerHeight + 'px'}}>
@@ -392,23 +130,33 @@ const AddWritingT = (props) =>{
                             <Breadcrumb.Item>
                             <a href="/HomeTeacherPage">Quản lý bài viết</a>
                             </Breadcrumb.Item>
-                            <Breadcrumb.Item >Nhận bài viết mới</Breadcrumb.Item>
+                            <Breadcrumb.Item >Danh sách bài viết mới </Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="row bg-row padding" >
                         <br/>
-                        <h3>NHẬN BÀI VIẾT MỚI</h3>
+                        <div className="col-8"><h3>DANH SÁCH BÀI VIẾT MỚI</h3></div>
+                        <div className=" col-4 ">
+                            <InputGroup >
+                                <InputGroupAddon addonType="prepend">
+                                <InputGroupText>Chủ Đề</InputGroupText>
+                                </InputGroupAddon>
+                                <Input type="select" >
+                                    <option>SCIENCE {'&'} TECH</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </Input>
+                            </InputGroup>
+                        </div>
                     </div>
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div className="col col-3 mb-3 mt-3">
+                            <div className="col col-8 mb-3 mt-3">
                                 <Input placeholder="Nhập tên bài viết cần tìm" />
                             </div>
-                            <div className="col col-1 mb-auto mt-auto ml-4" ><Input type="radio" name="sort" checked/> Tất cả</div>
-                            <div className="col col-1 mb-auto mt-auto "><Input type="radio" name="sort" />Đã chấm </div>
-                            <div className="col col-1 mb-auto mt-auto " ><Input type="radio" name="sort"/>Đang chấm</div>
-                            <div className="col col-1 mb-auto mt-auto "><Input type="radio" name="sort"/> Bị hủy</div>
                             <div className="col col-2 mb-auto mt-auto ">
                                 <Button outline color="secondary" block>Đặt lại</Button>
                             </div>
@@ -416,8 +164,17 @@ const AddWritingT = (props) =>{
                                 <Button color="primary" block>Tìm kiếm</Button>
                             </div>
                         </div>
-                        <div className="row mt-4" style={{height:'520px'}}>
-                            <EssayTable/>
+                        <div className="row mt-4" style={{height:'710px'}}>
+                            <Table rowKey={order => order.order_id} 
+                                columns={columnsEssay} 
+                                dataSource={orders} 
+                                pagination={{pageSize:10}} 
+                                rowSelection={{rowSelection}}
+                                onRow={(record) => {
+                                    return {
+                                    onClick: event => (props.history.push("/HomeTeacherPage/DetailRequirement?order_id="+record.order_id)),
+                                    };
+                                }}/>
                         </div>
                     </div>
                         
@@ -425,13 +182,13 @@ const AddWritingT = (props) =>{
                 </div>
 
                 <div className="container-fluid rightCol">
-                <div className="row bg-row margin padding" >
+                <div className="row bg-row margin padding" style={{height:"242px"}}>
                     <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số lượng bài viết đã đăng</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columns} dataSource={data} pagination={false}/>
                     </div>                     
                 </div>
-                <div className="row bg-row margin padding" >
+                <div className="row bg-row margin padding" style={{height:"242px"}}>
                     <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số bài phải chấm</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columnsSchedule} dataSource={dataSchedule} pagination={false}/>
@@ -456,7 +213,7 @@ const AddWritingT = (props) =>{
                     </div>
                     <hr/>
                     <div className="row ">
-                        <div className="col" style={{fontSize: '18px'}}>
+                        <div className="col" style={{fontSize: '18px', height:'100px'}}>
                             Doanh thu trung bình theo bài {'$300'} 
                         </div>
                     </div>
@@ -473,7 +230,7 @@ const AddWritingT = (props) =>{
                             <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'4.95'} </div>
                         </div>
                         <div className="row ">
-                            <div className="col" style={{fontSize: '18px'}} >
+                            <div className="col" style={{fontSize: '18px',height:'57px'}} >
                                 So với tháng trước {'10% '} 
                                 <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
                                 <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
@@ -491,6 +248,6 @@ const AddWritingT = (props) =>{
     );
 }
 
-export default AddWritingT;
+export default withRouter(AddWritingT);
 
 

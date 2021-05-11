@@ -1,10 +1,11 @@
 import './Teacher.css';
-import { React, useState} from 'react';
+import { React, useEffect, useState} from 'react';
 import { Badge, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand} from 'reactstrap';
 import avt from "../../img/avt.png";
-import { removeUserSession } from '../../Utils/Common';
+import { getBaseURL, getToken, removeUserSession } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 
+const api = getBaseURL();
 
 const ButtonDrop = (props) => {
     const [dropdownOpen, setOpen] = useState(false);
@@ -33,15 +34,37 @@ const ButtonDrop = (props) => {
   }
 
 const GlobalHeader= (props)=>{
-    const {
-        username
-    }=props;
+  const [username, setUsername] = useState("Không xác định");
+  
+  useEffect( () => {
+    async function fetchData() {
+        await api.get('/users/me',{
+          headers: {Authorization: 'Bearer ' + getToken()}
+        }
+        ).then(response => {
+            setUsername(response.data.info.name);
+        }).catch((error) => {
+          if(error.response){
+              if(error.response.status === 401 || error.response.status === 400 || error.response.status === 403){
+                setUsername(error.response.data.detail);
+              }
+              else{
+                setUsername("Không xác định");
+              }
+              
+          } 
+      })
+ 
+    }
+    fetchData();
+    
+},[]);
 
     const handleLogOut=() =>{
       removeUserSession();
       props.history.push("/Home");
     }
-
+    
     return(
         <Navbar light className="navBarDetail" fixed="top">
             <div style={{marginRight:"560px"}} >
@@ -54,8 +77,11 @@ const GlobalHeader= (props)=>{
             
             <ButtonDrop />
             </div>
+            <a href="/HomeStudentPage/PersonalInfo">
             <img src={avt} height="30px" className="ml-3" alt="Avatar"></img>
+            </a>
             <h5 className="username  ml-1 mt-auto mb-auto" onClick={handleLogOut}>  {username}</h5>
+            
         </Navbar>
         
     );

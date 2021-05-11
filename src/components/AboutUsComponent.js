@@ -3,6 +3,7 @@ import { Card, CardBody, CardImg, CardText, CardTitle } from 'reactstrap';
 import infoSys from '../img/infoSys1.jpg';
 import pmd from "../img/pmd.jpg";
 import ntc from "../img/ntc1.jpg";
+import tdn from "../img/tdn.png";
 import Header from './HomePage/HeaderComponent';
 import Footer from './HomePage/FooterComponent';
 
@@ -39,7 +40,7 @@ const AboutUs = (props) =>{
                         <img src={infoSys} alt="Infomation System" width="100%"></img>
                     </div>
                     <div className="col-12 col-md-6 ">
-                        <h4 align-self-center>Đồ án chuyên ngành hệ thống thông tin</h4>
+                        <h4 >Đồ án chuyên ngành hệ thống thông tin</h4>
                         <p className="textContent">
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -62,7 +63,7 @@ const AboutUs = (props) =>{
                         <CardMember image={ntc} nameCard="NGÔ THỊ CẢNH" msv="102170006" mission="Frontend Developer" />
                     </div>
                     <div className="col-12 col-md-4">
-                        <CardMember nameCard="TRẦN ĐÌNH NAM" msv="102170172" mission="Mobile Developer" />
+                        <CardMember image={tdn}nameCard="TRẦN ĐÌNH NAM" msv="102170172" mission="Mobile Developer" />
                     </div>
                 </div>
             </div>

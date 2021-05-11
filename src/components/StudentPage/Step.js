@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Steps, Radio, Select} from 'antd';
-import { Form, FormGroup, Input, Label, Col, CustomInput, FormText, Button, Card, CardHeader, CardText, CardBody, Alert } from 'reactstrap';
+import { Form, FormGroup, Input, Label, Col, CustomInput, FormText, Button, Card, CardHeader, CardBody, Alert } from 'reactstrap';
 import { getBaseURL, getToken } from '../../Utils/Common';
 import { withRouter } from 'react-router';
 
@@ -248,11 +248,11 @@ const Stepp = (props) => {
         }
         ).then(response => {
           const essay= response.data.essay;
-          const options = response.data.option_list;
-          setOptionsTotal(options);
-          setOptionTime(options[options.length-1]);
-          options.pop();
-          setOptionScore(options)
+          const optionsS = response.data.option_list;
+          setOptionsTotal(optionsS);
+          setOptionTime(optionsS[optionsS.length-1]);
+          optionsS.pop();
+          setOptionScore(optionsS)
           setTitle(essay.title);
           setContent(essay.content);
           setType(essay.type_id);
@@ -282,16 +282,13 @@ const Stepp = (props) => {
     };
 
       await api.get('/levels',).then(response => {
-        const level = response.data.data;
-        setLevels(level);
+        setLevels(response.data.data);
     });    
       await api.get('/options',).then(response => {
-        const option = response.data.data;
-        setOptions(option);
+        setOptions(response.data.data);
     });
       await api.get('/types',).then(response => {
-        const type = response.data.data;
-        setTypes(type);
+        setTypes(response.data.data);
     });
       
         
@@ -312,9 +309,24 @@ type.type_id!==0 &&(
 
 const optionList = options.map((option)=>(
 option.option_type===0 && (
-<Select.Option value={option.option_id} key={option.option_id} label={option.option_name}>
-    {option.option_name}
-</Select.Option>
+  <>
+  {option.option_id===0  && 
+    <Select.Option value={option.option_id} key={option.option_id} label={option.option_name} disabled>
+        {option.option_name}
+    </Select.Option>
+  }
+  {option.option_id ===1 && 
+    <Select.Option value={option.option_id} key={option.option_id} label={option.option_name} disabled>
+        {option.option_name}
+    </Select.Option>
+  } 
+  {option.option_id !==1 && option.option_id !==0 && 
+    <Select.Option value={option.option_id} key={option.option_id} label={option.option_name} >
+        {option.option_name}
+    </Select.Option>
+  }
+  </>
+
 )
 ));
 
@@ -340,6 +352,25 @@ function handleChangeLevel(e){
     setType(1);
   }
 }
+
+const ShowType= ()=>{
+  return(
+      <div className="row" style={{marginBottom:'20px'}}>
+          <div className="col col-7">{types? types[type].type_name: ""}:</div>
+          <div className="col" style={{textAlign:'right'}}>{types? types[type].type_price: 0} VNĐ</div>
+      </div>
+  );
+}
+const ShowTime= ()=>{
+  return(
+      <div className="row" style={{marginBottom:'20px'}}>
+          <div className="col col-7">{options? options[optionTime].option_name: ""}:</div>
+          <div className="col" style={{textAlign:'right'}}>{options? options[optionTime].option_price: ""} VNĐ</div>
+      </div>
+  );
+}
+
+
 
 
 const handleSave = (e) =>{
@@ -369,7 +400,7 @@ const handleSave = (e) =>{
             "essay": {
               "title": title,
               "content": content,
-              "type_id": type
+              "type_id": type,
             },
             "option_list": optionsTotal
           }, 
@@ -542,6 +573,8 @@ const handlePayment = (e) =>{
     
 }
 
+
+
   // console.log("title "+ title);
   // console.log("content "+ content);
   // console.log("level "+ level);
@@ -650,12 +683,12 @@ const handlePayment = (e) =>{
                         <Select
                           id="optionScore"
                           mode="multiple"
+                          allowClear="false"
                           style={{ width: '100%'}}
                           placeholder="Please select at least one option"
-                          defaultValue={optionScore}
+                          value={optionScore}
                           onChange={handleChangeOptionScore}
                           optionLabelProp="label"
-                          
                         >
                         {optionList}
                         </Select>
@@ -675,20 +708,22 @@ const handlePayment = (e) =>{
                   <Card style={{ minHeight: '250px'}}>
                   <CardHeader tag="h4" style={{ width: '100%'}}><i className="fa fa-cart-arrow-down fa-xl"/> Giỏ Hàng</CardHeader>
                     <CardBody>
-                      <CardText>
-                        Chấm điểm và sửa lỗi: 50,000 <br/>
-                        IELTS WRITING TASK 2: 50,000 <br/>
-                      </CardText>
+                      
+                      <div className="container-fluid">
+                        <ShowType/>
+                        <ShowTime/>
+                      </div>
+                  
                       <hr/>
-                      <CardText>
-                        <strong className="ml-auto">Tổng tiền: 100,000 VNĐ</strong>
-                      </CardText>
                     </CardBody>
                   </Card>
                   
                   <Button outline color="success" block className="mb-1 mt-1" onClick={handlePayment}>
                     {loadPay? 'Đang xử lý...' : 'Xác nhận thanh toán'}
-                    </Button>
+                  </Button>
+                  <Button outline color="danger" block className="mb-1 mt-1" onClick={handlePayment}>
+                    Hủy 
+                  </Button>
                 </div>
               </div>
             </div>
