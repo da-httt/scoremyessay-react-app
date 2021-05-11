@@ -15,6 +15,7 @@ import PrivateRoute from '../Utils/PrivateRoute';
 import AddWritingT from './TeacherPage/AddWrittingT';
 import DetailReq from './TeacherPage/DetailRequirements';
 import ScoreEssay from './TeacherPage/ScoreEssay';
+import PersonalInfo from './StudentPage/PersonalInfo';
 
 class Main extends Component{
 
@@ -29,13 +30,14 @@ class Main extends Component{
                     
                     <PrivateRoute exact path="/HomeStudentPage" component={() => <HomeStudent/>} />
                     <PrivateRoute  path="/HomeStudentPage/AddNewWriting" component={() => <AddNewWriting/>}/>
-                    <Route  path="/HomeStudentPage/DetailWriting" component={() => <DetailWriting/>}/>
-                    <Route exact path="/HomeStudentPage/Cart" component={() => <Cart/>}/>
+                    <PrivateRoute  path="/HomeStudentPage/DetailWriting" component={() => <DetailWriting/>}/>
+                    <PrivateRoute exact path="/HomeStudentPage/Cart" component={() => <Cart/>}/>
+                    <PrivateRoute exact path="/HomeStudentPage/PersonalInfo" component={() => <PersonalInfo/>}/>
 
                     <PrivateRoute exact path="/HomeTeacherPage" component={() => <HomeTeacher/>}/>
-                    <Route exact path="/HomeTeacherPage/AddNewWriting" component={() => <AddWritingT/>}/>
-                    <Route exact path="/HomeTeacherPage/DetailRequirement" component={() => <DetailReq/>}/>
-                    <Route exact path="/HomeTeacherPage/ScoreEssay" component={() => <ScoreEssay/>}/>
+                    <PrivateRoute exact path="/HomeTeacherPage/AddNewWriting" component={() => <AddWritingT/>}/>
+                    <PrivateRoute exact path="/HomeTeacherPage/DetailRequirement" component={() => <DetailReq/>}/>
+                    <PrivateRoute exact path="/HomeTeacherPage/ScoreEssay" component={() => <ScoreEssay/>}/>
 
                     <Route exact path="/test" component={() => <Test/>}/>
                     <Redirect to="/Home"/>

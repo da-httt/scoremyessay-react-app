@@ -1,33 +1,19 @@
 import './Teacher.css';
-import React  from 'react';
-import {  Button,   Card, Col, FormGroup, Input, Label, Form} from 'reactstrap';
+import React, { useEffect, useState }  from 'react';
+import {  Button,   Card, Col, FormGroup, Input, Label, Form, Alert} from 'reactstrap';
 import GlobalHeader from './GlobalHeaderComponent';
 import { Breadcrumb, Tabs } from 'antd';
+import { withRouter } from 'react-router-dom';
+import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 
 const {TabPane} =Tabs;
 
-const sentenceList = [
-    {
-        id: 1,
-        content: 'Câu 1 Lorem Ipsum is simply dummy text of the printing and typesetting industry 1',
-    },
-    {
-        id: 2,
-        content: 'Overaill It isLorem Ipsum is simply dummy text of the printing and typesetting industry 2',
-    },
-    {
-        id: 3,
-        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry 3',
-    },
-    {
-        id: 4,
-        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry 4',
-    },
-]
+const api=getBaseURL();
 
+const ScoreEssay = (props) =>{
+    const url = window.location.href.split('=');
+    const orderID=Number(url[1]);
 
-const TabComponent=(props)=>{
-    
     const [current, setCurrent] = React.useState(0);
 
     const next = () => {
@@ -37,169 +23,302 @@ const TabComponent=(props)=>{
     const prev = () => {
         setCurrent(current - 1);
     };
+    const [show, setShow] = useState(false);
+    const [error, setError] = useState(null);
+    const [colorAlert, setColorAlert] = useState("warning");
+    const [loadSave, setLoadSave] =useState(false);
 
-    const nameOfTeacher=<>Người viết: <Button color="link">CELED MAR</Button></>;
+    const [show2, setShow2] = useState(false);
+    const [error2, setError2] = useState(null);
+    const [loadSave2, setLoadSave2] =useState(false);
+    const [loadDone2, setLoadDone2] = useState(false);
+
+    const [studentID,setStudentID] = useState();
+    const [student,setStudent] = useState("Không xác định");
+    const [deadline,setDeadline] = useState("Không xác định");
+
+    const [titleS,setTitleS] = useState();
+    const [title, setTitle] = useState();
+    const [content, setContent] = useState();
+    const [sentences, setSentences] = useState([]);
+    const [comments, setComments] = useState([{sentence_index: 0, comment: "" }]);
     
-    return(
-        <div className="container-fluid">
-            <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
-            <TabPane tab="Sửa lỗi"  key="1">
-            <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
-                <div className="row ">
-                <div className="col-7">
-                    <strong>Đề bài</strong>
-                    <Button outline color="primary" style={{margin:'0px 10px 0px 310px', padding:'0px 5px'}}>Lưu lại</Button>
-                    <Button outline color="primary" style={{padding:'0px 5px'}} > Kết thúc chấm</Button>
-                    <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type 
-                    specimen book. </p>
-                    
-                    <br/>
-                    <strong>Nôi dung bài viết</strong>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type 
-                    specimen book. 
-                    
-                    It has survived not only five centuries, but also the leap into
-                    electronic typesetting, remaining essentially unchanged. It was popularised 
-                    in the 1960s with the release of Letraset sheets containing Lorem Ipsum 
-                    passages, and more recently with desktop publishing software like Aldus 
-                    PageMaker including versions of Lorem Ipsum.
+    const [commentOne, setCommentOne] = useState();
 
-                    It has survived not only five centuries, but also the leap into
-                    electronic typesetting, remaining essentially unchanged. It was popularised 
-                    in the 1960s with the release of Letraset sheets containing Lorem Ipsum 
-                    passages, and more recently with desktop publishing software like Aldus 
-                    PageMaker including versions of Lorem Ipsum.
-                    
-                    </p>
-                </div>
-                <div className="col-5">
-                    <div style={{marginBottom: "10px"}}>
-                        {current===0 &&(
-                            <>
-                            <Button outline disabled style={{padding:'0px 5px'}}>Câu trước đó</Button>
-                            <Button outline style={{margin:'0px 55px 0px 55px', padding:'0px 5px'}}>Đặt lại</Button>
-                            <Button outline style={{padding:'0px 5px'}} onClick={() => next()} >
-                            Câu tiếp theo
-                            </Button>
-                            </>
-                            )}
-                        {current < sentenceList.length - 1&& current >0 &&(
-                            <>
-                            <Button outline style={{padding:'0px 5px'}} onClick={() => prev()} >Câu trước đó</Button>
-                            <Button outline style={{margin:'0px 55px 0px 55px', padding:'0px 5px'}}>Đặt lại</Button>
-                            <Button outline style={{padding:'0px 5px'}} onClick={() => next()} >
-                            Câu tiếp theo
-                            </Button>
-                            </>
-                            )}
-                        {current === sentenceList.length - 1 &&(
-                            <>
-                            <Button outline style={{padding:'0px 5px'}} onClick={() => prev()}>Câu trước đó</Button>
-                            <Button outline style={{margin:'0px 55px 0px 55px', padding:'0px 5px'}}>Đặt lại</Button>
-                            <Button outline disabled style={{padding:'0px 5px'}}>
-                            Câu tiếp theo
-                            </Button>
-                            </>
-                            )}
-                        
-                    </div>
+    const [grade,setGrade] = useState();
+    const [gradeComment,setGradeComment] = useState();
+    const [review, setReview] = useState();
+    const [commentGeneral, setCommentGeneral] = useState();
+    const [isCriteria, setIsCriteria] = useState();
+    const [criteriaResults, setCriteriaResults] = useState([]);
+    const [extraResults, setExtraResults] =useState([]); 
 
-                    <Card style={{ padding: "10px 10px"}} id={sentenceList.id}>
-                        <strong>
-                                #{sentenceList.id}: {sentenceList[current].content}
-                        </strong>
-                        <br/>
-                        <Input type="textarea" rows="12" name="fix" id={sentenceList.id} 
-                        placeholder="Nhập lỗi cần chỉnh sửa và gợi ý câu mang tính học thuật hơn"
-                        ></Input> 
-                        <div className="ml-auto" style={{color:'grey', marginBottom:'5px'}}>Tên người chấm</div>       
-                        <div className="ml-auto" style={{color:'grey', marginBottom:'5px'}}>Cập nhật lúc: 12/4/2021</div>
-                    </Card>
-                </div>
-                </div>
-            </div>
-            </TabPane>
+    useEffect( () => {
+        async function fetchData() {
+             
+            await api.get('/orders/'+orderID,{
+                headers: {Authorization: getTokenType() + ' ' + getToken()}
+            }).then(response => {
+                const order=response.data;
+                setStudentID(order.student_id);
+                api.get('/users/'+order.student_id,{
+                    headers: {Authorization: getTokenType() + ' ' + getToken()}
+                }).then(response => {
+                    setStudent(response.data.name);
+                }) 
+                setDeadline(order.deadline);
+                setTitleS(order.essay.title.slice(0,65));
+
+
+                
+            }); 
+            await api.get('/essay_comments/'+orderID,{
+                headers: {Authorization: getTokenType() + ' ' + getToken()}
+            }).then(response => {
+                const data=response.data;
+                setTitle(data.title);
+                setContent(data.content);
+                setSentences(data.essay_comments);
+                
+            });   
+
+            await api.get('/results/'+orderID,{
+                headers: {Authorization: getTokenType() + ' ' + getToken()}
+            }).then(response => {
+                const data=response.data;
+                setIsCriteria(data.isCriteria);
+                setGrade(data.grade);
+                setGradeComment(data.grade_comment);
+                setReview(data.review);
+                setCommentGeneral(data.comment);
+                if(data.criteria_results!==null)
+                    setCriteriaResults(data.criteria_results);
+                if(data.extra_results!==null)
+                    setExtraResults(data.extra_results);
+                
+                
+            });   
             
-            <TabPane tab="Chấm điểm và đánh giá"  key="2">
-            <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
-                <div className="row ">
-                <div className="col-7">
-                    <strong >Đánh giá bài làm</strong>
-                    <Input type="textarea" id="review" rows={4} alt="Nhập đánh giá chung cho bài viết"></Input>
-                    <br/>
-                    <strong>Nhận xét về bài làm</strong>
-                    <Input type="textarea" id="generalComment" rows={4} alt="Nhập nhận xét chung cho bài viết"></Input>
-                </div>
-                <div className="col-5">
-                <div className="mb-1">
-                        <Button outline color="primary" style={{marginRight:'8px', padding:'0px 20px'}}>Đặt lại</Button>
-                        <Button outline color="primary" style={{padding:'0px 20px'}}>Lưu lại</Button>
-                        <Button outline color="primary" style={{marginLeft:'50px', padding:'0px 20px'}}>Kết thúc chấm</Button>
-                    </div>
-                    <Card style={{ padding: "10px 30px "}}>
-                        <Form>
-                            <FormGroup row>
-                                <strong>Điểm số</strong><br />
-                                <Input type="text" name="grade" id="grade" placeholder="Nhập điểm"/>    
-                            </FormGroup> 
-                            <FormGroup row>
-                                <strong>Nhận xét về điểm</strong><br />
-                                <Input type="textarea" rows='3' name="commentGrade" id="commentGrade" placeholder="Nhập Nhận xét"/>    
-                            </FormGroup>  
-                            <FormGroup row>
-                                <strong>Điểm thành phần</strong><br />
-                            </FormGroup>  
-                            <FormGroup row>
-                                <Label for="task" sm={8}>Task Achivement</Label>
-                                <Col sm={4}>
-                                <Input type="number" name="task" id="task" />
-                                </Col>
-                            </FormGroup>   
-                            <FormGroup row>
-                                <Label for="grammar" sm={8}>Grammartical Range</Label>
-                                <Col sm={4}>
-                                <Input type="number" name="grammar" id="grammar" />
-                                </Col>
-                            </FormGroup>   
-                            <FormGroup row>
-                                <Label for="vocabulary" sm={8}>Lexical Resource</Label>
-                                <Col sm={4}>
-                                <Input type="number" name="vocabulary" id="vocabulary" />
-                                </Col>
-                            </FormGroup>   
-                            <FormGroup row>
-                                <Label for="coherence" sm={8}>Coherence</Label>
-                                <Col sm={4}>
-                                <Input type="number" name="coherence" id="coherence" />
-                                </Col>
-                            </FormGroup> 
-                            
-                        </Form>
-                        
-                        
-                    </Card>
-                </div>
-                </div>
-            </div>
-            </TabPane>
+        }
+        fetchData();  
+    },[orderID]);
+
+
+    const handleClickCapture = (e) => comments.forEach((item,index) => {
+        
+        if(commentOne){
+            if(comments.length === 1 && item.sentence_index === 0 && item.comment === ""){
+                comments.splice(index,1);
+            }
+            var count=0;
+            if(item.sentence_index === current){
+                count++;
+                comments.splice(index,1);
+            }
+            if(count!==0 || index===(comments.length-1) || comments.length===0)
+            {
+                console.log(1);
+                    
+                    setComments([...comments,{sentence_index: current, comment: commentOne }]); 
+        
+                setCommentOne(); 
+                return
+            }
+        }
+        else return;
+    })
+
+
+    const handleSaveComment =(e) =>{
+        setLoadSave(true);
+        api.put('/essay_comments/'+orderID, {
+            comments : comments
+        }, 
+          {
+            headers: {'Authorization': 'Bearer ' + getToken()},
+          }).then(response => {
+            setLoadSave(false);
+            setShow(true);
+            setColorAlert("success");
+            alert("Bài chấm của bạn đã được lưu lại, hãy chuyển sang phần chẩm điểm & đánh giá!");
+          }).catch((error) => {
+            if(error.response){
+                setLoadSave(false);
+                if(error.response.status === 401 || error.response.status === 400){
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError(error.response.data.detail);
+                }
+                else{
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError("Something went wrong. Please try again later!");
+                }
+                
+            } 
+          })
+    }
+
+    const handleSaveResult =(e) =>{
+        setLoadSave2(true);
+        api.put('/results/'+orderID+'?status_id=2', {
+            "grade": 9,
+            "grade_comment": gradeComment,
+            "review": review,
+            "comment": commentGeneral,
+            "criteria_results": criteriaResults,
+            "extra_results": extraResults
+        }, 
+          {
+            headers: {'Authorization': 'Bearer ' + getToken()},
+          }).then(response => {
+            setLoadSave2(false);
+            setShow2(true);
+            setColorAlert("success");
+            alert("Bài chấm của bạn đã được lưu lại!");
+          }).catch((error) => {
+            if(error.response){
+                setLoadSave2(false);
+                if(error.response.status === 401 || error.response.status === 400){
+                    setShow2(true);
+                    setColorAlert("danger");
+                    setError2(error.response.data.detail);
+                }
+                else{
+                    setShow2(true);
+                    setColorAlert("danger");
+                    setError2("Something went wrong. Please try again later!");
+                }
+                
+            } 
+          })
+    }
+    
+    const handleDoneResult =(e) =>{
+        setLoadDone2(true);
+        api.put('/results/'+orderID+'?status_id=3', {
+            "grade": 9,
+            "grade_comment": gradeComment,
+            "review": review,
+            "comment": commentGeneral,
+            "criteria_results": criteriaResults,
+            "extra_results": extraResults
+        }, 
+          {
+            headers: {'Authorization': 'Bearer ' + getToken()},
+          }).then(response => {
+            setLoadDone2(false);
+            setShow2(true);
+            setColorAlert("success");
+            alert("Bài chấm của bạn đã chấm xong!");
+            props.history.push("/HomeTeacherPage");
+          }).catch((error) => {
+            if(error.response){
+                setLoadDone2(false);
+                if(error.response.status === 401 || error.response.status === 400){
+                    setShow2(true);
+                    setColorAlert("danger");
+                    setError2(error.response.data.detail);
+                }
+                else{
+                    setShow2(true);
+                    setColorAlert("danger");
+                    setError2("Something went wrong. Please try again later!");
+                }
+                
+            } 
+          })
+    }
+    
+    const sentenceList = sentences.map((sentence) =>(
+        <>
+        {current === sentence.sentence_index &&
+        (
+            <>
+        <div style={{marginBottom: "10px"}}>
+            {current===0 &&(
+                <>
+                <Button outline disabled style={{padding:'0px 5px'}}>Câu trước đó</Button>
+                <Button outline style={{margin:'0px 55px 0px 55px', padding:'0px 5px'}}>Đặt lại</Button>
+                <Button outline style={{padding:'0px 5px'}} onClick={() => next()}  disabled={sentences.length-1===0?true:false}
+                 onClickCapture={handleClickCapture}
+                >Câu tiếp theo</Button>
+                </>
+                )}
+            {current < sentences.length - 1&& current >0 &&(
+                <>
+                <Button outline style={{padding:'0px 5px'}} onClick={() => prev()} 
+                 onClickCapture={handleClickCapture}
+                 >Câu trước đó</Button>
+                <Button outline style={{margin:'0px 55px 0px 55px', padding:'0px 5px'}}>Đặt lại</Button>
+                <Button outline style={{padding:'0px 5px'}} onClick={() => next()} 
+                 onClickCapture={handleClickCapture}
+                >Câu tiếp theo</Button>
+                </>
+                )}
+            {current === sentences.length - 1 && current!==0 &&(
+                <>
+                <Button outline style={{padding:'0px 5px'}} onClick={() => prev()} 
+                 onClickCapture={handleClickCapture}
+                >Câu trước đó</Button>
+                <Button outline style={{margin:'0px 55px 0px 55px', padding:'0px 5px'}}>Đặt lại</Button>
+                <Button outline disabled style={{padding:'0px 5px'}} >
+                Câu tiếp theo
+                </Button>
+                </>
+                )}
             
-            </Tabs>
         </div>
-        
-        
-    );
-}
 
-const ScoreEssay = (props) =>{
+        <Card style={{ padding: "10px 10px", backgroundColor:'skyblue', height:'505px'}} >
+        <div key={sentence.sentence_index}>
+        <strong>
+            #{sentence.sentence_index}: {sentence.sentence}
+        </strong>
+        <br/>
+        <Input type="textarea" rows="12" name="fix" id={sentence.sentence_index} 
+        value={sentence.comment}
+        placeholder="Nhập lỗi cần chỉnh sửa và gợi ý câu mang tính học thuật hơn"
+        onChange={ e => {setCommentOne(e.target.value); sentences[current].comment= e.target.value}}
+        ></Input> 
+        </div>      
+            <div className="ml-auto" style={{color:'indianred', marginBottom:'5px'}}>Hạn giao bài viết: {deadline}</div>
+            
+        </Card>
+        </>
+            
+        )}
+        </>
+        ))
 
+
+    const criteriaResultsUI = criteriaResults.map((cri,index)=>(
+        <FormGroup row key={cri.criteria_id}>
+            <Label for="task" sm={9} style={{fontStyle:'italic'}}>{cri.criteria_name}</Label>
+            <Col sm={3}>
+            <Input disabled={!isCriteria} defaultValue={cri.criteria_score} type="number" name="task" id={cri.criteria_id} 
+            onChange={e => criteriaResults[index].criteria_score = e.target.value}/>
+            </Col>
+        </FormGroup>   
+    ));
+
+    const extraResultsUI = extraResults.map((extra,index)=>(
+        <>
+        <strong>{extra.option_name}</strong>
+        <Input type="textarea" id="generalComment" rows={7} 
+        defaultValue={extra.content}
+        onChange={e => extraResults[index].content=e.target.value}
+        ></Input>
+        </>
+    ));
+
+
+
+
+    const nameOfTeacher=<>Người viết: <Button color="link">{student}</Button></>;
     return (
         <>         
-            <GlobalHeader username="Teacher"/>
+            <GlobalHeader/>
             <div className="container-fluid detailPage"  >
             <div className="row" style={{height: window.innerHeight + 'px'}} >
                 <div className="container-fluid centerCol ">
@@ -216,11 +335,87 @@ const ScoreEssay = (props) =>{
                     </div>
                     <div className="row bg-row padding" >
                         <br/>
-                        <h3 className="mt-auto mb-auto"> Tên của bài viết để ở đây</h3>
+                        <h3 className="mt-auto mb-auto">#{orderID} {titleS}...</h3>
                     </div>
                     <div className="bg">
                         <div className="row bg-row margin padding">
-                            <TabComponent/>
+                            <div className="container-fluid">
+                                <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
+                                <TabPane tab="Sửa lỗi"  key="1">
+                                <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
+                                {error && <Alert color={colorAlert} isOpen={show} style={{margin: 'auto'}}>{error}</Alert>}
+                                    <div className="row ">
+                                    <div className="col-7">
+                                        <strong>Đề bài</strong>
+                                        <Button outline color="primary" style={{marginLeft:'390px', padding:'0px 5px', width:'102px'}}  onClickCapture={handleClickCapture} onClick={handleSaveComment}>{loadSave? 'Loading...' : 'Lưu lại'}</Button>
+                                        <Input style={{fontSize:'20px', marginTop:'8px',textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='4' defaultValue={title} />
+                                        
+                                        <strong >Nội dung bài viết</strong>
+                                        <Input style={{textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='14' defaultValue={content} />
+                                    </div>
+                                    <div className="col-5">
+                                        {sentenceList}
+                                    </div>
+                                    </div>
+                                </div>
+                                </TabPane>
+                                
+                                <TabPane tab="Chấm điểm và đánh giá"  key="2">
+                                <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
+                                {error2 && <Alert color={colorAlert} isOpen={show2} style={{margin: 'auto'}}>{error2}</Alert>}
+                                    <div className="row ">
+                                    <div className="col-7">
+                                        <strong >Đánh giá bài làm</strong>
+                                        <Input type="textarea" id="review" rows={4} placeholder="Nhập đánh giá chung cho bài viết"
+                                        defaultValue={review}
+                                        onChange={e => setReview(e.target.value)}></Input>
+                                        <br/>
+                                        <strong>Nhận xét về bài làm</strong>
+                                        <Input type="textarea" id="generalComment" rows={4} placeholder="Nhập nhận xét chung cho bài viết"
+                                        defaultValue={commentGeneral}
+                                        onChange={e => setCommentGeneral(e.target.value)}
+                                        ></Input>
+                                        <br/>
+                                        {extraResultsUI}
+                                    </div>
+                                    <div className="col-5">
+                                    <div className="mb-1">
+                                            <Button outline color="primary" style={{marginRight:'8px', padding:'0px 20px'}}>Đặt lại</Button>
+                                            <Button outline color="primary" style={{padding:'0px 20px', width:'102px'}} onClick={handleSaveResult}>{loadSave2? 'Loading...' : 'Lưu lại'}</Button>
+                                            <Button outline color="primary" style={{marginLeft:'35px', padding:'0px 20px', width:'145px'}} onClick={handleDoneResult}>{loadDone2? 'Loading...' : 'Kết thúc chấm'}</Button>
+                                        </div>
+                                        <Card style={{ padding: "10px 30px ", minHeight:'265px'}}>
+                                            <Form >
+                                                <FormGroup row>
+                                                    <strong>Điểm số</strong><br />
+                                                    <Input type="number" defaultValue={grade} name="grade" id="grade" placeholder="Nhập điểm"
+                                                    onChange={e => setGrade(e.target.value)}/>    
+                                                </FormGroup> 
+                                                <FormGroup row>
+                                                    <strong>Nhận xét về điểm</strong><br />
+                                                    <Input  type="textarea" defaultValue={gradeComment}rows='3' name="commentGrade" id="commentGrade" placeholder="Nhập Nhận xét"
+                                                    onChange={e => setGradeComment(e.target.value)}/>    
+                                                </FormGroup>  
+                                                {isCriteria=== true && 
+                                                <FormGroup row>
+                                                    <strong>Điểm thành phần</strong><br />
+                                                </FormGroup>  
+                                                }
+                                                {criteriaResultsUI}
+                                                
+                                            </Form>
+                                            
+                                            
+                                        </Card>
+                                    </div>
+                                    </div>
+                                </div>
+                                </TabPane>
+                                
+                                </Tabs>
+                            </div>
+                
+                
                         </div>
                     </div>
                     
@@ -237,4 +432,4 @@ const ScoreEssay = (props) =>{
     );
     }
 
-export default ScoreEssay;
+export default withRouter(ScoreEssay);

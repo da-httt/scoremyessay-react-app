@@ -70,58 +70,7 @@ function UserTable(props){
     );
 }
 
-/*const  columnsEssay = [
-    {
-        title: 'Thể loại',
-        dataIndex: 'kind',
-        width: 130,
-        render: kind => <div style={{color: 'blue'}}>{kind}</div>,
-       },
-      {
-        title: 'Đề bài',
-        dataIndex: 'title',
-        width: 360,
-        
-      },
-      {
-        title: 'Giá tiền',
-        dataIndex: 'cost',
-        width: 120,
-       
-      },
-      {
-        title: 'Tình trạng',
-        dataIndex: 'status',
-        width: 120,
-        render: tag => (
-            <>
-              {tag === "Đã chấm" && (<Tag color="success">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đang chấm" && (<Tag color="processing">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đang xử lý" && (<Tag color="warning">{tag.toUpperCase()}</Tag>)}
-              {tag === "Đã hủy" && (<Tag color="error">{tag.toUpperCase()}</Tag>)}
-            </>
-          ),
-       
-      },
-      {
-        title: 'Thời gian',
-        dataIndex: 'time',
-        width: 150,
-       
-      },
-      {
-        title: 'Điểm',
-        dataIndex: 'score',
-        width: 100,
-       
-      },
-
-];
-*/
-
-
 const api= getBaseURL();
-
 
 const HomeStudent = (props) =>{
     const rowSelection = useState([]);
@@ -129,7 +78,7 @@ const HomeStudent = (props) =>{
     const [types, setTypes] = useState([]);
     const [status, setStatus] = useState([]);
     const [stateOrder,setStateOrder] = useState(1);
-    console.log(rowSelection);
+    const [statistic,setStatistic] = useState();
     useEffect( () => {
         async function fetchData() {
             await api.get('/types',).then(response => {
@@ -149,6 +98,12 @@ const HomeStudent = (props) =>{
                 setOrders(orders);
                 
             })  
+            await api.get('/statistics/me',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setStatistic([response.data]);
+              })
         }
         fetchData();
         
@@ -171,21 +126,27 @@ const HomeStudent = (props) =>{
             title: 'Thể loại',
             dataIndex: ['essay','type_id'],
             key: ['essay','type_id'],
-            width: 130,
+            width: 150,
             render: kind => <div style={{color: 'blue'}}>{types[kind].type_name}</div>,
            },
+           {
+            title: 'Chủ đề',
+            dataIndex:'topic_name'
+            
+          },
           {
             title: 'Đề bài',
             dataIndex: ['essay','title'],
             key: ['essay','title'],
-            width: 460,
+            width: 400,
+            render: title => <div>{title.slice(0,40)}...</div>
             
           },
           {
             title: 'Thời gian cập nhật',
             dataIndex: 'updated_date',
             key: 'updated_date',
-            width: 160,
+            width: 180,
            
           },
           {
@@ -210,38 +171,28 @@ const HomeStudent = (props) =>{
             width: 100,
            
           },
-          {
-            title: 'Điểm',
-            width:100
-          }
+          
           
     ];
 
     const columns=[{
         title: 'Số lượng',
-        dataIndex: 'total',
-        key: 'total',
+        dataIndex: 'total_orders',
         render: total => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{total}</p>
         )
     },
     {
         title: 'Đã chấm',
-        dataIndex: 'score',
-        key: 'score',
+        dataIndex: 'total_done',
         render: score => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{score}</p>
         )
     }]
 
-    const data=[{
-        id:1,
-        total: '10',
-        score: '7'
-    }]
     return (
         <>         
-            <GlobalHeader username="Canh Ngo"/>
+            <GlobalHeader />
             
             <div className="container-fluid detailPage" >
                 <div class="row" style={{minHeight: window.innerHeight + 'px'}}>
@@ -261,12 +212,13 @@ const HomeStudent = (props) =>{
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div className="col col-3 mb-3 mt-3">
-                                <Input placeholder="Nhập tên bài viết cần tìm" />
+                            <div className="col col-2 mb-3 mt-3">
+                                <Input placeholder="Tên bài viết" />
                             </div>
-                            <div className="col col-5 mb-auto mt-auto " >
+                            <div className="col col-6 mb-auto mt-auto " >
                             <Radio.Group  defaultValue={stateOrder} onChange={(e)=>{setStateOrder(e.target.value)}}>
                                 {statusList}
+                                <Radio value={5}>All</Radio>
                             </Radio.Group>
                             </div>
                             <div className="col col-2 mb-auto mt-auto ">
@@ -276,18 +228,15 @@ const HomeStudent = (props) =>{
                                 <Button color="primary" block>Tìm kiếm</Button>
                             </div>
 
-                            
-
-                            
                         </div>
-                        <div className="row mt-4" style={{height:'705px'}}>
+                        <div className="row mt-4" style={{height:'725px'}}>
                             
                             <Table rowKey={order => order.order_id} 
                             columns={columnsEssay} 
                             dataSource={orders} 
                             pagination={{pageSize:10}} 
                             rowSelection={{rowSelection}}
-                            onRow={(record, rowIndex) => {
+                            onRow={(record) => {
                                 return {
                                   onClick: event => (props.history.push("/HomeStudentPage/DetailWriting?order_id="+record.order_id)),
                                 };
@@ -305,7 +254,7 @@ const HomeStudent = (props) =>{
                 <div className="row bg-row margin padding" >
                     <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số lượng bài viết đã đăng</h5>
                     <div className="mr-auto ml-auto">
-                    <Table columns={columns} dataSource={data} pagination={false} />
+                    <Table columns={columns} dataSource={statistic} pagination={false} />
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" >
@@ -316,24 +265,28 @@ const HomeStudent = (props) =>{
                         
                     </div>
                     <div className="row ">
-                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'$1,500,000'} </div>
+                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>
+                        {statistic && <>{statistic[0].monthly_payment} đồng</>}
+                            </div>
                     </div>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
-                            So với tháng trước {'10% '} 
+                            So với tháng trước:  
                             <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
                             <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
+                            {statistic && <> {statistic[0].gross} đồng</>}
                         </div>
                     </div>
                     <hr/>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
-                            Mức chi trung bình theo bài {'$300'} 
+                            Mức chi trung bình theo bài: 
+                            {statistic && <> { statistic[0].monthly_payment/statistic[0].monthly_orders} đồng</>}
                         </div>
                     </div>
                     </div>               
                 </div>
-                <div className="row bg-row margin padding" style={{height: '495px'}} >
+                <div className="row bg-row margin padding" style={{height: '488px'}} >
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col mb-2" style={{fontSize: '18px'}}> Xếp hạng</div>

@@ -1,16 +1,145 @@
 import './Teacher.css';
-import React  from 'react';
-import {Card, Button} from 'reactstrap';
+import React, { useEffect, useState }  from 'react';
+import {Card, Button, Alert, Input} from 'reactstrap';
 import GlobalHeader from './GlobalHeaderComponent';
 import { Breadcrumb } from 'antd';
-import titleImg from '../../img/title.png';
+//import titleImg from '../../img/title.png';
+import { withRouter } from 'react-router-dom';
+import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+const api = getBaseURL();
 const DetailReq = (props) =>{
+    const url = window.location.href.split('=');
+    const orderID=Number(url[1]);
 
+    const [show, setShow] = useState(false);
+    const [error, setError] = useState(null);
+    const [colorAlert, setColorAlert] = useState("warning");
+    const [loading, setLoading] =useState(false);
+    const [teacherID, setTeacherID] = useState();
+
+    const [title, setTitle] = useState();
+    const [titleSub, setTitleSub] = useState();
+    const [image, setImage] = useState();
+    const [content, setContent] = useState();
+    const [level, setLevel] = useState(0);
+    const [type, setType] = useState(0);
+    const [optionsTotal, setOptionsTotal] = useState([]);
+
+    const [student, setStudent] = useState(" Không xác định");
+    const [studentID, setStudentID] = useState();
+    const [sentDate, setSentdate] = useState();
+    const [totalPrice, setTotalPrice] = useState("0 VNĐ");
+
+    const [options,setOptions] = useState();
+    const [types,setTypes] = useState();
+
+    
+
+    useEffect( () => {
+        async function fetchData() {
+            await api.get('/orders/waiting/'+orderID,{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setStudentID(response.data.student_id);
+                  api.get('/users/'+response.data.student_id,{
+                    headers: {Authorization: getTokenType() + ' ' + getToken()}
+                    }).then(response => {
+                    setStudent(response.data.name);
+                }) 
+                  setSentdate(response.data.sent_date);
+                  setTotalPrice(response.data.total_price+ " VNĐ");
+                  const essay= response.data.essay;
+                  const options = response.data.option_list;
+                  setOptionsTotal(options);
+                  setTitle(essay.title);
+                  setTitleSub(essay.title.slice(0,50));
+                  setContent(essay.content);
+                  setType(essay.type_id);
+                  if(essay.type_id===0){
+                      setLevel(0);
+                  }
+                  else{
+                      setLevel(1);
+                  }
+                
+            })
+            await api.get('/options',
+              ).then(response => {
+                  setOptions(response.data.data);
+            })
+
+            await api.get('/types',
+              ).then(response => {
+                  setTypes(response.data.data);
+            })
+
+
+            
+          await api.get('/users/me',{
+            headers: {Authorization: 'Bearer ' + getToken()}
+          }
+          ).then(response => {
+              setTeacherID(response.data.info.user_id);
+          })
+         
+        
+         
+        }
+        fetchData();
+        
+    },[orderID]);
+    console.log(type);
+    const ShowType= ()=>{
+        return(
+            <div className="row" style={{marginBottom:'20px'}}>
+                <div className="col col-7">{types? types[type].type_name: ""}:</div>
+                <div className="col" style={{textAlign:'right'}}>{types? types[type].type_price: 0} VNĐ</div>
+            </div>
+        );
+    }
+    const showOptions= optionsTotal.map((option)=>(
+            <div className="row" style={{marginBottom:'20px'}}>
+                <div className="col col-7">{options? options[option].option_name: ""}:</div>
+                <div className="col" style={{textAlign:'right'}}>{options? options[option].option_price: ""} VNĐ</div>
+            </div>
+        
+    )
+    )
+
+
+    const handleReceive = (e) =>{
+        setLoading(true);
+        api.put('/orders/assign/'+orderID+'?teacher_id='+teacherID,{},{
+            headers: {Authorization: 'Bearer ' + getToken()}
+          }
+          ).then(response => {
+            setLoading(false);
+            alert("Bài viết của bạn đã được lưu về chấm!");
+            props.history.push("/HomeTeacherPage");
+          }).catch((error) => {
+            if(error.response){
+                setLoading(false);
+                if(error.response.status === 401 || error.response.status === 400){
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError(error.response.data.detail);
+                }
+                else{
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError("Something went wrong. Please try again later!");
+                }
+                
+            } 
+        })
+
+    }
     return (
         <>         
-            <GlobalHeader username="Teacher"/>
+            <GlobalHeader />
             <div className="container-fluid detailPage"  >
-            <div className="row" >
+            <div className="row" style={{height: window.innerHeight + 'px'}} >
                 <div className="container-fluid centerCol ">
                     <div className="row bg-row margin padding " >
                         <Breadcrumb  className="mt-1" style={{fontSize: "large"}}>
@@ -20,73 +149,54 @@ const DetailReq = (props) =>{
                             <Breadcrumb.Item >
                             <a href="/HomeTeacherPage">Quản lý bài viết</a>
                             </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                            <a href="/HomeTeacherPage/AddNewWriting">Danh sách bài viết mới</a>
+                            </Breadcrumb.Item>
                             <Breadcrumb.Item >Nhận chấm bài mới</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="row bg-row padding" >
                         <br/>
-                        <h3 className="mt-auto mb-auto"> Tên của bài viết để ở đây</h3>
+                        <h3 className="mt-auto mb-auto"> #{orderID} {titleSub}...</h3>
                     </div>
                     <div className="bg">
                         <div className="row bg-row margin padding">
                         <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
                 <div className="row ">
-                    <div className="ml-auto mr-3">Người viết:<a href="#/"> CELED MAR</a></div>
+                    <div className="ml-auto mr-3">Người viết:<a href="#/">{student}</a></div>
                 </div>
                 <hr />
                 <div className="row ">
+                    {error && <Alert color={colorAlert} isOpen={show} style={{marginTop:'10px'}}>{error}</Alert>}
+                </div>
+                <div className="row ">
                 <div className="col-7">
                     <strong>Đề bài</strong>
-                    <p style={{marginTop:'10px'}}>
-                    The table below shows the percentage of main types of dwelling in Victoria, the Northern Territory and Tasmania.
-                     Summarize the information by selecting and reporting the main features and make comparison where relevant.
-                    </p>
-                    <img src={titleImg} width="100%" alt="titleImage"></img>
-                    <br/>
+                    <Input  style={{fontSize:'20px', textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='4' defaultValue={title} />
+                    {image? <img src={image} width="100%" alt="titleImage"></img> : <></>}
                     <strong >Nội dung bài viết</strong>
-                    <p style={{marginTop:'10px'}}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type 
-                    specimen book. 
+                    <Input  style={{marginTop:'10px', textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='10'
+                                        defaultValue={content} />
                     
-                    It has survived not only five centuries, but also the leap into
-                    electronic typesetting, remaining essentially unchanged. It was popularised 
-                    in the 1960s with the release of Letraset sheets containing Lorem Ipsum 
-                    passages, and more recently with desktop publishing software like Aldus 
-                    PageMaker including versions of Lorem Ipsum.
-
-                    It has survived not only five centuries, but also the leap into
-                    electronic typesetting, remaining essentially unchanged. It was popularised 
-                    in the 1960s with the release of Letraset sheets containing Lorem Ipsum 
-                    passages, and more recently with desktop publishing software like Aldus 
-                    PageMaker including versions of Lorem Ipsum.
-                    </p>
                 </div>
                 <div className="col-5">
                     <div className="ml-auto">
-                        <Button outline color="primary" block style={{padding:'0px 20px'}}>Nhận chấm</Button>
+                        <Button outline color="primary" block style={{padding:'0px 20px'}} 
+                        onClick={handleReceive}
+                        >
+                            {loading? "Đang xử lý...": "Nhận chấm"}
+                            </Button>
                     </div>
                     <Card style={{ minHeight: '250px', padding: "10px 30px ", marginTop:'5px'}}>
                         <strong>YÊU CẦU BÀI</strong> 
-                        <div className="ml-auto" style={{color:'grey', marginBottom:'5px'}}>Cập nhật lúc: 12/4/2021</div>
+                        <div className="ml-auto" style={{color:'grey', marginBottom:'5px'}}>Cập nhật lúc: {sentDate}</div>
                         <Card style={{ minHeight: '220px', marginTop:'5px'}}>
                             <div className="container">
-                                <div className="row" style={{marginBottom:'20px'}}>
-                                    <div className="col col-7">Chấm điểm và sửa lỗi  :</div>
-                                    <div className="col" style={{textAlign:'right'}}>50,000 VNĐ</div>
-                                </div>
-                                <div className="row" style={{marginBottom:'20px'}}>
-                                    <div className="col col-7">Ielts writing task 2  : </div>
-                                    <div className="col " style={{textAlign:'right'}}>50,000 VNĐ</div>
-                                </div>
-                                <div className="row" style={{marginBottom:'20px'}}>
-                                    <div className="col col-7">Thời gian chấm (12h): </div>
-                                    <div className="col " style={{textAlign:'right'}}>100,000 VNĐ</div>
-                                </div>
+                                <ShowType/>
+                                {showOptions}
                                 <hr/>
                                 <div className="row" style={{marginBottom:'20px'}}>
-                                    <strong className="ml-auto mr-3">Tổng tiền: 200,000 VNĐ</strong>
+                                    <strong className="ml-auto mr-3">Tổng tiền: {totalPrice}</strong>
                                 </div>
                                 
                             </div>
@@ -111,4 +221,4 @@ const DetailReq = (props) =>{
     );
     }
 
-export default DetailReq;
+export default withRouter(DetailReq);

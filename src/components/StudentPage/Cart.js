@@ -102,13 +102,14 @@ const Cart = (props) =>{
         {
             title: 'Thể loại',
             dataIndex: ['essay','type_id'],
-            width: 130,
+            width: 190,
             render: kind => <div style={{color: 'blue'}}>{types[kind].type_name}</div>,
            },
           {
             title: 'Đề bài',
             dataIndex: ['essay','title'],
             width: 560,
+            render: title => <div>{title.slice(0,70)}...</div>
             
           },
           

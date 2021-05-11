@@ -9,10 +9,6 @@ import { withRouter } from 'react-router-dom';
 const AddNewWriting = (props) =>{
     const url = window.location.href.split('=');
     const orderID=Number(url[1]);
-    // if(Number.isNaN(orderID)){
-    //     console.log("rỗng");
-    // }
-    //Kiểm tra số đó có rỗng không để create, còn lại là update
     return (
         <div >        
         <GlobalHeader username="Canh Ngo"/>
