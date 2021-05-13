@@ -5,6 +5,7 @@ import GlobalHeader from './GlobalHeaderComponent';
 import { Breadcrumb, Tabs } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+import ProfileStudent from '../ModalProfile/ProfileStudent';
 
 const {TabPane} =Tabs;
 
@@ -39,6 +40,7 @@ const ScoreEssay = (props) =>{
 
     const [titleS,setTitleS] = useState();
     const [title, setTitle] = useState();
+    const [base64Image, setBase64Image] = useState("");
     const [content, setContent] = useState();
     const [sentences, setSentences] = useState([]);
     const [comments, setComments] = useState([{sentence_index: 0, comment: "" }]);
@@ -52,6 +54,13 @@ const ScoreEssay = (props) =>{
     const [isCriteria, setIsCriteria] = useState();
     const [criteriaResults, setCriteriaResults] = useState([]);
     const [extraResults, setExtraResults] =useState([]); 
+    const [modal, setModal] = useState(false);
+
+
+    const toggle = () => setModal(!modal);
+    function handleChange(newValue){
+        setModal(newValue);
+    }
 
     useEffect( () => {
         async function fetchData() {
@@ -68,10 +77,14 @@ const ScoreEssay = (props) =>{
                 }) 
                 setDeadline(order.deadline);
                 setTitleS(order.essay.title.slice(0,65));
-
-
                 
             }); 
+            api.get('/orders/image/'+orderID,{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }).then(response =>{
+                setBase64Image(response.data.image_base64);
+            })
+
             await api.get('/essay_comments/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
@@ -101,7 +114,7 @@ const ScoreEssay = (props) =>{
             
         }
         fetchData();  
-    },[orderID]);
+    },[orderID,studentID]);
 
 
     const handleClickCapture = (e) => comments.forEach((item,index) => {
@@ -315,7 +328,9 @@ const ScoreEssay = (props) =>{
 
 
 
-    const nameOfTeacher=<>Người viết: <Button color="link">{student}</Button></>;
+    const nameOfTeacher=<>Người viết: <Button color="link" onClick={toggle}>{student}</Button></>;
+                    
+                   
     return (
         <>         
             <GlobalHeader/>
@@ -340,7 +355,9 @@ const ScoreEssay = (props) =>{
                     <div className="bg">
                         <div className="row bg-row margin padding">
                             <div className="container-fluid">
+                            <ProfileStudent modal={modal} id={studentID} onClick={handleChange} />
                                 <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
+                                
                                 <TabPane tab="Sửa lỗi"  key="1">
                                 <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
                                 {error && <Alert color={colorAlert} isOpen={show} style={{margin: 'auto'}}>{error}</Alert>}
@@ -349,7 +366,7 @@ const ScoreEssay = (props) =>{
                                         <strong>Đề bài</strong>
                                         <Button outline color="primary" style={{marginLeft:'390px', padding:'0px 5px', width:'102px'}}  onClickCapture={handleClickCapture} onClick={handleSaveComment}>{loadSave? 'Loading...' : 'Lưu lại'}</Button>
                                         <Input style={{fontSize:'20px', marginTop:'8px',textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='4' defaultValue={title} />
-                                        
+                                        {base64Image && <img src={`data:image/jpeg;base64,${base64Image}`} width="547px"  alt="Title or Content"></img>}<br/>
                                         <strong >Nội dung bài viết</strong>
                                         <Input style={{textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='14' defaultValue={content} />
                                     </div>

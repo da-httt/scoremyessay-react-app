@@ -6,70 +6,6 @@ import GlobalHeader from './GlobalHeaderComponent';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 
-  const columnsUser = [
-    {
-    title: 'STT',
-    dataIndex: 'key',
-    width: 40,
-   },
-  {
-    title: 'Người dùng',
-    dataIndex: 'username',
-    width: 170,
-    render: username => <div style={{color: 'blue'}}>{username}</div>,
-  },
-  {
-    title: 'Số bài',
-    dataIndex: 'numOfEssay',
-    width: 90,
-   
-  },
-];
-
-const dataUser=[
-    {
-        key: 1,
-        username: 'pmdung',
-        numOfEssay: '13'
-    },
-    {
-        key: 2,
-        username: 'ntcanh',
-        numOfEssay: '29'
-    },
-    {
-        key: 3,
-        username: 'tdnam',
-        numOfEssay: '17'
-    },
-    {
-        key: 4,
-        username: 'canhngo',
-        numOfEssay: '2'
-    },
-    {
-        key: 5,
-        username: 'namhunter',
-        numOfEssay: '10'
-    },
-    {
-        key: 6,
-        username: 'dungpm',
-        numOfEssay: '32'
-    },
-    {
-        key: 7,
-        username: 'namhunter',
-        numOfEssay: '11'
-    },
-]
-
-function UserTable(props){
-    return(
-        <Table columns={columnsUser} dataSource={dataUser} pagination={{ pageSize: 5 }} />
-    );
-}
-
 const api= getBaseURL();
 
 const HomeStudent = (props) =>{
@@ -79,6 +15,8 @@ const HomeStudent = (props) =>{
     const [status, setStatus] = useState([]);
     const [stateOrder,setStateOrder] = useState(1);
     const [statistic,setStatistic] = useState();
+    const [statistics,setStatistics] = useState();
+    const [topUsers,setTopUsers] = useState([]);
     useEffect( () => {
         async function fetchData() {
             await api.get('/types',).then(response => {
@@ -103,6 +41,14 @@ const HomeStudent = (props) =>{
               }
               ).then(response => {
                   setStatistic([response.data]);
+                  setStatistics(response.data);
+              })
+              await api.get('/statistics/top_user',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setTopUsers(response.data.top_users);
+                  
               })
         }
         fetchData();
@@ -190,6 +136,20 @@ const HomeStudent = (props) =>{
         )
     }]
 
+    const columnsUser = [
+      {
+        title: 'Người dùng',
+        dataIndex: 'user_name',
+        width: 220,
+        render: username => <div style={{color: 'blue'}}>{username}</div>,
+      },
+      {
+        title: 'Số bài',
+        dataIndex: 'order_count',
+        width: 90,
+       
+      },
+    ];
     return (
         <>         
             <GlobalHeader />
@@ -258,33 +218,37 @@ const HomeStudent = (props) =>{
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" >
+                    {statistics && (
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col contentPhu">Tổng chi tháng này</div>
                         <div ><i className="fa fa-info-circle fa-lg fa-custome " ></i></div>
-                        
                     </div>
+                    
                     <div className="row ">
                         <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>
-                        {statistic && <>{statistic[0].monthly_payment} đồng</>}
+                        {statistics.monthly_payment} đồng
                             </div>
                     </div>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
                             So với tháng trước:  
-                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
-                            <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
-                            {statistic && <> {statistic[0].gross} đồng</>}
+                            {statistics.gross > 0 && 
+                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>}
+                            {statistics.gross < 0 && 
+                            <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> }
+                            {statistics.gross} %
                         </div>
                     </div>
                     <hr/>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
                             Mức chi trung bình theo bài: 
-                            {statistic && <> { statistic[0].monthly_payment/statistic[0].monthly_orders} đồng</>}
+                            {statistics.monthly_payment/statistic[0].monthly_orders} đồng
                         </div>
                     </div>
                     </div>               
+                    )}
                 </div>
                 <div className="row bg-row margin padding" style={{height: '488px'}} >
                     <div className="container-fluid">
@@ -293,7 +257,7 @@ const HomeStudent = (props) =>{
                         <div className=""><i className="fa fa fa-ellipsis-h fa-lg fa-custome "></i></div>
                     </div>
                     <div className="row " >
-                        <UserTable/>
+                        <Table columns={columnsUser} dataSource={topUsers} pagination={{ pageSize: 5 }} />
                     </div>
                     </div>               
                 </div>

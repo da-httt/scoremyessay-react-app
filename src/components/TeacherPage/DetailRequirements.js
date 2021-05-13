@@ -2,10 +2,12 @@ import './Teacher.css';
 import React, { useEffect, useState }  from 'react';
 import {Card, Button, Alert, Input} from 'reactstrap';
 import GlobalHeader from './GlobalHeaderComponent';
+import ProfileStudent from '../ModalProfile/ProfileStudent';
 import { Breadcrumb } from 'antd';
 //import titleImg from '../../img/title.png';
 import { withRouter } from 'react-router-dom';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+
 const api = getBaseURL();
 const DetailReq = (props) =>{
     const url = window.location.href.split('=');
@@ -19,7 +21,7 @@ const DetailReq = (props) =>{
 
     const [title, setTitle] = useState();
     const [titleSub, setTitleSub] = useState();
-    const [image, setImage] = useState();
+    const [base64Image, setBase64Image] = useState("");
     const [content, setContent] = useState();
     const [level, setLevel] = useState(0);
     const [type, setType] = useState(0);
@@ -33,7 +35,12 @@ const DetailReq = (props) =>{
     const [options,setOptions] = useState();
     const [types,setTypes] = useState();
 
-    
+    const [modal, setModal] = useState(false);
+
+    const toggle = () => setModal(!modal);
+    function handleChange(newValue){
+        setModal(newValue);
+    }
 
     useEffect( () => {
         async function fetchData() {
@@ -64,6 +71,13 @@ const DetailReq = (props) =>{
                   }
                 
             })
+
+            api.get('/orders/image/'+orderID,{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }).then(response =>{
+                setBase64Image(response.data.image_base64);
+            })
+
             await api.get('/options',
               ).then(response => {
                   setOptions(response.data.data);
@@ -89,7 +103,6 @@ const DetailReq = (props) =>{
         fetchData();
         
     },[orderID]);
-    console.log(type);
     const ShowType= ()=>{
         return(
             <div className="row" style={{marginBottom:'20px'}}>
@@ -135,6 +148,7 @@ const DetailReq = (props) =>{
         })
 
     }
+    
     return (
         <>         
             <GlobalHeader />
@@ -163,7 +177,9 @@ const DetailReq = (props) =>{
                         <div className="row bg-row margin padding">
                         <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
                 <div className="row ">
-                    <div className="ml-auto mr-3">Người viết:<a href="#/">{student}</a></div>
+                    <div className="ml-auto mr-3">Người viết: <Button color="link" onClick={toggle}>{student}</Button></div>
+                    
+                    <ProfileStudent modal={modal} id={studentID} onClick={handleChange} />
                 </div>
                 <hr />
                 <div className="row ">
@@ -173,7 +189,7 @@ const DetailReq = (props) =>{
                 <div className="col-7">
                     <strong>Đề bài</strong>
                     <Input  style={{fontSize:'20px', textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='4' defaultValue={title} />
-                    {image? <img src={image} width="100%" alt="titleImage"></img> : <></>}
+                    {base64Image && <img src={`data:image/jpeg;base64,${base64Image}`} width="563px"  alt="Title or Content"></img>}<br/>
                     <strong >Nội dung bài viết</strong>
                     <Input  style={{marginTop:'10px', textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='10'
                                         defaultValue={content} />

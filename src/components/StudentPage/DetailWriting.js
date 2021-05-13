@@ -54,11 +54,13 @@ const DetailWriting = (props) =>{
                 setTitle(response.data.essay.title);
                 setContent(response.data.essay.content);
                 setTitleS(response.data.essay.title.slice(0,65));
+                if(response.data.status_id!==1){
                 api.get('/users/'+response.data.teacher_id,{
                     headers: {Authorization: getTokenType() + ' ' + getToken()}
                 }).then(response => {
                     setTeacher(response.data.name);
                 }) 
+            }
                 
             }) 
             await api.get('/spelling_errors/'+orderID,{
@@ -86,7 +88,7 @@ const DetailWriting = (props) =>{
                     setExtraResults(data.extra_results);
             }) 
 
-            await api.get('/essay_comments/'+orderID,{
+            await statusWriting===3 && api.get('/essay_comments/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const data=response.data;
@@ -395,7 +397,34 @@ const DetailWriting = (props) =>{
             </div>
     
             </TabPane>
-            <TabPane tab="Sửa lỗi tự động" disabled key="2"/>
+            <TabPane tab="Sửa lỗi tự động" key="2">
+            <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
+                <div className="row ">
+                    <div className="col-3">
+                    <strong>Chủ đề: </strong>
+                    <p>{topic}</p>
+                    </div>
+                    <div className="col-2">
+                    <strong>Tổng số câu:</strong>
+                    <p> {numSentence}</p>
+                    </div>
+                    <div className="col-5">
+                    <strong>      Chiều dài trung bình mỗi câu:</strong>
+                    <p>     {average}</p>
+                    </div>
+                    <div className="col-2">
+                    <strong>     Tổng số lỗi:</strong>
+                    <p>  {numErrors}</p>
+                    </div>
+                </div>
+                
+                    <Table 
+                            columns={columns} 
+                            dataSource={spelling} 
+                            pagination={{pageSize:8}} 
+                    />
+                    </div>
+                </TabPane>
             <TabPane tab="Sửa lỗi" disabled key="3"/>
             <TabPane tab="Phản hồi" disabled key="4"/>
         </Tabs>

@@ -1,37 +1,14 @@
 import './Teacher.css';
 import { React, useEffect, useState} from 'react';
-import { Badge, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand} from 'reactstrap';
-import avt from "../../img/avt.png";
+import {Navbar, NavbarBrand} from 'reactstrap';
 import { getBaseURL, getToken, removeUserSession } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
+import { Dropdown, Menu } from 'antd';
+
+import { UserOutlined, AuditOutlined, LogoutOutlined } from '@ant-design/icons';
 
 const api = getBaseURL();
 
-const ButtonDrop = (props) => {
-    const [dropdownOpen, setOpen] = useState(false);
-  
-    const toggle = () => setOpen(!dropdownOpen);
-  
-    return (
-
-        <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} >
-        <DropdownToggle caret className="fa fa-bell-o "  color="info">
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem header>Thông báo mới</DropdownItem>
-          <DropdownItem>Thông báo 1</DropdownItem>
-          <DropdownItem>Thông báo 2</DropdownItem>
-          <DropdownItem divider />
-          <DropdownItem header>Thông báo trước đây</DropdownItem>
-          <DropdownItem>Thông báo 3</DropdownItem>
-          <DropdownItem>Thông báo 4</DropdownItem>
-        </DropdownMenu>
-        <Badge className="badge">3</Badge>
-      </ButtonDropdown>
-
-      
-    );
-  }
 
 const GlobalHeader= (props)=>{
   const [username, setUsername] = useState("Không xác định");
@@ -64,7 +41,16 @@ const GlobalHeader= (props)=>{
       removeUserSession();
       props.history.push("/Home");
     }
-    
+    const menu = (
+      <Menu >
+        <Menu.Item key="1" onClick={e => props.history.push("/HomeTeacherPage/PersonalInfo")} icon={<AuditOutlined />}>
+          Thông tin cá nhân
+        </Menu.Item>
+        <Menu.Item key="2" onClick={handleLogOut} icon={<LogoutOutlined />}>
+          Đăng xuất
+        </Menu.Item>
+      </Menu>
+    );
     return(
         <Navbar light className="navBarDetail" fixed="top">
             <div style={{marginRight:"560px"}} >
@@ -74,13 +60,10 @@ const GlobalHeader= (props)=>{
             </div>
 
             <div className="ml-auto" >
-            
-            <ButtonDrop />
+            <Dropdown.Button overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
+            </Dropdown.Button>
             </div>
-            <a href="/HomeStudentPage/PersonalInfo">
-            <img src={avt} height="30px" className="ml-3" alt="Avatar"></img>
-            </a>
-            <h5 className="username  ml-1 mt-auto mb-auto" onClick={handleLogOut}>  {username}</h5>
+            <h5 className="username  ml-1 mt-auto mb-auto" >  {username}</h5>
             
         </Navbar>
         

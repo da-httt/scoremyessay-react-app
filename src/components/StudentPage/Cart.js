@@ -6,71 +6,6 @@ import GlobalHeader from './GlobalHeaderComponent';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router';
 
-  const columnsUser = [
-    {
-    title: 'STT',
-    dataIndex: 'key',
-    width: 40,
-   },
-  {
-    title: 'Người dùng',
-    dataIndex: 'username',
-    width: 170,
-    render: username => <div style={{color: 'blue'}}>{username}</div>,
-  },
-  {
-    title: 'Số bài',
-    dataIndex: 'numOfEssay',
-    width: 90,
-   
-  },
-];
-
-const dataUser=[
-    {
-        key: 1,
-        username: 'pmdung',
-        numOfEssay: '13'
-    },
-    {
-        key: 2,
-        username: 'ntcanh',
-        numOfEssay: '29'
-    },
-    {
-        key: 3,
-        username: 'tdnam',
-        numOfEssay: '17'
-    },
-    {
-        key: 4,
-        username: 'canhngo',
-        numOfEssay: '2'
-    },
-    {
-        key: 5,
-        username: 'namhunter',
-        numOfEssay: '10'
-    },
-    {
-        key: 6,
-        username: 'dungpm',
-        numOfEssay: '32'
-    },
-    {
-        key: 7,
-        username: 'namhunter',
-        numOfEssay: '11'
-    },
-]
-
-function UserTable(props){
-    return(
-        <Table columns={columnsUser} dataSource={dataUser} pagination={{ pageSize: 5 }} />
-    );
-}
-
-
 const api= getBaseURL();
 
 
@@ -78,6 +13,9 @@ const Cart = (props) =>{
     const rowSelection = useState([]);
     const [orders, setOrders] = useState([]);
     const [types, setTypes] = useState([]);
+    const [statistic,setStatistic] = useState();
+    const [statistics,setStatistics] = useState();
+    const [topUsers,setTopUsers] = useState([]);
     
     useEffect( () => {
         async function fetchData(){
@@ -92,7 +30,22 @@ const Cart = (props) =>{
                 const orders = response.data.data;
                 setOrders(orders);
                 
-            })  
+            }) 
+            
+            await api.get('/statistics/me',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setStatistic([response.data]);
+                  setStatistics(response.data);
+              })
+              await api.get('/statistics/top_user',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setTopUsers(response.data.top_users);
+                  
+              })
         }
         fetchData();
         
@@ -129,26 +82,33 @@ const Cart = (props) =>{
 
     const columns=[{
         title: 'Số lượng',
-        dataIndex: 'total',
-        key: 'total',
+        dataIndex: 'total_orders',
         render: total => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{total}</p>
         )
     },
     {
         title: 'Đã chấm',
-        dataIndex: 'score',
-        key: 'score',
+        dataIndex: 'total_done',
         render: score => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{score}</p>
         )
     }]
 
-    const data=[{
-        id:1,
-        total: '10',
-        score: '7'
-    }]
+    const columnsUser = [
+      {
+        title: 'Người dùng',
+        dataIndex: 'user_name',
+        width: 220,
+        render: username => <div style={{color: 'blue'}}>{username}</div>,
+      },
+      {
+        title: 'Số bài',
+        dataIndex: 'order_count',
+        width: 90,
+       
+      },
+    ];
     return (
         <>         
             <GlobalHeader username="Canh Ngo"/>
@@ -184,7 +144,7 @@ const Cart = (props) =>{
                                 <Button color="primary" block>Tìm kiếm</Button>
                             </div>
                         </div>
-                        <div className="row mt-4" style={{height:'705px'}}>
+                        <div className="row mt-4" style={{height:'726px'}}>
                             
                             <Table rowKey={order => order.order_id} 
                             columns={columnsEssay} dataSource={orders} 
@@ -202,51 +162,60 @@ const Cart = (props) =>{
 
                 <div className="container-fluid rightCol">
                 <div className="row  margin" >
-                    <Button color="primary" href="/HomeStudentPage/AddNewWriting" block >Thêm bài viết mới</Button>
+                    <Button color="primary" href="/HomeStudentPage/AddNewWriting" block large>Thêm bài viết mới</Button>
                 </div>
                 <div className="row bg-row margin padding" >
-                    <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số lượng bài viết đã đăng</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số lượng bài viết đã đăng</h5>
                     <div className="mr-auto ml-auto">
-                    <Table columns={columns} dataSource={data} pagination={false} />
+                    <Table columns={columns} dataSource={statistic} pagination={false} />
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" >
+                    {statistics && (
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col contentPhu">Tổng chi tháng này</div>
-                        <div className=""><i className="fa fa-info-circle fa-lg fa-custome "></i></div>
-                        
+                        <div ><i className="fa fa-info-circle fa-lg fa-custome " ></i></div>
                     </div>
+                    
                     <div className="row ">
-                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'$1,500,000'} </div>
+                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>
+                        {statistics.monthly_payment} đồng
+                            </div>
                     </div>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
-                            So với tháng trước {'10% '} 
-                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
-                            <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
+                            So với tháng trước:  
+                            {statistics.gross > 0 && 
+                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>}
+                            {statistics.gross < 0 && 
+                            <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> }
+                            {statistics.gross} %
                         </div>
                     </div>
                     <hr/>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
-                            Mức chi trung bình theo bài {'$300'} 
+                            Mức chi trung bình theo bài: 
+                            {statistics.monthly_payment/statistic[0].monthly_orders} đồng
                         </div>
                     </div>
                     </div>               
+                    )}
                 </div>
-                <div className="row bg-row margin padding" style={{height: '495px'}} >
+                <div className="row bg-row margin padding" style={{height: '488px'}} >
                     <div className="container-fluid">
                     <div className="row ">
                         <div className="col mb-2" style={{fontSize: '18px'}}> Xếp hạng</div>
                         <div className=""><i className="fa fa fa-ellipsis-h fa-lg fa-custome "></i></div>
                     </div>
                     <div className="row " >
-                        <UserTable/>
+                        <Table columns={columnsUser} dataSource={topUsers} pagination={{ pageSize: 5 }} />
                     </div>
                     </div>               
                 </div>
             </div>
+            
             </div>
             
             </div>

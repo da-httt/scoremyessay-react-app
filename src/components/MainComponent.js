@@ -38,6 +38,7 @@ class Main extends Component{
                     <PrivateRoute exact path="/HomeTeacherPage/AddNewWriting" component={() => <AddWritingT/>}/>
                     <PrivateRoute exact path="/HomeTeacherPage/DetailRequirement" component={() => <DetailReq/>}/>
                     <PrivateRoute exact path="/HomeTeacherPage/ScoreEssay" component={() => <ScoreEssay/>}/>
+                    <PrivateRoute exact path="/HomeTeacherPage/PersonalInfo" component={() => <PersonalInfo/>}/>
 
                     <Route exact path="/test" component={() => <Test/>}/>
                     <Redirect to="/Home"/>
