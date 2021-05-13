@@ -1,48 +1,26 @@
 import './Student.css';
 import { React, useEffect, useState} from 'react';
-import { Badge, Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Navbar, NavbarBrand} from 'reactstrap';
-import avt from "../../img/avt.png";
+import {Navbar, NavbarBrand} from 'reactstrap';
 import { getBaseURL, getToken, removeUserSession } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
+import { Dropdown, Menu } from 'antd';
 
-const api= getBaseURL();
+import { UserOutlined, AuditOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Button } from 'reactstrap';
 
-const ButtonDrop = (props) => {
-    const [dropdownOpen, setOpen] = useState(false);
-  
-    const toggle = () => setOpen(!dropdownOpen);
-  
-    return (
+const api = getBaseURL();
 
-        <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} >
-        <DropdownToggle caret className="fa fa-bell-o "  color="info">
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem header>Thông báo mới</DropdownItem>
-          <DropdownItem>Thông báo 1</DropdownItem>
-          <DropdownItem>Thông báo 2</DropdownItem>
-          <DropdownItem divider />
-          <DropdownItem header>Thông báo trước đây</DropdownItem>
-          <DropdownItem>Thông báo 3</DropdownItem>
-          <DropdownItem>Thông báo 4</DropdownItem>
-        </DropdownMenu>
-        <Badge className="badge">3</Badge>
-      </ButtonDropdown>
-
-      
-    );
-  }
 
 const GlobalHeader= (props)=>{
   const [username, setUsername] = useState("Không xác định");
+  
   useEffect( () => {
     async function fetchData() {
         await api.get('/users/me',{
           headers: {Authorization: 'Bearer ' + getToken()}
         }
         ).then(response => {
-            const name = response.data.info.name;
-            setUsername(name);
+            setUsername(response.data.info.name);
         }).catch((error) => {
           if(error.response){
               if(error.response.status === 401 || error.response.status === 400 || error.response.status === 403){
@@ -59,11 +37,21 @@ const GlobalHeader= (props)=>{
     fetchData();
     
 },[]);
+
     const handleLogOut=() =>{
       removeUserSession();
       props.history.push("/Home");
     }
-
+    const menu = (
+      <Menu >
+        <Menu.Item key="1" onClick={e => props.history.push("/HomeStudentPage/PersonalInfo")} icon={<AuditOutlined />}>
+          Thông tin cá nhân
+        </Menu.Item>
+        <Menu.Item key="2" onClick={handleLogOut} icon={<LogoutOutlined />}>
+          Đăng xuất
+        </Menu.Item>
+      </Menu>
+    );
     return(
         <Navbar light className="navBarDetail" fixed="top">
             <div style={{marginRight:"560px"}} >
@@ -73,13 +61,12 @@ const GlobalHeader= (props)=>{
             </div>
 
             <div className="ml-auto" >
-            <Button color="link" href="/HomeStudentPage/Cart"><i className="fa fa-cart-arrow-down fa-lg" /> Giỏ Hàng</Button>
-            <ButtonDrop />
+            <Button color="link" href="/HomeStudentPage/Cart" style={{fontSize:"22px"}}><i className="fa fa-cart-arrow-down fa-lg" /> Giỏ Hàng</Button>
+            <Dropdown.Button overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
+            </Dropdown.Button>
             </div>
-            <a href="/HomeStudentPage/PersonalInfo">
-            <img src={avt} height="30px" className="ml-3" alt="Avatar"></img>
-            </a>
-            <h5 className="username  ml-1 mt-auto mb-auto" onClick={handleLogOut} >{username}</h5>
+            <h5 className="username  ml-1 mt-auto mb-auto" >  {username}</h5>
+            
         </Navbar>
         
     );

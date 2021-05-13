@@ -14,6 +14,10 @@ const api = getBaseURL();
 const AddWritingT = (props) =>{
     const rowSelection = useState([]);
     const [orders, setOrders] = useState([]);
+
+    const [statistic,setStatistic] = useState([]);
+    const [statistics,setStatistics] = useState();
+    const [deadline, setDeadline] = useState([]);
     useEffect( () => {
         async function fetchData() {
     
@@ -22,8 +26,22 @@ const AddWritingT = (props) =>{
             }).then(response => {
                 const orders = response.data.data;
                 setOrders(orders);
-                
             })  
+
+            await api.get('/statistics/me',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setStatistic([response.data]);
+                  setStatistics(response.data);
+              })
+
+              await api.get('/deadlines',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setDeadline([response.data]);
+              })
         }
         fetchData();
         
@@ -72,49 +90,36 @@ const AddWritingT = (props) =>{
             
           
     ];
+    
     const columns=[{
         title: 'Số lượng',
-        dataIndex: 'total',
-        key: 'total',
+        dataIndex: 'total_orders',
         render: total => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{total}</p>
         )
     },
     {
         title: 'Đã chấm',
-        dataIndex: 'score',
-        key: 'score',
+        dataIndex: 'total_done',
         render: score => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{score}</p>
         )
     }]
-    const data=[{
-        total: '10',
-        score: '7'
-    }]
+    
     const columnsSchedule=[{
         title: 'Ngày hôm nay',
-        dataIndex: 'today',
-        key: 'today',
+        dataIndex: 'today_deadline',
         render: today => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{today}</p>
         )
     },
     {
         title: 'Tuần này',
-        dataIndex: 'week',
-        key: 'week',
+        dataIndex: 'week_deadline',
         render: week => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{week}</p>
         )
     }]
-
-    const dataSchedule=[
-        {
-            today: 12,
-            week: 20
-        }
-    ]
     return (
         <>         
             <GlobalHeader />
@@ -168,7 +173,7 @@ const AddWritingT = (props) =>{
                             <Table rowKey={order => order.order_id} 
                                 columns={columnsEssay} 
                                 dataSource={orders} 
-                                pagination={{pageSize:10}} 
+                                pagination={{pageSize:7}} 
                                 rowSelection={{rowSelection}}
                                 onRow={(record) => {
                                     return {
@@ -183,41 +188,48 @@ const AddWritingT = (props) =>{
 
                 <div className="container-fluid rightCol">
                 <div className="row bg-row margin padding" style={{height:"242px"}}>
-                    <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số lượng bài viết đã đăng</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số lượng bài viết đã nhận</h5>
                     <div className="mr-auto ml-auto">
-                    <Table columns={columns} dataSource={data} pagination={false}/>
+                    <Table columns={columns} dataSource={statistic} pagination={false}/>
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" style={{height:"242px"}}>
                     <h5 ><i className="fa fa-info-circle fa-lg" >{' '}</i>  Số bài phải chấm</h5>
                     <div className="mr-auto ml-auto">
-                    <Table columns={columnsSchedule} dataSource={dataSchedule} pagination={false}/>
+                        <Table columns={columnsSchedule} dataSource={deadline} pagination={false}/>
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" >
-                    <div className="container-fluid">
+                    {statistics &&(
+                        <div className="container-fluid">
                     <div className="row ">
-                        <div className="col contentPhu">Tổng doanh thu tháng này</div>
+                        <div className="col contentPhu">Tổng thu tháng này</div>
                         <div ><i className="fa fa-info-circle fa-lg fa-custome " ></i></div>
                         
                     </div>
                     <div className="row ">
-                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'$1,500,000'} </div>
+                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>
+                        {statistics.monthly_payment} đồng
+                            </div>
                     </div>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
-                            So với tháng trước {'10% '} 
-                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
-                            <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
+                            So với tháng trước:   
+                            {statistics.gross > 0 && 
+                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}/>}
+                            {statistics.gross < 0 && 
+                            <i className="fa fa-sort-down" style={{color:'darkorange'}} /> } 
+                            {statistics.gross} %
                         </div>
                     </div>
                     <hr/>
                     <div className="row ">
-                        <div className="col" style={{fontSize: '18px', height:'100px'}}>
-                            Doanh thu trung bình theo bài {'$300'} 
+                        <div className="col" style={{fontSize: '18px',height:'98px'}}>
+                            Mức chi trung bình theo bài: <br/>
+                            { statistics.monthly_payment/statistics.monthly_orders} đồng
                         </div>
                     </div>
-                    </div>               
+                    </div>                 )}
                 </div>
                 <div className="row bg-row margin padding" >
                     <div className="container-fluid">

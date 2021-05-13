@@ -4,6 +4,7 @@ import GlobalHeader from './GlobalHeaderComponent';
 import { Col, Input, Row,Form, FormGroup, Label, Container, Button, Alert, Table } from 'reactstrap';
 import { Radio } from 'antd';
 import { getBaseURL, getToken } from '../../Utils/Common';
+import { withRouter } from 'react-router-dom';
 
 const api= getBaseURL();
 
@@ -37,6 +38,8 @@ const PersonalInfo =(props) =>{
     const [show3, setShow3] = useState(false);
     const [error3, setError3] = useState(null);
     const [loadPass, setLoadPass] =useState(false);
+
+    const [statistic, setStatistic] = useState();
 
     useEffect( () => {
         async function fetchData() {
@@ -74,7 +77,7 @@ const PersonalInfo =(props) =>{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
-                 // setStatistic([response.data]);
+                 setStatistic(response.data);
               })
      
         }
@@ -330,36 +333,38 @@ const PersonalInfo =(props) =>{
                             </div>
 
                             <div className="row  bg-row padding margin">
-                                <h5><strong>Thông tin hoạt động</strong></h5>
-                                <Table>
+                                <h5><strong>Thông tin hoạt động</strong></h5><br/>
+                                {statistic &&(
+                                <Table  bordered style={{backgroundColor:"powderblue"}} >
                                 <tr>
                                     <th >Tổng số bài đăng</th>
-                                    <td>6</td>
+                                    <td>{statistic.total_orders} bài</td>
                                 </tr>
                                 <tr>
                                     <th>Số bài được chấm</th>
-                                    <td>6</td>
+                                    <td>{statistic.total_done} bài</td>
                                 </tr>
                                 <tr>
                                     <th >Tổng chi</th>
-                                    <td>450</td>
+                                    <td>{statistic.total_payment} VNĐ</td>
                                 </tr>
                                 <tr>
                                     <th >Trung bình chi theo tháng</th>
-                                    <td>450</td>
+                                    <td>{statistic.monthly_payment} VNĐ</td>
                                 </tr>
                                 <tr>
-                                    <th >So với tháng trước</th>
-                                    <td>450</td>
+                                    <th >Tổng chi so với tháng trước</th>
+                                    <td>
+                                    {statistic.gross > 0 && 
+                                        <i className="fa fa-sort-up" style={{color:'forestgreen'}}/>}
+                                    {statistic.gross < 0 && 
+                                        <i className="fa fa-sort-down" style={{color:'darkorange'}} /> } 
+                                        {statistic.gross} %
+                                        </td>
                                 </tr>
                                 </Table>
-                                                
-                            {!edit &&
-                            (<div className=" mt-2 mr-3 ml-auto">
-                                {error3 && <Alert color={colorAlert} isOpen={show3} style={{margin: 'auto'}}>{error3}</Alert>}
-                                <Button color="primary" outline  style={{margin:'0px 7px'}}>{loadInfo? 'Đang xử lý...' : 'Lưu lại'}</Button>
-                                <Button color="primary" outline  onClick={e=>setEditPass(true)}>Trở lại</Button>
-                            </div>)}
+                                )}
+                            
                             </div>
                         </div>
                         
@@ -371,4 +376,4 @@ const PersonalInfo =(props) =>{
     );
 }
 
-export default PersonalInfo;
+export default withRouter(PersonalInfo);

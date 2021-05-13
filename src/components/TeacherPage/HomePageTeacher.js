@@ -14,11 +14,16 @@ const HomeTeacher = (props) =>{
     const [orders, setOrders] = useState([]);
     const [status, setStatus] = useState([]);
     const [stateOrder,setStateOrder] = useState(2);
-
+    const [statistics,setStatistics] = useState();
     const [statistic,setStatistic] = useState([]);
+    const [deadline, setDeadline] = useState([]);
+    const [types, setTypes] = useState([]);
     useEffect( () => {
         async function fetchData() {
-             
+            await api.get('/types',).then(response => {
+                const types = response.data.data;
+                setTypes(types);
+            })  
     
             await api.get('/status',).then(response => {
                 const status = response.data.data;
@@ -37,6 +42,14 @@ const HomeTeacher = (props) =>{
               }
               ).then(response => {
                   setStatistic([response.data]);
+                  setStatistics(response.data);
+              })
+
+              await api.get('/deadlines',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                  setDeadline([response.data]);
               })
         }
         fetchData();
@@ -57,11 +70,11 @@ const HomeTeacher = (props) =>{
             width: 20,
         },
         {
-            title: 'Tên HS',
-            dataIndex: 'student_id',
-            key: 'student_id',
-            width: 130,
-            render: name => <div style={{color: 'blue'}}>{name}</div>,
+            title: 'Thể loại',
+            dataIndex: ['essay','type_id'],
+            key: ['essay','type_id'],
+            width: 150,
+            render: kind => <div style={{color: 'blue'}}>{types[kind].type_name}</div>,
            },
           {
             title: 'Tiêu đề bài viết',
@@ -74,7 +87,7 @@ const HomeTeacher = (props) =>{
             title: 'Giá tiền',
             dataIndex: 'total_price',
             key: 'total_price',
-            width: 100,
+            width: 150,
            
           },
           {
@@ -97,9 +110,6 @@ const HomeTeacher = (props) =>{
                 </>
             )
           },
-          {
-            title: 'Điểm',
-          }
           
     ];
 
@@ -120,27 +130,18 @@ const HomeTeacher = (props) =>{
     
     const columnsSchedule=[{
         title: 'Ngày hôm nay',
-        dataIndex: 'today',
-        key: 'today',
+        dataIndex: 'today_deadline',
         render: today => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{today}</p>
         )
     },
     {
         title: 'Tuần này',
-        dataIndex: 'week',
-        key: 'week',
+        dataIndex: 'week_deadline',
         render: week => (
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{week}</p>
         )
     }]
-
-    const dataSchedule=[
-        {
-            today: 12,
-            week: 20
-        }
-    ]
     return (
         <>         
             <GlobalHeader/>
@@ -179,11 +180,11 @@ const HomeTeacher = (props) =>{
                                 <Button color="primary" block>Tìm kiếm</Button>
                             </div>
                         </div>
-                        <div className="row mt-4" style={{height:'710px'}}>
+                        <div className="row mt-4" style={{height:'667px'}}>
                             <Table rowKey={order => order.order_id} 
                                 columns={columnsEssay} 
                                 dataSource={orders} 
-                                pagination={{pageSize:10}} 
+                                pagination={{pageSize:6}} 
                                 rowSelection={{rowSelection}}
                                 onRow={(record) => {
                                     return {
@@ -201,7 +202,7 @@ const HomeTeacher = (props) =>{
                     <Button color="primary" href="/HomeTeacherPage/AddNewWriting" block>Chấm bài viết mới</Button>
                 </div>
                 <div className="row bg-row margin padding"  style={{height:"230px"}}>
-                    <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số lượng bài viết đã đăng</h5>
+                    <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số lượng bài viết đã nhận</h5>
                     <div className="mr-auto ml-auto">
                     <Table columns={columns} dataSource={statistic} pagination={false}/>
                     </div>                     
@@ -209,33 +210,41 @@ const HomeTeacher = (props) =>{
                 <div className="row bg-row margin padding"  style={{height:"230px"}}>
                     <h5 ><i className="fa fa-info-circle fa-lg">{' '}</i>  Số bài phải chấm</h5>
                     <div className="mr-auto ml-auto">
-                    <Table columns={columnsSchedule} dataSource={dataSchedule} pagination={false}/>
+                    <Table columns={columnsSchedule} dataSource={deadline} pagination={false}/>
                     </div>                     
                 </div>
                 <div className="row bg-row margin padding" >
-                    <div className="container-fluid">
+                {statistics &&(
+                        <div className="container-fluid">
                     <div className="row ">
-                        <div className="col contentPhu">Tổng doanh thu tháng này</div>
-                        <div><i className="fa-custome fa fa-info-circle fa-lg" ></i></div>
+                        <div className="col contentPhu">Tổng thu tháng này</div>
+                        <div ><i className="fa fa-info-circle fa-lg fa-custome " ></i></div>
                         
                     </div>
                     <div className="row ">
-                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>{'$1,500,000'} </div>
+                        <div className="col" style={{fontSize: '30px', fontStyle:'revert'}}>
+                        {statistics.monthly_payment} đồng
+                            </div>
                     </div>
                     <div className="row ">
                         <div className="col" style={{fontSize: '18px'}}>
-                            So với tháng trước {'10% '} 
-                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}></i>
-                            <i className="fa fa-sort-down" style={{color:'darkorange'}} ></i> 
+                            So với tháng trước:   
+                            {statistics.gross > 0 && 
+                            <i className="fa fa-sort-up" style={{color:'forestgreen'}}/>}
+                            {statistics.gross < 0 && 
+                            <i className="fa fa-sort-down" style={{color:'darkorange'}} /> } 
+                            {statistics.gross} %
                         </div>
                     </div>
                     <hr/>
                     <div className="row ">
-                        <div className="col" style={{fontSize: '18px', height:'100px'}}>
-                            Doanh thu trung bình theo bài {'$300'} 
+                        <div className="col" style={{fontSize: '18px',height:'98px'}}>
+                            Mức chi trung bình theo bài: <br/>
+                            { statistics.monthly_payment/statistics.monthly_orders} đồng
                         </div>
                     </div>
-                    </div>               
+                    </div>                 )}
+                
                 </div>
                 <div className="row bg-row margin padding" >
                     <div className="container-fluid">

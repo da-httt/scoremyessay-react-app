@@ -17,189 +17,6 @@ const steps = [
   },
 ];
 
-// const First = (props) => {
-//   const {
-//     isFirst, 
-//     titleU,
-//     imageU, 
-//     contentU
-//   }=props;
-//   const [title, setTitle] = useState();
-//   const [image, setImage] = useState();
-//   const [content, setContent] = useState();
-
-//   props.title(title);
-//   props.image(image);
-//   props.content(content);
-//   console.log(titleU);
-//     return(
-//       <div className="container-fluid mt-2" style={{fontSize: "large"}}>
-//       <Form >
-//           <FormGroup row>
-//             <Label for="title" sm={2}>Đề bài</Label>
-//             <Col sm={10}>
-//             <Input type="textarea" name="title" id="title" placeholder="Nhập đề bài" required onChange={e => setTitle(e.target.value)} 
-//             defaultValue={titleU} />
-//             </Col>
-//           </FormGroup> 
-//           <FormGroup row>
-//             <Label for="image" sm={2}>Ảnh đính kèm</Label>
-//             <Col sm={10}>
-//             <CustomInput type="file" name="image" id="image" accept="image/*" onChange={e => setImage(e.target.value)}/>
-//             </Col>
-//           </FormGroup>  
-//           <FormGroup row>
-//             <Label for="content" sm={2}>Nội dung</Label>
-//             <Col sm={10}>
-//             <Input type="textarea" name="content" id="content" placeholder="Nhập nội dung bài viết" rows="15" onChange={e => setContent(e.target.value)}
-//             defaultValue={isFirst? contentU : null}/>
-//             <FormText color="muted">
-//               Độ dài tối đa: 1000 chữ.
-//             </FormText>
-//             </Col>
-//           </FormGroup> 
-//       </Form>
-//       </div>
-    
-//     );
-// }
-
-// const Second = (props) => {
-//   const {
-//     isSecond,
-//     levelU,
-//     typeU,
-//     optionsU
-//   }=props;
-//   const [level, setLevel] = useState(0);
-//   const [type, setType] = useState(1);
-//   const [optionScore, setOptionScore] = useState([0,1]);
-//   const [optionTime, setOptionTime] = useState(4);
-//   const [optionsTotal,setOptionsTotal] = useState([0,1]);
-//   props.level(level);
-//   props.type(type);
-//   props.optionScore(optionScore);
-//   props.optionTime(optionTime);
-//   props.optionsTotal(optionsTotal);
-  
-//   const [options, setOptions] = useState([]);
-//   const [levels, setLevels] = useState([]);
-//   const [types, setTypes] = useState([]);
-//   useEffect( () => {
-//     async function fetchData() {
-//         await api.get('/levels',).then(response => {
-//           const level = response.data.data;
-//           setLevels(level);
-//       });    
-//         await api.get('/options',).then(response => {
-//           const option = response.data.data;
-//           setOptions(option);
-//       });
-//         await api.get('/types',).then(response => {
-//           const type = response.data.data;
-//           setTypes(type);
-//       });
-//     }
-//     fetchData();
-//   },[]);
-
-//   const levelList = levels.map((level) =>(
-//       <Radio.Button value={level.level_id} key={level.level_id} style={{margin: '0px 8px'}}>{level.level_name}</Radio.Button>
-//   ));
-
-//   const typeList = types.map((type) =>(
-//     type.type_id!==0 &&(
-//     <option value={type.type_id}>{type.type_name}</option>
-//     )
-// ));
-
-//   const optionList = options.map((option)=>(
-//     option.option_type===0 && (
-//     <Select.Option value={option.option_id} key={option.option_id} label={option.option_name}>
-//         {option.option_name}
-//     </Select.Option>
-//     )
-//   ));
-
-//   const optionTimeList = options.map((option)=>(
-//     option.option_type===1 && (
-//       <Radio value={option.option_id} key={option.option_id}>{option.option_name} giờ</Radio>
-//     )
-//   ));
-  
-//   function handleChangeOptionScore(value) {
-//     setOptionScore(value);
-//     setOptionsTotal(value);
-//   }
-  
-//   return(
-//       <div className="container-fluid mt-2" style={{fontSize: "large"}}>
-//         <div className="row ">
-//           <div className="col-8">
-//             <Form >
-//                 <FormGroup row>
-//                   <Label for="level" sm={3} >Trình độ</Label>
-//                   <Col sm={9}>
-//                   <Radio.Group value={level} onChange={e => setLevel(e.target.value)} >
-//                     {levelList}
-//                   </Radio.Group>
-//                   </Col>
-//                 </FormGroup> 
-//                 <FormGroup row>
-//                   <Label for="type" sm={3}>Thể loại bài viết</Label>
-//                   <Col sm={9}>
-//                   <Input type="select" name="type" id="type" disabled={!level} defaultValue={1} onChange={e => setType(e.target.value)}>
-//                     {typeList}
-//                   </Input>
-//                   </Col>
-//                 </FormGroup>  
-//                 <FormGroup row >
-//                   <Label for="optionScore" sm={3}>Lựa chọn sửa bài</Label>
-//                   <Col sm={9}>
-//                   <Select
-//                     id="optionScore"
-//                     mode="multiple"
-//                     style={{ width: '100%'}}
-//                     placeholder="Please select at least one options"
-//                     defaultValue={[0,1]}
-//                     onChange={handleChangeOptionScore}
-//                     optionLabelProp="label"
-                    
-//                   >
-//                   {optionList}
-//                   </Select>
-//                   </Col>
-//                 </FormGroup> 
-//                 <FormGroup row style={{marginTop: '30px'}}>
-//                   <Label for="optionTime" sm={3}>Lựa chọn thời gian chấm</Label>
-//                   <Col sm={9} style={{padding: "20px 15px"}} >
-//                     <Radio.Group  defaultValue={optionTime} onChange={e => setOptionTime(e.target.value)}>
-//                       {optionTimeList}
-//                     </Radio.Group>
-//                   </Col>
-//                 </FormGroup> 
-//             </Form>
-//           </div>
-//           <div className="col-4">
-//             <Card style={{ minHeight: '250px'}}>
-//             <CardHeader tag="h4" style={{ width: '100%'}}><i className="fa fa-cart-arrow-down fa-xl"/> Giỏ Hàng</CardHeader>
-//               <CardBody>
-//                 <CardText>
-//                   Chấm điểm và sửa lỗi: 50,000 <br/>
-//                   IELTS WRITING TASK 2: 50,000 <br/>
-//                   <hr />
-//                   <strong className="ml-auto">Tổng tiền: 100,000 VNĐ</strong>
-//                 </CardText>
-//               </CardBody>
-//             </Card>
-            
-//             <Button outline color="success" block className="mb-1 mt-1">Xác nhận thanh toán</Button>
-//           </div>
-//         </div>
-//       </div>
-    
-//     );
-// }
 
 
 const Stepp = (props) => {
@@ -227,19 +44,22 @@ const Stepp = (props) => {
   const [colorAlert, setColorAlert] = useState("warning");
   const [loading, setLoading] =useState(false);
   const [loadPay, setLoadPay] = useState(false);
+  const [loadDel, setLoadDel] = useState(false);
   
   const [title, setTitle] = useState();
-  const [image, setImage] = useState();
   const [content, setContent] = useState();
   const [level, setLevel] = useState(0);
   const [type, setType] = useState(0);
   const [optionScore, setOptionScore] = useState([0,1]);
   const [optionTime, setOptionTime] = useState(4);
-  const [optionsTotal, setOptionsTotal] = useState([]);
+  const [optionsTotal, setOptionsTotal] = useState([0,1]);
 
   const [options, setOptions] = useState([]);
   const [levels, setLevels] = useState([]);
   const [types, setTypes] = useState([]);
+  
+  const [base64Image, setBase64Image] = useState("");
+
   useEffect( () => {
     async function fetchData() {
       if(isUpdate){
@@ -279,6 +99,12 @@ const Stepp = (props) => {
             
         } 
     })
+        api.get('/orders/image/'+orderID,{
+          headers: {Authorization: 'Bearer ' + getToken()}
+        }).then(response =>{
+          setBase64Image(response.data.image_base64);
+      })
+
     };
 
       await api.get('/levels',).then(response => {
@@ -370,7 +196,26 @@ const ShowTime= ()=>{
   );
 }
 
+const uploadImage = async (e) =>{
+  const file=e.target.files[0];
+  const base64 = await convertBase64(file);
+  const a= base64.split(",");
+  setBase64Image(a[1]);
+}
+const convertBase64=(file)=>{
+  return new Promise((resolve, reject)=>{
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
 
+      fileReader.onload =() =>{
+          resolve(fileReader.result);
+      };
+
+      fileReader.onerror=(error) =>{
+          reject(error)
+      };
+  });
+};
 
 
 const handleSave = (e) =>{
@@ -380,7 +225,7 @@ const handleSave = (e) =>{
     setError("Bạn chưa nhập đề bài, vui lòng kiểm tra lại!");
   }
   else{
-    if(!image && !content)
+    if(!base64Image && !content)
     {
       setShow(true);
       setColorAlert("warning");
@@ -407,11 +252,34 @@ const handleSave = (e) =>{
           {
             headers: {'Authorization': 'Bearer ' + getToken()},
           }).then(response => {
-            setLoading(false);
-            setShow(true);
-            setColorAlert("success");
-            alert("Bài viết của bạn đã được lưu vào giỏ hàng!");
-            props.history.push("/HomeStudentPage/Cart");
+            api.put('orders/image/'+response.data.order_id, {
+              "base64": base64Image,
+          }, 
+            {
+              headers: {'Authorization': 'Bearer ' + getToken()},
+            }).then(response => {
+              setLoading(false);
+              setShow(true);
+              setColorAlert("success");
+              alert("Bài viết của bạn đã được lưu vào giỏ hàng!");
+              props.history.push("/HomeStudentPage/Cart");
+            }).catch((error) => {
+              if(error.response){
+                setLoading(false);
+                if(error.response.status === 401 || error.response.status === 400){
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError(error.response.data.detail);
+                }
+                else{
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError("Something went wrong. Please try again later!");
+                }
+                  
+              } 
+            })
+            
           }).catch((error) => {
             if(error.response){
                 setLoading(false);
@@ -473,6 +341,7 @@ const handleSave = (e) =>{
     
 }
 
+
 const handlePayment = (e) =>{
   if(!title){
     setShow(true);
@@ -480,7 +349,7 @@ const handlePayment = (e) =>{
     setError("Bạn chưa nhập đề bài, vui lòng kiểm tra lại!");
   }
   else{
-    if(!image && !content)
+    if(!base64Image && !content)
     {
       setShow(true);
       setColorAlert("warning");
@@ -507,11 +376,34 @@ const handlePayment = (e) =>{
           {
             headers: {'Authorization': 'Bearer ' + getToken()},
           }).then(response => {
-            setLoadPay(false);
-            setShow(true);
-            setColorAlert("success");
-            alert("Bài viết của bạn đã được thanh toán và đang tìm giáo viên chấm!");
-            props.history.push("/HomeStudentPage");
+            api.put('orders/image/'+response.data.order_id, {
+              "base64": base64Image,
+          }, 
+            {
+              headers: {'Authorization': 'Bearer ' + getToken()},
+            }).then(response => {
+              setLoadPay(false);
+              setShow(true);
+              setColorAlert("success");
+              alert("Bài viết của bạn đã được thanh toán và đang tìm giáo viên chấm!");
+              props.history.push("/HomeStudentPage");
+            }).catch((error) => {
+              if(error.response){
+                setLoadPay(false);
+                if(error.response.status === 401 || error.response.status === 400){
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError(error.response.data.detail);
+                }
+                else{
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError("Something went wrong. Please try again later!");
+                }
+                  
+              } 
+            })
+            
           }).catch((error) => {
             if(error.response){
               setLoadPay(false);
@@ -573,16 +465,41 @@ const handlePayment = (e) =>{
     
 }
 
-
-
-  // console.log("title "+ title);
-  // console.log("content "+ content);
-  // console.log("level "+ level);
-  // console.log("type "+ type);
+const handleDelete = (e) =>{
+  setLoadDel(true);
+  if(!isUpdate){
+    alert("Bài viết của bạn đã được hủy!");
+    props.history.push("/HomeStudentPage/Cart");
+  }
+  else{
+    api.delete("orders/saved/"+orderID,{
+      headers: {Authorization: 'Bearer ' + getToken()}
+    }).then(response => {
+      setLoadDel(false);
+      setShow(true);
+      setColorAlert("success");
+      alert("Bài viết của bạn đã được hủy!");
+      props.history.push("/HomeStudentPage/Cart");
+    }).catch((error) => {
+      if(error.response){
+        setLoadDel(false);
+          if(error.response.status === 401 || error.response.status === 400){
+              setShow(true);
+              setColorAlert("danger");
+              setError(error.response.data.detail);
+          }
+          else{
+              setShow(true);
+              setColorAlert("danger");
+              setError("Something went wrong. Please try again later!");
+          }
+          
+      } 
+  })
+  }
   
-  // console.log("optionsTotal "+ optionsTotal);
-  // console.log("optionScore "+ optionScore);
-  // console.log("optionTime "+ optionTime);
+}
+
   return (
     <div className="bg" style={{height: window.innerHeight + 'px'}} >
     <div className="row bg margin padding">
@@ -618,11 +535,6 @@ const handlePayment = (e) =>{
     {error && <Alert color={colorAlert} isOpen={show} style={{margin: 'auto'}}>{error}</Alert>}
         {
         current === 0 && (
-          <>
-            {/* <First 
-              title= {(t)=>setTitle(t)} image= {(i)=>setImage(i)} content= {(c)=>setContent(c)} isFirst={isUpdate}
-              titleU={title} contentU={content} imageU={image}
-            /> */}
           <div className="container-fluid mt-2" style={{fontSize: "large"}}>
             <Form >
               <FormGroup row>
@@ -635,7 +547,8 @@ const handlePayment = (e) =>{
               <FormGroup row>
                 <Label for="image" sm={2}>Ảnh đính kèm</Label>
                 <Col sm={10}>
-                <CustomInput type="file" name="image" id="image" accept="image/*" onChange={e => setImage(e.target.value)}/>
+                <CustomInput type="file" name="image" id="image" accept="image/*" onChange={(e) => {uploadImage(e)} }/>
+                {base64Image && <img src={`data:image/jpeg;base64,${base64Image}`}  alt="Title or Content"></img>}
                 </Col>
               </FormGroup>  
               <FormGroup row>
@@ -650,13 +563,8 @@ const handlePayment = (e) =>{
               </FormGroup> 
           </Form>
           </div>
-    
-          </>
         )}
         {current === 1 && (
-          <>
-            {/* <Second isSecond={isUpdate} type= {(t)=>setType(t)} level= {(t)=>setLevel(t)} optionScore= {(t)=>setOptionScore(t)} optionTime= {(t)=>setOptionTime(t)} optionsTotal= {(t)=>setOptionsTotal(t)}
-            /> */}
             <div className="container-fluid mt-2" style={{fontSize: "large"}}>
               <div className="row ">
                 <div className="col-8">
@@ -721,14 +629,12 @@ const handlePayment = (e) =>{
                   <Button outline color="success" block className="mb-1 mt-1" onClick={handlePayment}>
                     {loadPay? 'Đang xử lý...' : 'Xác nhận thanh toán'}
                   </Button>
-                  <Button outline color="danger" block className="mb-1 mt-1" onClick={handlePayment}>
-                    Hủy 
+                  <Button outline color="danger" block className="mb-1 mt-1" onClick={handleDelete}>
+                    {loadDel? 'Đang xử lý...' : 'Hủy' } 
                   </Button>
                 </div>
               </div>
             </div>
-    
-          </>
         )}
         
     </div>
