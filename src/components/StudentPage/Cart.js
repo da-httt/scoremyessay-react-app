@@ -12,11 +12,12 @@ const api= getBaseURL();
 const Cart = (props) =>{
     const rowSelection = useState([]);
     const [orders, setOrders] = useState([]);
+    const [orders2, setOrders2] = useState([]);
     const [types, setTypes] = useState([]);
     const [statistic,setStatistic] = useState();
     const [statistics,setStatistics] = useState();
     const [topUsers,setTopUsers] = useState([]);
-    
+    const [searchTitle, setSearchTitle] = useState();
     useEffect( () => {
         async function fetchData(){
             await api.get('/types',).then(response => {
@@ -29,6 +30,7 @@ const Cart = (props) =>{
             }).then(response => {
                 const orders = response.data.data;
                 setOrders(orders);
+                setOrders2(orders);
                 
             }) 
             
@@ -39,7 +41,7 @@ const Cart = (props) =>{
                   setStatistic([response.data]);
                   setStatistics(response.data);
               })
-              await api.get('/statistics/top_user',{
+              await api.get('/top_users',{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
@@ -50,6 +52,21 @@ const Cart = (props) =>{
         fetchData();
         
     },[]);
+
+    const handleSearch = () =>{
+    
+        setOrders(orders2);
+        const filteredEvents = orders2.filter((order) => {
+            const title = order.essay.title.toLowerCase();
+            return title.includes(searchTitle.toLowerCase());
+          });
+        setOrders(filteredEvents);
+    };
+
+    const handleReset = () =>{
+        setSearchTitle("");
+        setOrders(orders2);
+    }
 
     const  columnsEssay = [
         {
@@ -135,13 +152,13 @@ const Cart = (props) =>{
                     <div className="container-fluid">
                         <div className="row ">
                             <div className="col col-7 mb-3 mt-3">
-                                <Input placeholder="Nhập tên bài viết cần tìm" />
+                                <Input placeholder="Nhập đề bài viết bạn muốn tìm kiếm" value={searchTitle} onChange={(e)=>setSearchTitle(e.target.value)}/>
                             </div>
                             <div className="col col-2 mb-auto mt-auto offset-1">
-                                <Button outline color="secondary" block>Đặt lại</Button>
+                                <Button outline color="secondary" block onClick={handleReset}>Đặt lại</Button>
                             </div>
                             <div className="col col-2 mb-auto mt-auto ">
-                                <Button color="primary" block>Tìm kiếm</Button>
+                                <Button color="primary" block>Tìm kiếm onClick={handleSearch}</Button>
                             </div>
                         </div>
                         <div className="row mt-4" style={{height:'726px'}}>

@@ -12,12 +12,15 @@ const api = getBaseURL();
 const HomeTeacher = (props) =>{
     const rowSelection = useState([]);
     const [orders, setOrders] = useState([]);
+    const [orders2, setOrders2] = useState([]);
     const [status, setStatus] = useState([]);
-    const [stateOrder,setStateOrder] = useState(2);
+    //const [stateOrder,setStateOrder] = useState(2);
     const [statistics,setStatistics] = useState();
     const [statistic,setStatistic] = useState([]);
     const [deadline, setDeadline] = useState([]);
     const [types, setTypes] = useState([]);
+
+    const [searchTitle, setSearchTitle] = useState();
     useEffect( () => {
         async function fetchData() {
             await api.get('/types',).then(response => {
@@ -35,6 +38,7 @@ const HomeTeacher = (props) =>{
             }).then(response => {
                 const orders = response.data.data;
                 setOrders(orders);
+                setOrders2(orders);
                 
             })  
             await api.get('/statistics/me',{
@@ -101,6 +105,12 @@ const HomeTeacher = (props) =>{
             dataIndex: 'status_id',
             key: 'status_id',
             width: 100,
+            filters: [
+                { text: 'On Going', value: 2 },
+                { text: 'Done', value: 3 },
+                { text: 'Cancelled', value: 4 },
+              ],
+            onFilter: (value, record) => record.status_id === value,
             render: statu => 
             (
                 <>
@@ -142,6 +152,22 @@ const HomeTeacher = (props) =>{
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{week}</p>
         )
     }]
+
+    const handleSearch = () =>{
+    
+        setOrders(orders2);
+        const filteredEvents = orders2.filter((order) => {
+            const title = order.essay.title.toLowerCase();
+            return title.includes(searchTitle.toLowerCase());
+          });
+        setOrders(filteredEvents);
+    };
+
+    const handleReset = () =>{
+        setSearchTitle("");
+        setOrders(orders2);
+    }
+
     return (
         <>         
             <GlobalHeader/>
@@ -164,31 +190,34 @@ const HomeTeacher = (props) =>{
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div className="col col-3 mb-3 mt-3">
-                                <Input placeholder="Nhập tên bài viết cần tìm" />
+                            <div className="col col-8 mb-3 mt-3">
+                                <Input placeholder="Nhập đề bài viết bạn muốn tìm kiếm" value={searchTitle} onChange={(e)=>setSearchTitle(e.target.value)} />
                             </div>
-                            <div className="col col-5 mb-auto mt-auto " >
+                            {/* <div className="col col-5 mb-auto mt-auto " >
                             <Radio.Group  defaultValue={stateOrder} onChange={(e)=>{setStateOrder(e.target.value)}}>
                                 {statusList}
                                 <Radio value={5}>All</Radio>
                             </Radio.Group>
+                            </div> */}
+                            <div className="col col-2 mb-auto mt-auto ">
+                                <Button outline color="secondary" block onClick={handleReset}>Đặt lại</Button>
                             </div>
                             <div className="col col-2 mb-auto mt-auto ">
-                                <Button outline color="secondary" block>Đặt lại</Button>
-                            </div>
-                            <div className="col col-2 mb-auto mt-auto ">
-                                <Button color="primary" block>Tìm kiếm</Button>
+                                <Button color="primary" block onClick={handleSearch}>Tìm kiếm </Button>
                             </div>
                         </div>
-                        <div className="row mt-4" style={{height:'667px'}}>
+                        <div className="row mt-4" style={{height:'735px'}}>
                             <Table rowKey={order => order.order_id} 
                                 columns={columnsEssay} 
                                 dataSource={orders} 
-                                pagination={{pageSize:6}} 
+                                pagination={{pageSize:7}} 
                                 rowSelection={{rowSelection}}
                                 onRow={(record) => {
                                     return {
-                                    onClick: event => (props.history.push("/HomeTeacherPage/ScoreEssay?order_id="+record.order_id)),
+                                    onClick: event => <>
+                                    {record.status_id===2 &&(props.history.push("/HomeTeacherPage/ScoreEssay?order_id="+record.order_id))}
+                                    {record.status_id===3 &&(props.history.push("/HomeTeacherPage/DetailResult?order_id="+record.order_id))}
+                                    </>,
                                     };
                                 }}/>
                         </div>
