@@ -20,6 +20,8 @@ import PersonalInfo from './StudentPage/PersonalInfo';
 import MyReviews from './StudentPage/MyReview';
 import DetailResult from './TeacherPage/DetailResult';
 import MyRating from './TeacherPage/MyRating';
+import AdminPage from './AdminPage/AdminPage'
+
 class Main extends Component{
 
     render(){
@@ -48,6 +50,7 @@ class Main extends Component{
                     <PrivateRoute exact path="/HomeTeacherPage/MyRating" component={() => <MyRating/>}/>
 
                     <Route exact path="/test" component={() => <Test/>}/>
+                    <Route exact path="/admin" component={() => <AdminPage/>}/>
                     <Redirect to="/Home"/>
                 </Switch>
             </div>
