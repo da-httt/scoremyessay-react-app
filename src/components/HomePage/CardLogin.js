@@ -40,7 +40,7 @@ const CardLogin = (props) =>{
                 let linkSignIn= "/Home";
                  if (role === 1) linkSignIn = '/HomeStudentPage';
                 else if (role === 2) linkSignIn = '/HomeTeacherPage';
-                else if (role === 0) linkSignIn = '/HomeStudentPage';
+                else if (role === 0) linkSignIn = '/admin';
                 props.history.push(linkSignIn);
             }) 
             

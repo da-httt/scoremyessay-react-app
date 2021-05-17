@@ -1,5 +1,5 @@
 import React from 'react';
-import { Line } from '@ant-design/charts';
+import {Line} from '@ant-design/charts';
 import { Card } from 'antd';
 
 const Profit = (props) => {
