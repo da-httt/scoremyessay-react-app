@@ -16,6 +16,7 @@ import AddWritingT from './TeacherPage/AddWrittingT';
 import DetailReq from './TeacherPage/DetailRequirements';
 import ScoreEssay from './TeacherPage/ScoreEssay';
 import PersonalInfo from './StudentPage/PersonalInfo';
+import AdminPage from './AdminPage/AdminPage'
 
 class Main extends Component{
 
@@ -41,6 +42,7 @@ class Main extends Component{
                     <PrivateRoute exact path="/HomeTeacherPage/PersonalInfo" component={() => <PersonalInfo/>}/>
 
                     <Route exact path="/test" component={() => <Test/>}/>
+                    <Route exact path="/admin" component={() => <AdminPage/>}/>
                     <Redirect to="/Home"/>
                 </Switch>
             </div>
