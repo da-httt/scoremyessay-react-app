@@ -50,7 +50,7 @@ class Main extends Component{
                     <PrivateRoute exact path="/HomeTeacherPage/MyRating" component={() => <MyRating/>}/>
 
                     <Route exact path="/test" component={() => <Test/>}/>
-                    <Route exact path="/admin" component={() => <AdminPage/>}/>
+                    <PrivateRoute exact path="/admin" component={() => <AdminPage/>}/>
                     <Redirect to="/Home"/>
                 </Switch>
             </div>
