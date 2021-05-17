@@ -1,4 +1,4 @@
-import './Student.css';
+import './Teacher.css';
 import React, { useEffect, useState }  from 'react';
 import {  Alert, Button,   Card, Input} from 'reactstrap';
 import GlobalHeader from './GlobalHeaderComponent';
@@ -10,11 +10,10 @@ const {TabPane} =Tabs;
 
 const api= getBaseURL();
 
-const DetailWriting = (props) =>{
+const DetailResult = (props) =>{
     const url = window.location.href.split('=');
     const orderID=Number(url[1]);
 
-    const [statusWriting, setStatusWriting] = useState();
     const [current, setCurrent] = React.useState(0);
 
     const [title,setTitle] = useState();
@@ -29,7 +28,6 @@ const DetailWriting = (props) =>{
     const [extraResults, setExtraResults] =useState([]); 
 
     const [sentences, setSentences] = useState([]);
-    const [teacher, setTeacher] = useState();
     const [topic, setTopic] = useState();
     const [spelling, setSpelling] = useState([]);
     const [numSentence, setNumSentence] =useState();
@@ -57,18 +55,9 @@ const DetailWriting = (props) =>{
             await api.get('/orders/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
-                setStatusWriting(response.data.status_id); 
                 setTitle(response.data.essay.title);
                 setContent(response.data.essay.content);
                 setTitleS(response.data.essay.title.slice(0,65));
-                if(response.data.status_id!==1){
-                api.get('/users/'+response.data.teacher_id,{
-                    headers: {Authorization: getTokenType() + ' ' + getToken()}
-                }).then(response => {
-                    setTeacher(response.data.name);
-                }) 
-            }
-                
             }) 
             await api.get('/spelling_errors/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
@@ -80,7 +69,7 @@ const DetailWriting = (props) =>{
                 setNumErrors(response.data.num_errors);
             }) 
 
-            await statusWriting===3 && api.get('/results/'+orderID,{
+            await api.get('/results/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const data=response.data;
@@ -95,7 +84,7 @@ const DetailWriting = (props) =>{
                     setExtraResults(data.extra_results);
             }) 
 
-            await statusWriting===3 && api.get('/essay_comments/'+orderID,{
+            await api.get('/essay_comments/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const data=response.data;
@@ -103,7 +92,7 @@ const DetailWriting = (props) =>{
                 
             });   
             
-            await statusWriting===3 && api.get('ratings/'+orderID,{
+            await api.get('ratings/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response =>{
                 setResponse(false);
@@ -121,7 +110,7 @@ const DetailWriting = (props) =>{
         }
         fetchData();
         
-    },[orderID,statusWriting]);
+    },[orderID]);
 
     const  columns = [
         {
@@ -276,7 +265,7 @@ const DetailWriting = (props) =>{
             } 
         })
     }
-    const nameOfTeacher=<>Người chấm: <Button color="link">{teacher}</Button></>;
+    
     return (
         <>         
             <GlobalHeader/>
@@ -289,7 +278,7 @@ const DetailWriting = (props) =>{
                             <a href="/Home">Trang chủ</a>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item >
-                            <a href="/HomeStudentPage">Quản lý bài viết</a>
+                            <a href="/HomeTeacherPage">Quản lý bài viết</a>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item >Xem bài viết</Breadcrumb.Item>
                         </Breadcrumb>
@@ -301,8 +290,8 @@ const DetailWriting = (props) =>{
                     <div className="bg">
                         <div className="row bg-row margin padding">
                         <div className="container-fluid">
-        { statusWriting === 3 &&(
-            <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
+        
+            <Tabs defaultActiveKey="1" >
             <TabPane tab="Điểm số và đánh giá"  key="1">
             <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
                 <div className="row ">
@@ -396,120 +385,7 @@ const DetailWriting = (props) =>{
                 </div>
             </TabPane>
             </Tabs>
-        ) }
-        { statusWriting === 2 &&(
-            <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
-            <TabPane tab="Điểm số và đánh giá"  key="1">
-            <div className="container-fluid mt-2" style={{fontSize: "medium"}}>
-                <div className="row ">
-                <div className="col-7">
-                    <strong>Đánh Giá</strong>
-                    <p>Bài viết đang chấm</p>
-                    <br/>
-                    <br/>
-                    <strong>Nhận xét</strong>
-                    <p>Bài viết đang chấm</p>
-                </div>
-                <div className="col-5">
-                    <Card style={{ minHeight: '150px', padding: "30px 10px "}}>
-                        <strong>Điểm số</strong>
-                        <p>Bài viết đang chấm</p>
-                    </Card>
-                </div>
-                </div>
-            </div>
-            </TabPane>
-            <TabPane tab="Sửa lỗi tự động" key="2">
-            <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
-                <div className="row ">
-                    <div className="col-3">
-                    <strong>Chủ đề: </strong>
-                    <p>{topic}</p>
-                    </div>
-                    <div className="col-2">
-                    <strong>Tổng số câu:</strong>
-                    <p> {numSentence}</p>
-                    </div>
-                    <div className="col-5">
-                    <strong>      Chiều dài trung bình mỗi câu:</strong>
-                    <p>     {average}</p>
-                    </div>
-                    <div className="col-2">
-                    <strong>     Tổng số lỗi:</strong>
-                    <p>  {numErrors}</p>
-                    </div>
-                </div>
-                
-                    <Table 
-                            columns={columns} 
-                            dataSource={spelling} 
-                            pagination={{pageSize:8}} 
-                    />
-                    </div>
-                    
-                
-            </TabPane>
-            
-            <TabPane tab="Sửa lỗi" disabled key="3"/>
-            <TabPane tab="Phản hồi" disabled key="4"/>
-        </Tabs>
-            
-        ) }
-        { statusWriting === 1 &&(
-            <Tabs defaultActiveKey="1">
-            <TabPane tab="Điểm số và đánh giá"  key="1">
-            <div className="container-fluid mt-2" style={{fontSize: "medium"}}>
-                <div className="row ">
-                <div className="col-7">
-                    <strong>Đánh Giá</strong>
-                    <p>Bài viết chưa chấm</p>
-                    <br/>
-                    <br/>
-                    <strong>Nhận xét</strong>
-                    <p>Bài viết chưa chấm</p>
-                </div>
-                <div className="col-5">
-                    <Card style={{ minHeight: '150px', padding: "30px 10px "}}>
-                        <strong>Điểm số</strong>
-                        <p>Bài viết chưa chấm</p>
-                    </Card>
-                </div>
-                </div>
-            </div>
-    
-            </TabPane>
-            <TabPane tab="Sửa lỗi tự động" key="2">
-            <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
-                <div className="row ">
-                    <div className="col-3">
-                    <strong>Chủ đề: </strong>
-                    <p>{topic}</p>
-                    </div>
-                    <div className="col-2">
-                    <strong>Tổng số câu:</strong>
-                    <p> {numSentence}</p>
-                    </div>
-                    <div className="col-5">
-                    <strong>      Chiều dài trung bình mỗi câu:</strong>
-                    <p>     {average}</p>
-                    </div>
-                    <div className="col-2">
-                    <strong>     Tổng số lỗi:</strong>
-                    <p>  {numErrors}</p>
-                    </div>
-                </div>
-                
-                    <Table 
-                            columns={columns} 
-                            dataSource={spelling} 
-                            pagination={{pageSize:8}} 
-                    />
-                    </div>
-                </TabPane>
-            <TabPane tab="Sửa lỗi" disabled key="3"/>
-            <TabPane tab="Phản hồi" disabled key="4"/>
-        </Tabs>
-        ) }
+        
         
         
         </div>
@@ -524,4 +400,4 @@ const DetailWriting = (props) =>{
     );
     }
 
-export default withRouter(DetailWriting);
+export default withRouter(DetailResult);

@@ -5,7 +5,7 @@ import { getBaseURL, getToken, removeUserSession } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 import { Dropdown, Menu } from 'antd';
 
-import { UserOutlined, AuditOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserOutlined, AuditOutlined, LogoutOutlined, StarOutlined } from '@ant-design/icons';
 
 const api = getBaseURL();
 
@@ -46,7 +46,10 @@ const GlobalHeader= (props)=>{
         <Menu.Item key="1" onClick={e => props.history.push("/HomeTeacherPage/PersonalInfo")} icon={<AuditOutlined />}>
           Thông tin cá nhân
         </Menu.Item>
-        <Menu.Item key="2" onClick={handleLogOut} icon={<LogoutOutlined />}>
+        <Menu.Item key="1" onClick={e => props.history.push("/HomeTeacherPage/MyRating")} icon={<StarOutlined />}>
+          Xếp hạng của tôi
+        </Menu.Item>
+        <Menu.Item key="3" onClick={handleLogOut} icon={<LogoutOutlined />}>
           Đăng xuất
         </Menu.Item>
       </Menu>

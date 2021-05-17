@@ -79,11 +79,10 @@
 .scrollbar
 {
 	float: left;
-    height: 400px;
-	width: 360px;
-	padding-right: 10px;
-	overflow-y: scroll;
-
+    height: 360px;
+    width: 545px;
+    padding-right: 10px;
+    overflow-y: scroll;
 }
 
 .force-overflow

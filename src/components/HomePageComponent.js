@@ -8,6 +8,7 @@ import imgStudent from '../img/student1.jpg';
 import imgTeacher from '../img/teacher1.jpg';
 import Header from './HomePage/HeaderComponent';
 import Footer from './HomePage/FooterComponent';
+import { withRouter } from 'react-router-dom';
 
 const HomePage = (props) =>{
     return(
@@ -47,4 +48,4 @@ const HomePage = (props) =>{
         
     );
 }
-export default HomePage;
+export default withRouter(HomePage);

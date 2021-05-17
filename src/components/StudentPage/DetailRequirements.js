@@ -1,22 +1,16 @@
-import './Teacher.css';
+import './Student.css';
 import React, { useEffect, useState }  from 'react';
-import {Card, Button, Alert, Input} from 'reactstrap';
+import {Card, Input} from 'reactstrap';
 import GlobalHeader from './GlobalHeaderComponent';
-import ProfileStudent from '../ModalProfile/ProfileStudent';
 import { Breadcrumb } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+import { getBaseURL, getToken } from '../../Utils/Common';
 
 const api = getBaseURL();
-const DetailReq = (props) =>{
+const DetailRequirement = (props) =>{
     const url = window.location.href.split('=');
     const orderID=Number(url[1]);
 
-    const [show, setShow] = useState(false);
-    const [error, setError] = useState(null);
-    const [colorAlert, setColorAlert] = useState("warning");
-    const [loading, setLoading] =useState(false);
-    const [teacherID, setTeacherID] = useState();
 
     const [title, setTitle] = useState();
     const [titleSub, setTitleSub] = useState();
@@ -26,33 +20,19 @@ const DetailReq = (props) =>{
     const [type, setType] = useState(0);
     const [optionsTotal, setOptionsTotal] = useState([]);
 
-    const [student, setStudent] = useState(" Không xác định");
-    const [studentID, setStudentID] = useState();
     const [sentDate, setSentdate] = useState();
     const [totalPrice, setTotalPrice] = useState("0 VNĐ");
 
     const [options,setOptions] = useState();
     const [types,setTypes] = useState();
 
-    const [modal, setModal] = useState(false);
-
-    const toggle = () => setModal(!modal);
-    function handleChange(newValue){
-        setModal(newValue);
-    }
-
+   
     useEffect( () => {
         async function fetchData() {
-            await api.get('/orders/waiting/'+orderID,{
+            await api.get('/orders/'+orderID,{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
-                  setStudentID(response.data.student_id);
-                  api.get('/users/'+response.data.student_id,{
-                    headers: {Authorization: getTokenType() + ' ' + getToken()}
-                    }).then(response => {
-                    setStudent(response.data.name);
-                }) 
                   setSentdate(response.data.sent_date);
                   setTotalPrice(response.data.total_price+ " VNĐ");
                   const essay= response.data.essay;
@@ -87,14 +67,6 @@ const DetailReq = (props) =>{
                   setTypes(response.data.data);
             })
 
-
-            
-          await api.get('/users/me',{
-            headers: {Authorization: 'Bearer ' + getToken()}
-          }
-          ).then(response => {
-              setTeacherID(response.data.info.user_id);
-          })
          
         
          
@@ -120,33 +92,7 @@ const DetailReq = (props) =>{
     )
 
 
-    const handleReceive = (e) =>{
-        setLoading(true);
-        api.put('/orders/assign/'+orderID+'?teacher_id='+teacherID,{},{
-            headers: {Authorization: 'Bearer ' + getToken()}
-          }
-          ).then(response => {
-            setLoading(false);
-            alert("Bài viết của bạn đã được lưu về chấm!");
-            props.history.push("/HomeTeacherPage");
-          }).catch((error) => {
-            if(error.response){
-                setLoading(false);
-                if(error.response.status === 401 || error.response.status === 400){
-                    setShow(true);
-                    setColorAlert("danger");
-                    setError(error.response.data.detail);
-                }
-                else{
-                    setShow(true);
-                    setColorAlert("danger");
-                    setError("Something went wrong. Please try again later!");
-                }
-                
-            } 
-        })
-
-    }
+    
     
     return (
         <>         
@@ -160,12 +106,9 @@ const DetailReq = (props) =>{
                             <a href="/Home">Trang chủ</a>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item >
-                            <a href="/HomeTeacherPage">Quản lý bài viết</a>
+                            <a href="/HomeStudentPage">Quản lý bài viết</a>
                             </Breadcrumb.Item>
-                            <Breadcrumb.Item>
-                            <a href="/HomeTeacherPage/AddNewWriting">Danh sách bài viết mới</a>
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item >Nhận chấm bài mới</Breadcrumb.Item>
+                            <Breadcrumb.Item >Xem chi tiết bài viết</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="row bg-row padding" >
@@ -176,14 +119,8 @@ const DetailReq = (props) =>{
                         <div className="row bg-row margin padding">
                         <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
                 <div className="row ">
-                    <div className="ml-auto mr-3">Người viết: <Button color="link" onClick={toggle}>{student}</Button></div>
-                    
-                    <ProfileStudent modal={modal} id={studentID} onClick={handleChange} />
                 </div>
                 <hr />
-                <div className="row ">
-                    {error && <Alert color={colorAlert} isOpen={show} style={{marginTop:'10px'}}>{error}</Alert>}
-                </div>
                 <div className="row ">
                 <div className="col-7">
                     <strong>Đề bài</strong>
@@ -195,14 +132,7 @@ const DetailReq = (props) =>{
                     
                 </div>
                 <div className="col-5">
-                    <div className="ml-auto">
-                        <Button outline color="primary" block style={{padding:'0px 20px'}} 
-                        onClick={handleReceive}
-                        >
-                            {loading? "Đang xử lý...": "Nhận chấm"}
-                            </Button>
-                    </div>
-                    <Card style={{ minHeight: '250px', padding: "10px 30px ", marginTop:'5px'}}>
+                    <Card style={{ minHeight: '280px', padding: "10px 30px ", marginTop:'5px'}}>
                         <strong>YÊU CẦU BÀI</strong> 
                         <div className="ml-auto" style={{color:'grey', marginBottom:'5px'}}>Cập nhật lúc: {sentDate}</div>
                         <Card style={{ minHeight: '220px', marginTop:'5px'}}>
@@ -236,4 +166,4 @@ const DetailReq = (props) =>{
     );
     }
 
-export default withRouter(DetailReq);
+export default withRouter(DetailRequirement);
