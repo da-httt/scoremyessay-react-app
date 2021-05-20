@@ -1,0 +1,47 @@
+.login-form {
+    max-width: 300px;
+    
+
+  }
+  .login-form-forgot {
+    float: right;
+  }
+  .login-form-button {
+    width: 100%;
+  }
+
+
+  .imglogo-admin{
+    width: 500px;
+    margin-top: 100px;
+}
+
+
+@media (max-width: 992px) {
+    .imglogo-admin{
+        width: 200px;
+        margin-top: 60px;
+    }
+
+
+    
+  }
+@media (max-width: 1200px) {
+    .imglogo-admin{
+        width: 300px;
+        margin-top: 100px;
+    }
+
+}
+  .center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height:100vh; 
+    background-image: url("./img/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: hsla(0,0%,100%,0.30);
+    background-blend-mode: overlay;
+}

@@ -1,9 +1,7 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
-import { List, Tabs, Input, Modal, Form, Badge, Descriptions, Image, Space, Tag, Cascader, Layout, Menu, Breadcrumb, Button, Avatar, Divider, InputNumber } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { List, Tabs, Input, Modal, Form, Badge, Descriptions, Image, Space, Tag,Button,  Divider, InputNumber } from 'antd';
 import { React, useEffect, useState } from 'react';
-const { SubMenu } = Menu;
-const { TextArea } = Input;
+
 const { TabPane } = Tabs;
 const api = getBaseURL();
 
@@ -40,7 +38,7 @@ const Order = (props) => {
 
     const showModal = () => {
         console.log("show modal")
-        if (editType == 'deadline') {
+        if (editType === 'deadline') {
 
         } else {
             form.setFieldsValue({
@@ -51,11 +49,12 @@ const Order = (props) => {
             })
             if (result.isCriteria) {
                 result.criteria_results.map((criteria_result) => {
-                    console.log(criteria_result)
+                    console.log(criteria_result);
                     form.setFieldsValue({
                         [criteria_result.criteria_id + ".grade"]: criteria_result.criteria_score,
                         [criteria_result.criteria_id + ".comment"]: criteria_result.criteria_comment
-                    })
+                    });
+                    return 0;
                 })
             }
             if (result.isExtra) {
@@ -63,6 +62,8 @@ const Order = (props) => {
                     form.setFieldsValue({
                         ["extra." + extra_result.option_id + ".content"]: extra_result.content
                     })
+                    return 0;
+
                 })
             }
             if (result && essay_comment) {
@@ -70,6 +71,8 @@ const Order = (props) => {
                     form.setFieldsValue({
                         [`em.${essay_comment.sentence_index}.comment`]: essay_comment.comment
                     })
+                    return 0;
+
                 })
             }
 
@@ -85,7 +88,7 @@ const Order = (props) => {
 
     const handleOk = () => {
         setConfirmLoading(true);
-        if (editType == 'deadline') {
+        if (editType === 'deadline') {
             api.put("/orders/reset/" + order.order_id,{},{
                 headers: { 'Authorization': 'Bearer ' + getToken() },
             }).then(response => {
@@ -298,8 +301,8 @@ const Order = (props) => {
                             <Descriptions.Item label="Order Id">{order.order_id}</Descriptions.Item>
                             <Descriptions.Item label="Disabled" span={2}>
                                 <>
-                                    {order.is_disabled == true && (<Tag color="red">{'TRUE'}</Tag>)}
-                                    {order.is_disabled == false && (<Tag color="gray">{'FALSE'}</Tag>)}
+                                    {order.is_disabled === true && (<Tag color="red">{'TRUE'}</Tag>)}
+                                    {order.is_disabled === false && (<Tag color="gray">{'FALSE'}</Tag>)}
                                 </>
                             </Descriptions.Item>
                             <Descriptions.Item label="Status" span={3}>
@@ -357,13 +360,13 @@ const Order = (props) => {
                                     <Descriptions.Item label="Result ID">{result.result_id}</Descriptions.Item>
                                     <Descriptions.Item label="isCriteria">
                                         <>
-                                            {result.isCriteria == true && (<Tag color="green">{'TRUE'}</Tag>)}
-                                            {result.isCriteria == false && (<Tag color="gray">{'FALSE'}</Tag>)}
+                                            {result.isCriteria === true && (<Tag color="green">{'TRUE'}</Tag>)}
+                                            {result.isCriteria === false && (<Tag color="gray">{'FALSE'}</Tag>)}
                                         </>
                                     </Descriptions.Item>
                                     <Descriptions.Item label="isExtra">
-                                        {result.isExtra == true && (<Tag color="green">{'TRUE'}</Tag>)}
-                                        {result.isExtra == false && (<Tag color="gray">{'FALSE'}</Tag>)}
+                                        {result.isExtra === true && (<Tag color="green">{'TRUE'}</Tag>)}
+                                        {result.isExtra === false && (<Tag color="gray">{'FALSE'}</Tag>)}
                                     </Descriptions.Item>
                                     <Descriptions.Item label="Grade " spane={3}>{result.grade}</Descriptions.Item>
                                     <Descriptions.Item label="Grade Comment" span={3}>
@@ -401,8 +404,6 @@ const Order = (props) => {
                                             <List
                                                 style={{ marginBottom: "200px" }}
                                                 pagination={{ pageSize: "1" }}
-                                                style={{ marginBottom: "100px" }}
-
                                                 dataSource={result.extra_results}
                                                 renderItem={item => (
                                                     <List.Item>
@@ -451,10 +452,10 @@ const Order = (props) => {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
-                width={editType == 'result' ? 1000 : 500}
+                width={editType === 'result' ? 1000 : 500}
             >
                 {
-                    editType == 'deadline' ?
+                    editType === 'deadline' ?
                         <div>
                             Are you sure to reset this order's deadline?
                             </div>

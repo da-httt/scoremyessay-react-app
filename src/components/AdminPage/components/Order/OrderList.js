@@ -1,23 +1,11 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
-import { Form, DatePicker, Popconfirm, Input, Row, Col, Descriptions, PageHeader, Drawer, Space, Tag, Table, Layout, Menu, Radio, Button } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import {  Popconfirm,  Descriptions, PageHeader, Drawer, Button, Space, Tag, Table, } from 'antd';
 import { React, useEffect, useState } from 'react';
 import Order from "./Order"
 
-const { Search } = Input
-const { RangePicker } = DatePicker
-const { SubMenu } = Menu;
-const { Header, Content, Footer } = Layout;
+
 
 const api = getBaseURL();
-
-const status_fitler = [
-  { label: 'All', value: 0},
-  { label: 'Waiting', value: 1 },
-  { label: 'On Going', value: 2 },
-  { label: 'Done', value: 3 },
-  { label: 'Canceled', value: 4 },
-];
 
 
 
@@ -48,9 +36,7 @@ export const OrderList = (props) => {
   const cancel = (e) =>{
 
   };
-  const confirm = (e) =>{
-    
-  };
+
 
   const columnsEssay = [
     {
@@ -73,7 +59,7 @@ export const OrderList = (props) => {
       dataIndex: ['student_id'],
       key: ['student_id'],
       width: 'auto',
-      render: student_id => <div>{users[0]  && (users.filter(user => user.info.user_id == student_id)[0]).info.name }</div>,
+      render: student_id => <div>{users[0]  && (users.filter(user => user.info.user_id === student_id)[0]).info.name }</div>,
     },
     {
       title: 'Updated Time',
@@ -117,7 +103,7 @@ export const OrderList = (props) => {
           {statu === 4 && (<Tag color="error">{status[statu].status_name.toUpperCase()}</Tag>)}
         </>
       ),
-      onFilter: (value, record) => value == 0 ? true: record.status_id === value,
+      onFilter: (value, record) => value === 0 ? true: record.status_id === value,
       width: 'auto'
     },
     {
@@ -132,10 +118,10 @@ export const OrderList = (props) => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a href="#" onClick={() => {
+          <Button type="link" onClick={() => {
             showDrawer()
             setOrder(record.order_id)
-          }}> View </a>
+          }}> View </Button>
           <Popconfirm
             title="Are you sure to perform this task?"
             onConfirm={(e) =>{
@@ -149,7 +135,7 @@ export const OrderList = (props) => {
             okText="Disable"
             cancelText="Cancel"
           >
-            <a href="#"> Disable</a>
+            <Button type="link" > Disable</Button>
           </Popconfirm>,
         </Space>
       ),
