@@ -70,8 +70,6 @@ const StuRegister = (props) => {
     const [show, setShow] = useState(false);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    console.log(password);
-    console.log("Again:" + passwordAgain);
     const handleSignUp = (e) => {
         if (name && birthday && email && tel && password && passwordAgain) {
             if (password !== passwordAgain) {
@@ -191,7 +189,7 @@ const StuRegister = (props) => {
                         </div>
                     </div>
                     <div className="row align-items-center">
-                        <Label check className="mr-auto ml-auto"><Input type="checkbox" required onClick={e => setAgree(!agree)} /> Chấp nhận mọi điều khoản và chính sách</Label>
+                        <Label check className="mr-auto ml-auto"><Input type="checkbox" required style={{fontSize:'20px',color:"dodgerblue"}} onClick={e => setAgree(!agree)} /> Chấp nhận mọi điều khoản và chính sách</Label>
                     </div>
                     <div className="row align-items-center mt-3">
                         {error && <Alert color={colorAlert} isOpen={show} style={{ margin: 'auto' }}>{error}</Alert>}
@@ -199,7 +197,6 @@ const StuRegister = (props) => {
                     <div className="row align-items-center mt-3">
                         <Button color="primary" className="mr-auto ml-auto" onClick={handleSignUp}>{loading ? 'Đang xử lý...' : 'Đăng ký'}</Button>
                     </div>
-
                 </Form>
             </div>
             <Footer />

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getBaseURL = () =>{
     return axios.create({
-        baseURL: 'http://f587fcd5ff9b.ngrok.io/'
+        baseURL: 'http://2defdd33ba6b.ngrok.io/'
     })
 }
 

@@ -241,7 +241,7 @@ const PersonalInfo =(props) =>{
                             {!editAvt &&
                             <>
                             <div className="mt-2 ml-3 mr-3">
-                            <Input type="file" onChange={(e) => {uploadImage(e)} }/>   
+                            <Input type="file" onChange={(e) => {uploadImage(e)}}  accept="image/*" />   
                             {error2 && <Alert color={colorAlert} isOpen={show2} style={{margin: 'auto'}}>{error2}</Alert>}
                             </div>
                             <div className="mt-2 mb-3 ml-3 mr-3">
