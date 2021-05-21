@@ -68,12 +68,18 @@
 
 .bg-signup{
     padding: 15px 10px 15px 10px;
-    color: #666666;
+    background-color: transparent;
     margin-top: 20px;
     margin-bottom: 20px;
-    background: #ece9e9;
     font-size: large;
 }
+
+.background-signup {
+    background-image: url("./img/register-bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .video{
     margin-top: 18px;
     margin-bottom: 20px;
