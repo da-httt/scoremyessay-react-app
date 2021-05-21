@@ -1,26 +1,14 @@
 import { Button } from 'reactstrap';
 import React from 'react';
-
-const ContactUs = (props) =>{
-    return(
+const ContactUs = (props) => {
+    return (
         <React.Fragment>
-            <div className="container">
-                <div className="row">
-                    <div className="col align-self-center">
-                        <h4 className="row-title"> Liên hệ</h4>
-                    </div>
-                </div>
-                <div className="row align-items-center">
-                    <div className="col align-self-center">
-                        <p className="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-8 col-sm-4 offset-2 offset-sm-4 mt-2">
-                        <Button outline color="primary" block>Liên hệ với chúng tôi!</Button>
-                    </div>
+            <div className="container justify-content-center">
+                <div className="col justify-content-center ">
+                        <h4 className="row justify-content-center" style={{color: "white"}}>Bạn đã sẵn sàng để trở thành học viên? </h4>
+                        <h1 className="row justify-content-center" style={{color: "white", fontSize: "70px"}}>Đăng ký ngay!</h1>
+                        <div className="row justify-content-center">
+                            <button className="btn outlined btn-block btn-lg btn-primary" style={{maxWidth: 300}} type="submit">Register!</button></div>
                 </div>
             </div>
         </React.Fragment>

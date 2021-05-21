@@ -13,6 +13,8 @@ import Cart from './StudentPage/Cart';
 import HomeTeacher from './TeacherPage/HomePageTeacher';
 import PublicRoute from '../Utils/PublicRoute';
 import PrivateRoute from '../Utils/PrivateRoute';
+import AdminRoute from '../Utils/AdminRoute';
+import "./HomePage/home.css"
 import AddWritingT from './TeacherPage/AddWrittingT';
 import DetailReq from './TeacherPage/DetailRequirements';
 import ScoreEssay from './TeacherPage/ScoreEssay';
@@ -20,7 +22,7 @@ import PersonalInfo from './StudentPage/PersonalInfo';
 import MyReviews from './StudentPage/MyReview';
 import DetailResult from './TeacherPage/DetailResult';
 import MyRating from './TeacherPage/MyRating';
-import AdminPage from './AdminPage/AdminPage'
+import Admin from './AdminPage/Admin'
 
 class Main extends Component{
 
@@ -50,7 +52,7 @@ class Main extends Component{
                     <PrivateRoute exact path="/HomeTeacherPage/MyRating" component={() => <MyRating/>}/>
 
                     <Route exact path="/test" component={() => <Test/>}/>
-                    <PrivateRoute exact path="/admin" component={() => <AdminPage/>}/>
+                    <AdminRoute exact path="/admin" component={() => <Admin />}/>
                     <Redirect to="/Home"/>
                 </Switch>
             </div>

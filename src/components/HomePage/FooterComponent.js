@@ -4,8 +4,8 @@ import {Link, Route} from 'react-router-dom';
 const Footer =(props) =>{
     return (
         <React.Fragment>
-            <div className="container mt-3">
-                <div className="row">
+            <div className="container mt-3" >
+                <div className="row" style={{marginTop: 50, marginBottom: 50}}>
                     <div className="col-0 col-sm-3">
                             <i className="d-none d-sm-block left" ><img src={logo}  alt="Score My Essay" height="100%" width="100%"></img></i>
                     </div>

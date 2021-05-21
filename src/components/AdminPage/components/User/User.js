@@ -1,6 +1,12 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
+<<<<<<< HEAD
 import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag, Button, Avatar,  Form } from 'antd';
 import { React, useEffect, useState } from 'react';
+=======
+import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag,Button, Avatar, Form } from 'antd';
+import {  React, useEffect, useState } from 'react';
+
+>>>>>>> a585d60fe898e98b7ecf6fb18644a63b2c40a3d0
 const { TabPane } = Tabs;
 const api = getBaseURL();
 
@@ -12,12 +18,7 @@ const layout = {
       span: 16,
     },
   };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
-  };
+
   
 const User  = (props) => {
 
@@ -29,7 +30,6 @@ const User  = (props) => {
     const [base64Image, setBase64Image] = useState("");
     const [tempBase64Image, setTempBase64Image] = useState("");
 
-    const [statistic, setStatistic] = useState();
 
     const showModal = () => {
         form.setFieldsValue({
@@ -180,8 +180,8 @@ const User  = (props) => {
 
                         <Descriptions.Item label="Disabled" span={2}>
                             <>
-                                {user.disabled == true && (<Tag color="red">{'TRUE'}</Tag>)}
-                                {user.disabled == false && (<Tag color="gray">{'FALSE'}</Tag>)}
+                                {user.disabled === true && (<Tag color="red">{'TRUE'}</Tag>)}
+                                {user.disabled === false && (<Tag color="gray">{'FALSE'}</Tag>)}
                             </>
                         </Descriptions.Item>
 

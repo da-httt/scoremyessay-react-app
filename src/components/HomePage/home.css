@@ -1,0 +1,44 @@
+
+
+.why {
+    padding: 10px;
+    border-radius: 25px;
+    background-color: white;
+}
+
+.navbar {
+    background-color: transparent;
+ }
+ 
+.ten-project{
+    color: #2596be;
+    font-family: Helvetica;
+    
+}
+
+.imglogo{
+    width: 700px;
+    margin-top: 100px;
+}
+
+
+@media (max-width: 992px) {
+    .imglogo{
+        width: 300px;
+        margin-top: 60px;
+    }
+
+    .navbar {
+        background-color: white;
+    }
+
+    
+  }
+@media (max-width: 1200px) {
+    .imglogo{
+        width: 500px;
+        margin-top: 100px;
+    }
+
+}
+
