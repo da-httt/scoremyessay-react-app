@@ -20,12 +20,12 @@ const Cart = (props) =>{
     const [searchTitle, setSearchTitle] = useState();
     useEffect( () => {
         async function fetchData(){
-            await api.get('/types',).then(response => {
+            api.get('/types',).then(response => {
                 const types = response.data.data;
                 setTypes(types);
             })  
     
-            await api.get('/orders/saved',{
+            api.get('/orders/saved',{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const orders = response.data.data;
@@ -34,14 +34,14 @@ const Cart = (props) =>{
                 
             }) 
             
-            await api.get('/statistics/me',{
+            api.get('/statistics/me',{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
                   setStatistic([response.data]);
                   setStatistics(response.data);
               })
-              await api.get('/top_users',{
+            api.get('/top_users',{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
@@ -158,7 +158,7 @@ const Cart = (props) =>{
                                 <Button outline color="secondary" block onClick={handleReset}>Đặt lại</Button>
                             </div>
                             <div className="col col-2 mb-auto mt-auto ">
-                                <Button color="primary" block>Tìm kiếm onClick={handleSearch}</Button>
+                                <Button color="primary" block onClick={handleSearch}>Tìm kiếm </Button>
                             </div>
                         </div>
                         <div className="row mt-4" style={{height:'726px'}}>

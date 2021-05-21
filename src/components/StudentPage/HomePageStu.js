@@ -21,17 +21,17 @@ const HomeStudent = (props) =>{
     const [searchTitle, setSearchTitle] = useState();
     useEffect( () => {
         async function fetchData() {
-            await api.get('/types',).then(response => {
+            api.get('/types',).then(response => {
                 const types = response.data.data;
                 setTypes(types);
             })  
     
-            await api.get('/status',).then(response => {
+            api.get('/status',).then(response => {
                 const status = response.data.data;
                 setStatus(status);
             }) 
     
-            await api.get('/orders',{
+            api.get('/orders',{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const orders = response.data.data;
@@ -39,14 +39,14 @@ const HomeStudent = (props) =>{
                 setOrders2(orders);
                 
             })  
-            await api.get('/statistics/me',{
+            api.get('/statistics/me',{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
                   setStatistic([response.data]);
                   setStatistics(response.data);
               })
-              await api.get('/top_users',{
+            api.get('/top_users',{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {

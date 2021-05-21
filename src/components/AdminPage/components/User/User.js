@@ -1,9 +1,6 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
-import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag, Table, Layout, Menu, Breadcrumb, Button, Avatar, Divider, Form } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
-import { createRef, React, useEffect, useState } from 'react';
-const { SubMenu } = Menu;
-const { TextArea } = Input;
+import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag, Button, Avatar,  Form } from 'antd';
+import { React, useEffect, useState } from 'react';
 const { TabPane } = Tabs;
 const api = getBaseURL();
 

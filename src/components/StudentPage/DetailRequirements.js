@@ -29,7 +29,7 @@ const DetailRequirement = (props) =>{
    
     useEffect( () => {
         async function fetchData() {
-            await api.get('/orders/'+orderID,{
+            api.get('/orders/'+orderID,{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
@@ -57,12 +57,12 @@ const DetailRequirement = (props) =>{
                 setBase64Image(response.data.image_base64);
             })
 
-            await api.get('/options',
+            api.get('/options',
               ).then(response => {
                   setOptions(response.data.data);
             })
 
-            await api.get('/types',
+            api.get('/types',
               ).then(response => {
                   setTypes(response.data.data);
             })

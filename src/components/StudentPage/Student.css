@@ -76,17 +76,20 @@
     margin-right: 20px;
 }
 
-.scrollbar
-{
-	float: left;
-    height: 360px;
-    width: 545px;
-    padding-right: 10px;
-    overflow-y: scroll;
-}
 
 .force-overflow
 {
 	min-height: 90%;
     margin-left: 10px;
+}
+.white{
+    white-space: pre-line;
+}
+
+.scroll{
+    width: 540px;
+    height: 340px;
+    float: left;
+    overflow-y: scroll;
+    padding-right: 10px;
 }

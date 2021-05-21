@@ -39,11 +39,13 @@ const PersonalInfo =(props) =>{
     const [error3, setError3] = useState(null);
     const [loadPass, setLoadPass] =useState(false);
 
+    const [pass, setPass] = useState();
+    const [passA, setPassA] =useState()
     const [statistic, setStatistic] = useState();
 
     useEffect( () => {
         async function fetchData() {
-            await api.get('/users/me',{
+            api.get('/users/me',{
               headers: {Authorization: 'Bearer ' + getToken()}
             }
             ).then(response => {
@@ -63,17 +65,17 @@ const PersonalInfo =(props) =>{
                 })
             })
             
-            await api.get('/jobs').then(response => {
+            api.get('/jobs').then(response => {
                 const jobs = response.data.data;
                 setJobs(jobs);
                 
             })  
-            await api.get('/genders').then(response => {
+            api.get('/genders').then(response => {
                 const genders = response.data.data; 
                 setGenders(genders);
                 
             }) 
-            await api.get('/statistics/me',{
+            api.get('/statistics/me',{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }
               ).then(response => {
@@ -186,6 +188,44 @@ const PersonalInfo =(props) =>{
             } 
           })
     }
+    
+    const handleChangePass =(e)=>{
+        if(pass !== passA){
+            setShow3(true);
+            setColorAlert("warning");
+            setError3("Mật khẩu chưa trùng khớp, vui lòng kiểm tra lại!");
+        }
+        else{
+            setLoadPass(true);
+            api.put('/change_password/me?new_password='+pass.toString(),{},{
+                headers: {Authorization: 'Bearer ' + getToken()},
+              }
+              ).then(response => {
+                setLoadPass(false);
+                setShow3(true);
+                setColorAlert("success");
+                alert("Mật khẩu của bạn đã được cập nhật!");
+                setEditPass(true);
+              }).catch((error) => {
+                if(error.response){
+                    setLoadPass(false);
+                    if(error.response.status === 401 || error.response.status === 400){
+                        setShow3(true);
+                        setColorAlert("danger");
+                        setError3(error.response.data.detail);
+                    }
+                    else{
+                        setShow3(true);
+                        setColorAlert("danger");
+                        setError3("Something went wrong. Please try again later!");
+                    }
+                    
+                } 
+              })
+
+        }
+    }
+
     return(
         <>
         <GlobalHeader/>
@@ -303,7 +343,9 @@ const PersonalInfo =(props) =>{
                                 <Button color="primary" outline  onClick={e=>setEdit(true)}>Trở lại</Button>
                             </div>)}
                             </div>
-
+                            {!editPass &&
+                            (
+                            
                             <div className="row  bg-row padding margin">
                                 <h5><strong>Thay đổi mật khẩu</strong></h5>
                                 <Container>
@@ -312,26 +354,26 @@ const PersonalInfo =(props) =>{
                                             <Col xs="6" >
                                             <FormGroup style={{fontSize:'17px'}}>
                                                 <Label for="password">Mật khẩu mới *</Label>
-                                                <Input type="password" name="password" id="password" required />
+                                                <Input type="password" name="password" id="password" required onChange={e => setPass(e.target.value)}/>
                                             </FormGroup>
                                             </Col>
                                             <Col xs="6" >
                                             <FormGroup style={{fontSize:'17px'}}>
                                                 <Label for="passwordAgain">Nhập lại mật khẩu mới *</Label>
-                                                <Input type="password" name="passwordAgain" id="passwordAgain" required />
+                                                <Input type="password" name="passwordAgain" id="passwordAgain" required onChange={e => setPassA(e.target.value)} />
                                             </FormGroup>
                                             </Col>
                                         </Row>
                                     </Form>
                                 </Container>
-                            {!edit &&
-                            (<div className=" mt-2 mr-3 ml-auto">
+                            <div className=" mt-2 mr-3 ml-auto">
                                 {error3 && <Alert color={colorAlert} isOpen={show3} style={{margin: 'auto'}}>{error3}</Alert>}
-                                <Button color="primary" outline  style={{margin:'0px 7px'}}>{loadInfo? 'Đang xử lý...' : 'Lưu lại'}</Button>
+                                <Button color="primary" outline  style={{margin:'0px 7px'}} onClick={handleChangePass}>{loadInfo? 'Đang xử lý...' : 'Lưu lại'}</Button>
                                 <Button color="primary" outline  onClick={e=>setEditPass(true)}>Trở lại</Button>
-                            </div>)}
                             </div>
-
+                            
+                            </div>
+                            )}
                             <div className="row  bg-row padding margin">
                                 <h5><strong>Thông tin hoạt động</strong></h5><br/>
                                 {statistic &&(

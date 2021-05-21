@@ -54,7 +54,7 @@ const DetailWriting = (props) =>{
     useEffect( () => {
         async function fetchData() {
 
-            await api.get('/orders/'+orderID,{
+            api.get('/orders/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 setStatusWriting(response.data.status_id); 
@@ -70,7 +70,7 @@ const DetailWriting = (props) =>{
             }
                 
             }) 
-            await api.get('/spelling_errors/'+orderID,{
+            statusWriting===3 && statusWriting===2 && api.get('/spelling_errors/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 setTopic(response.data.predicted_topic);
@@ -80,7 +80,7 @@ const DetailWriting = (props) =>{
                 setNumErrors(response.data.num_errors);
             }) 
 
-            await statusWriting===3 && api.get('/results/'+orderID,{
+            statusWriting===3 && api.get('/results/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const data=response.data;
@@ -95,7 +95,7 @@ const DetailWriting = (props) =>{
                     setExtraResults(data.extra_results);
             }) 
 
-            await statusWriting===3 && api.get('/essay_comments/'+orderID,{
+            statusWriting===3 && api.get('/essay_comments/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const data=response.data;
@@ -103,7 +103,7 @@ const DetailWriting = (props) =>{
                 
             });   
             
-            await statusWriting===3 && api.get('ratings/'+orderID,{
+            statusWriting===3 && api.get('ratings/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response =>{
                 setResponse(false);
@@ -162,11 +162,13 @@ const DetailWriting = (props) =>{
     function getHighlightedText(text, highlight) {
         // Split on highlight term and include term into parts, ignore case
         const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-        return <span> { parts.map((part, i) => 
-            <span key={i} style={part.toLowerCase() === highlight.toLowerCase() ? { color: "red" } : {} }>
-                { part }
-            </span>)
-        } </span>;
+        return <div aria-hidden="true"><span className="white" > { parts.map((part, i) => 
+            
+            <span key={i} style={part.toLowerCase() === highlight.toLowerCase() ? { color: "red" } : {}}>
+               {part}
+            </span>
+            )
+        } </span></div>;
     }
 
     const sentenceList = sentences.map((sentence) =>(
@@ -182,7 +184,8 @@ const DetailWriting = (props) =>{
                     <br/>
                     <strong>Nội dung bài viết</strong>
                     <br/>
-                    <div className="scrollbar ">{getHighlightedText(content,sentence.sentence)}</div>
+                    <div className="scroll">{getHighlightedText(content,sentence.sentence)}</div>
+                    
                                       
                      
                      
@@ -301,6 +304,9 @@ const DetailWriting = (props) =>{
                     <div className="bg">
                         <div className="row bg-row margin padding">
                         <div className="container-fluid">
+        { statusWriting === 4 &&(
+            <h4 style={{color: 'red', margin:"2px 40%"}}>Bài viết đã bị hủy!</h4>
+        )}
         { statusWriting === 3 &&(
             <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
             <TabPane tab="Điểm số và đánh giá"  key="1">

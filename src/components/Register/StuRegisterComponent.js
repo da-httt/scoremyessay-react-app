@@ -44,12 +44,12 @@ const StuRegister = (props) =>{
     const [colorAlert, setColorAlert] = useState('danger');
     useEffect( () => {
         async function fetchData(){
-            await api.get('/jobs').then(response => {
+            api.get('/jobs').then(response => {
                 const jobs = response.data.data;
                 setJobs(jobs);
                 
             })  
-            await api.get('/genders').then(response => {
+            api.get('/genders').then(response => {
                 const genders = response.data.data; 
                 setGenders(genders);
                 
