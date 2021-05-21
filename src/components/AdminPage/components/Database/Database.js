@@ -93,9 +93,9 @@ export const Database = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <a onClick={() => {
-                    }}> Edit </a>
-                    <a>Delete</a>
+                    <Button type="link" onClick={() => {
+                    }}> Edit </Button>
+                    <Button type="link">Delete</Button>
                 </Space>
             ),
         }
@@ -128,7 +128,7 @@ export const Database = (props) => {
                                         dataSource={jobs}
                                         renderItem={item => (
                                             <List.Item
-                                                actions={[<a key="list-loadmore-edit">edit</a>]}
+                                                actions={[<Button type="link" >edit</Button>]}
                                             >
                                                 <List.Item.Meta
 
@@ -151,7 +151,7 @@ export const Database = (props) => {
                                     dataSource={genders}
                                     renderItem={item => (
                                         <List.Item
-                                            actions={[<a key="list-loadmore-edit">edit</a>]}
+                                        actions={[<Button type="link" >edit</Button>]}
                                         >
                                             <List.Item.Meta
 
@@ -174,7 +174,7 @@ export const Database = (props) => {
                                         dataSource={status}
                                         renderItem={item => (
                                             <List.Item
-                                                actions={[<a key="list-loadmore-edit">edit</a>]}
+                                            actions={[<Button type="link" >edit</Button>]}
                                             >
                                                 <List.Item.Meta
 

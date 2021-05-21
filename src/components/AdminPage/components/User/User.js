@@ -1,9 +1,7 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
-import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag, Table, Layout, Menu, Breadcrumb, Button, Avatar, Divider, Form } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
-import { createRef, React, useEffect, useState } from 'react';
-const { SubMenu } = Menu;
-const { TextArea } = Input;
+import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag,Button, Avatar, Form } from 'antd';
+import {  React, useEffect, useState } from 'react';
+
 const { TabPane } = Tabs;
 const api = getBaseURL();
 
@@ -15,12 +13,7 @@ const layout = {
       span: 16,
     },
   };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
-  };
+
   
 const User  = (props) => {
 
@@ -32,7 +25,6 @@ const User  = (props) => {
     const [base64Image, setBase64Image] = useState("");
     const [tempBase64Image, setTempBase64Image] = useState("");
 
-    const [statistic, setStatistic] = useState();
 
     const showModal = () => {
         form.setFieldsValue({
@@ -183,8 +175,8 @@ const User  = (props) => {
 
                         <Descriptions.Item label="Disabled" span={2}>
                             <>
-                                {user.disabled == true && (<Tag color="red">{'TRUE'}</Tag>)}
-                                {user.disabled == false && (<Tag color="gray">{'FALSE'}</Tag>)}
+                                {user.disabled === true && (<Tag color="red">{'TRUE'}</Tag>)}
+                                {user.disabled === false && (<Tag color="gray">{'FALSE'}</Tag>)}
                             </>
                         </Descriptions.Item>
 

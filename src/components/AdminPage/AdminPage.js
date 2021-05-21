@@ -16,7 +16,7 @@ const AdminPage = (props) => {
 
   const handleLogOut = () => {
     removeUserSession();
-    props.history.push("/Home");
+    props.history.push("/admin");
   }
   const handleMenuClick = menu => {
     console.log("update render key with key = " + menu.key)
@@ -27,7 +27,7 @@ const AdminPage = (props) => {
   const [render, updateRender] = useState(1);
 
   const components = {
-    1: <Dashboard style={{ width: 'auto', height: 'auto' }} handleClick={handleMenuClick}  />,
+    1: <Dashboard style={{ width: 'auto', height: 'auto' }} handleClick={handleMenuClick} />,
     2: <OrderList />,
     3: <UserList style={{ width: 'auto' }} />,
     4: <Database style={{ width: 'auto' }} />,
@@ -45,7 +45,6 @@ const AdminPage = (props) => {
         subTitle="The Admin Panel"
         extra={[
           <>
-
             <span>Admin</span>
             <Button onClick={handleLogOut}>Logout</Button>,
         </>

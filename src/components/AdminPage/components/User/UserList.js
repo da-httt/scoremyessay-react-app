@@ -1,5 +1,5 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
-import { Popconfirm, notification, Modal, Form, DatePicker, Radio, Input, Select, Avatar, Divider, Descriptions, PageHeader, Drawer, Space, Tag, Table, Layout, Menu, Breadcrumb, Button } from 'antd';
+import { Popconfirm, notification, Modal, Form ,Radio, Input, Select, Avatar, Divider, Descriptions, PageHeader, Drawer, Space, Tag, Table, Button } from 'antd';
 import { React, useEffect, useState } from 'react';
 import User from "./User"
 import "../../admin.css"
@@ -23,8 +23,6 @@ export const UserList = (props) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [gender_filter, setGenderFilter] = useState(0)
   const [job_filer, setJobFilter] = useState(0)
-  const [status_filter, setStatusFilter] = useState(0)
-  const [base64Image, setBase64Image] = useState("");
   const [tempBase64Image, setTempBase64Image] = useState("");
   const rowSelection = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -44,11 +42,7 @@ export const UserList = (props) => {
     setModal(true);
   };
 
-  const onCloseModel = () => {
-    setRefreshKey(oldKey => oldKey +1)
 
-    setModal(false)
-  }
 
   const onClose = () => {
     setRefreshKey(oldKey => oldKey +1)
@@ -118,9 +112,7 @@ export const UserList = (props) => {
   const cancel = (e) => {
 
   }
-  const confirm = (e) => {
 
-  }
 
 
   const columnUsers = [
@@ -146,7 +138,7 @@ export const UserList = (props) => {
       filters: gender_filter,
       render: gender_id => (
         <>
-          { genders[0] && (<Tag>{(genders.filter(gender => gender.gender_id == gender_id)[0]).gender_name}</Tag>)}
+          { genders[0] && (<Tag>{(genders.filter(gender => gender.gender_id === gender_id)[0]).gender_name}</Tag>)}
         </>
       ),
       onFilter: (value, record) => record.info.gender_id === value,
@@ -159,7 +151,7 @@ export const UserList = (props) => {
       filters: job_filer,
       render: job_id => (
         <>
-          { jobs[0] && (<Tag>{(jobs.filter(job => job.job_id == job_id)[0]).job_name}</Tag>)}
+          { jobs[0] && (<Tag>{(jobs.filter(job => job.job_id === job_id)[0]).job_name}</Tag>)}
         </>
       ),
       onFilter: (value, record) => record.info.job_id === value,
@@ -219,10 +211,10 @@ export const UserList = (props) => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a href="#" onClick={() => {
+          <Button type="link" onClick={() => {
             showDrawer()
             setUser(record.info.user_id)
-          }}> View </a>
+          }}> View </Button>
           <Popconfirm
             title="Are you sure to perform this task?"
             onConfirm={(e) => {
@@ -242,7 +234,7 @@ export const UserList = (props) => {
             okText="Delete"
             cancelText="Cancel"
           >
-            <a href="#"> {record.disabled ? "Restore" : "Delete"}</a>
+            <Button type="link"> {record.disabled ? "Restore" : "Delete"}</Button>
           </Popconfirm>,
         </Space>
       ),
