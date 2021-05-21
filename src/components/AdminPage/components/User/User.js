@@ -1,12 +1,6 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
-<<<<<<< HEAD
 import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag, Button, Avatar,  Form } from 'antd';
 import { React, useEffect, useState } from 'react';
-=======
-import { Radio, Tabs, Input, Modal, Badge, Descriptions, Select, Space, Tag,Button, Avatar, Form } from 'antd';
-import {  React, useEffect, useState } from 'react';
-
->>>>>>> a585d60fe898e98b7ecf6fb18644a63b2c40a3d0
 const { TabPane } = Tabs;
 const api = getBaseURL();
 
