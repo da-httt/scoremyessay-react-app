@@ -30,7 +30,7 @@ const HomePage = (props) => {
                             <CardLogin style={{ flex: 1 }}
                                 image={imgStudent}
                                 nameCard="Học sinh"
-                                contentCard="Cải thiện những kỹ năng viết bài và nhận điểm số từ ScoreMyEssay!"
+                                contentCard="Cải thiện kỹ năng viết bài và nhận điểm số từ ScoreMyEssay!"
                                 linkSignUp="/RegisterforStudent">
                             </CardLogin>
                             <CardLogin style={{ flex: 1 }}
