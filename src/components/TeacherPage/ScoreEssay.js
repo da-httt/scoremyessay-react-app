@@ -242,12 +242,33 @@ const ScoreEssay = (props) =>{
             } 
           })
     }
-    
+    function getHighlightedText(text, highlight) {
+        // Split on highlight term and include term into parts, ignore case
+        const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+        return <span className="white"> { parts.map((part, i) => 
+            <span key={i} style={part.toLowerCase() === highlight.toLowerCase() ? { color: "red" } : {} }>
+                { part }
+            </span>)
+        } </span>;
+    }
     const sentenceList = sentences.map((sentence) =>(
         <>
         {current === sentence.sentence_index &&
         (
             <>
+            <div className="col-7">
+                    <strong>Đề bài</strong>
+                    <Input style={{fontSize:'20px', marginTop:'8px',textAlign:'justify',backgroundColor:'white'}} type="textarea" name="title" id="title" disabled rows='4' defaultValue={title} />
+                                        
+                    <br/>
+                    <strong>Nội dung bài viết</strong>
+                    <br/>
+                    <div className="scroll">{getHighlightedText(content,sentence.sentence)}</div>
+                                      
+                     
+                     
+            </div>
+            <div className="col-5">
         <div style={{marginBottom: "10px"}}>
             {current===0 &&(
                 <>
@@ -298,6 +319,7 @@ const ScoreEssay = (props) =>{
             <div className="ml-auto" style={{color:'indianred', marginBottom:'5px'}}>Hạn giao bài viết: {deadline}</div>
             
         </Card>
+        </div>
         </>
             
         )}
@@ -362,17 +384,7 @@ const ScoreEssay = (props) =>{
                                 <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
                                 {error && <Alert color={colorAlert} isOpen={show} style={{margin: 'auto'}}>{error}</Alert>}
                                     <div className="row ">
-                                    <div className="col-7">
-                                        <strong>Đề bài</strong>
-                                        <Button outline color="primary" style={{marginLeft:'390px', padding:'0px 5px', width:'102px'}}  onClickCapture={handleClickCapture} onClick={handleSaveComment}>{loadSave? 'Loading...' : 'Lưu lại'}</Button>
-                                        <Input style={{fontSize:'20px', marginTop:'8px',textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='4' defaultValue={title} />
-                                        {base64Image && <img src={`data:image/jpeg;base64,${base64Image}`} width="547px"  alt="Title or Content"></img>}<br/>
-                                        <strong >Nội dung bài viết</strong>
-                                        <Input style={{textAlign:'justify'}} type="textarea" name="title" id="title" disabled rows='14' defaultValue={content} />
-                                    </div>
-                                    <div className="col-5">
                                         {sentenceList}
-                                    </div>
                                     </div>
                                 </div>
                                 </TabPane>

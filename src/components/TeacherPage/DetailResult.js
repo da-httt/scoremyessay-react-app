@@ -151,7 +151,7 @@ const DetailResult = (props) =>{
     function getHighlightedText(text, highlight) {
         // Split on highlight term and include term into parts, ignore case
         const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-        return <span> { parts.map((part, i) => 
+        return <span className="white"> { parts.map((part, i) => 
             <span key={i} style={part.toLowerCase() === highlight.toLowerCase() ? { color: "red" } : {} }>
                 { part }
             </span>)
@@ -171,12 +171,12 @@ const DetailResult = (props) =>{
                     <br/>
                     <strong>Nội dung bài viết</strong>
                     <br/>
-                    <div className="scrollbar ">{getHighlightedText(content,sentence.sentence)}</div>
+                    <div className="scroll">{getHighlightedText(content,sentence.sentence)}</div>
                                       
                      
                      
-                </div>
-                <div className="col-5">
+            </div>
+            <div className="col-5">
         <div style={{marginBottom: "10px"}}>
             {current===0 &&(
                 <>

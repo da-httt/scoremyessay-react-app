@@ -42,17 +42,17 @@ const StuRegister = (props) => {
     const [jobs, setJobs] = useState([]);
     const [genders, setGenders] = useState([]);
     const [colorAlert, setColorAlert] = useState('danger');
-    useEffect(() => {
-        async function fetchData() {
-            await api.get('/jobs').then(response => {
+
+    useEffect( () => {
+        async function fetchData(){
+            api.get('/jobs').then(response => {
                 const jobs = response.data.data;
                 setJobs(jobs);
-
-            })
-            await api.get('/genders').then(response => {
-                const genders = response.data.data;
+                
+            })  
+            api.get('/genders').then(response => {
+                const genders = response.data.data; 
                 setGenders(genders);
-
             })
         }
         fetchData();
