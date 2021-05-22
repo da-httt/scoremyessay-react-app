@@ -2,7 +2,7 @@ import './Teacher.css';
 import { React, useEffect, useState} from 'react';
 import {  Button, Input} from 'reactstrap';
 import { Breadcrumb,Radio,Table, Tag } from 'antd';
-import GlobalHeader from './GlobalHeaderComponent';
+import GlobalHeader from './GlobalHeaderComponentT';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 
@@ -78,6 +78,12 @@ const HomeTeacher = (props) =>{
             dataIndex: ['essay','type_id'],
             key: ['essay','type_id'],
             width: 150,
+            filters: [
+                { text: 'English Writing', value: 0 },
+                { text: 'IELTS WRITING TASK 1', value: 1 },
+                { text: 'IELTS WRITING TASK 2', value: 2 },
+              ],
+            onFilter: (value, record) => record.essay.type_id === value,
             render: kind => <div style={{color: 'blue'}}>{types[kind].type_name}</div>,
            },
           {
@@ -92,6 +98,7 @@ const HomeTeacher = (props) =>{
             dataIndex: 'total_price',
             key: 'total_price',
             width: 150,
+            sorter: (a, b) => a.total_price - b.total_price,
            
           },
           {
@@ -99,6 +106,7 @@ const HomeTeacher = (props) =>{
             dataIndex: 'deadline',
             key: 'deadline',
             width: 110,
+            
           },
           {
             title: 'Tình trạng',

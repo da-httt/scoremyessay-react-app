@@ -1,7 +1,7 @@
 import './Teacher.css';
 import React, { useEffect, useState }  from 'react';
 import {Card, Button, Alert, Input} from 'reactstrap';
-import GlobalHeader from './GlobalHeaderComponent';
+import GlobalHeader from './GlobalHeaderComponentT';
 import ProfileStudent from '../ModalProfile/ProfileStudent';
 import { Breadcrumb } from 'antd';
 import { withRouter } from 'react-router-dom';
@@ -70,7 +70,7 @@ const DetailReq = (props) =>{
                   }
                 
             })
-
+            
             api.get('/orders/image/'+orderID,{
                 headers: {Authorization: 'Bearer ' + getToken()}
               }).then(response =>{
@@ -177,7 +177,6 @@ const DetailReq = (props) =>{
                         <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
                 <div className="row ">
                     <div className="ml-auto mr-3">Người viết: <Button color="link" onClick={toggle}>{student}</Button></div>
-                    
                     <ProfileStudent modal={modal} id={studentID} onClick={handleChange} />
                 </div>
                 <hr />

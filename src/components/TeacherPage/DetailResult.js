@@ -1,7 +1,7 @@
 import './Teacher.css';
 import React, { useEffect, useState }  from 'react';
 import {  Alert, Button,   Card, Input} from 'reactstrap';
-import GlobalHeader from './GlobalHeaderComponent';
+import GlobalHeader from './GlobalHeaderComponentT';
 import { Breadcrumb, Rate, Table, Tabs } from 'antd';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
