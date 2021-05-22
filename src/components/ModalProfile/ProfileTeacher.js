@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ModalHeader, ModalBody, Modal, Form, Label, Input, FormGroup, ModalFooter, Container, Row, Col } from 'reactstrap';
+import { Button, ModalHeader, ModalBody, Modal, Form, Label, Input, FormGroup, ModalFooter, Container, Row, Col, Table } from 'reactstrap';
  
 import { withRouter } from 'react-router-dom';
 import { getBaseURL, getToken,  } from '../../Utils/Common';
@@ -9,7 +9,7 @@ import { Radio } from 'antd';
 const api= getBaseURL();
 
 
-const ProfileStudent = (props) =>{
+const ProfileTeacher = (props) =>{
     const {
         modal,
         id
@@ -22,6 +22,8 @@ const ProfileStudent = (props) =>{
     const [mail, setMail] = useState();
     const [jobs,setJobs] =useState();
     const [genders,setGenders] =useState([]);
+
+    const [statistic, setStatistic] = useState();
     function handleChange(){
         props.onClick(modall);
     }
@@ -54,6 +56,12 @@ const ProfileStudent = (props) =>{
                 setGenders(genders);
                 
             }) 
+            await api.get('/statistics/me',{
+                headers: {Authorization: 'Bearer ' + getToken()}
+              }
+              ).then(response => {
+                 setStatistic(response.data);
+              })
      
         }
         fetchData();
@@ -87,7 +95,41 @@ const ProfileStudent = (props) =>{
                                 <Input type="text" name="fullname" id="fullname"  defaultValue={info.name}  readOnly style={{backgroundColor:'white'}}
                                 />
                             </FormGroup>
+                            <FormGroup style={{fontSize:'17px'}}>
+                                <Label for="datebirth">Ngày tháng năm sinh</Label>
+                                <Input  type="date" name="datebirth" id="datebirth"  defaultValue={info.date_of_birth} readOnly style={{backgroundColor:'white'}}
+                                />
+                            </FormGroup>
+                            <FormGroup style={{fontSize:'17px'}}>
+                                <Label for="gender">Giới tính</Label>
+                                <br/>
+                                <Radio.Group defaultValue={info.gender_id}>
+                                    {gendersList}
+                                </Radio.Group>
+                            </FormGroup>
+                            <FormGroup style={{fontSize:'17px'}}>
+                                <Label for="gmail">Gmail</Label>
+                                <Input type="email" name="gmail" id="gmail"   defaultValue={mail} readOnly style={{backgroundColor:'white'}}/>
+                            </FormGroup>
+                            <FormGroup style={{fontSize:'17px'}}>
+                                <Label for="job">Nghề nghiệp</Label>
+                               {jobs && <Input type="test" name="carrier" id="carrier"   defaultValue={jobs[info.job_id].job_name} readOnly style={{backgroundColor:'white'}}/>}
+                            </FormGroup>
                             </Col>
+                        </Row>
+                        <Row>
+                        {statistic &&(
+                        <Table bordered>
+                            <tr>
+                                <th >Tổng số bài đã nhận chấm</th>
+                                <td>{statistic.total_orders} bài</td>
+                            </tr>
+                            <tr>
+                                <th>Số bài đã chấm xong</th>
+                                <td>{statistic.total_done} bài</td>
+                            </tr>
+                        </Table>
+                        )}
                         </Row>
                         
                     </Form>
@@ -100,4 +142,4 @@ const ProfileStudent = (props) =>{
             </Modal>
     );
 }
-export default withRouter(ProfileStudent);
+export default withRouter(ProfileTeacher);

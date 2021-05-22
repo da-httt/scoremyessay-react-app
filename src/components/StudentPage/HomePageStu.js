@@ -99,12 +99,19 @@ const HomeStudent = (props) =>{
             dataIndex: ['essay','type_id'],
             key: ['essay','type_id'],
             width: 125,
+            filters: [
+                { text: 'English Writing', value: 0 },
+                { text: 'IELTS WRITING TASK 1', value: 1 },
+                { text: 'IELTS WRITING TASK 2', value: 2 },
+              ],
+            onFilter: (value, record) => record.essay.type_id === value,
             render: kind => <div style={{color: 'blue'}}>{types[kind].type_name}</div>,
            },
            {
             title: 'Chủ đề',
             dataIndex:'topic_name',
-            width:130
+            width:130,
+            
             
           },
           {

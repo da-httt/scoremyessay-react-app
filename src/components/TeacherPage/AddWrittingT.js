@@ -2,7 +2,7 @@ import './Teacher.css';
 import { React, useEffect, useState} from 'react';
 import {  Button, Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
 import { Breadcrumb,Table } from 'antd';
-import GlobalHeader from './GlobalHeaderComponent';
+import GlobalHeader from './GlobalHeaderComponentT';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 
@@ -18,14 +18,23 @@ const AddWritingT = (props) =>{
     const [statistic,setStatistic] = useState([]);
     const [statistics,setStatistics] = useState();
     const [deadline, setDeadline] = useState([]);
+
+    const [types, setTypes] = useState([]);
+    const [searchTitle, setSearchTitle] = useState();
+    const [orders2, setOrders2] = useState([]);
     useEffect( () => {
         async function fetchData() {
-    
+            await api.get('/types',).then(response => {
+                const types = response.data.data;
+                setTypes(types);
+            })  
+
             await api.get('/orders/waiting',{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
                 const orders = response.data.data;
                 setOrders(orders);
+                setOrders2(orders);
             })  
 
             await api.get('/statistics/me',{
@@ -55,18 +64,30 @@ const AddWritingT = (props) =>{
             width: 20,
         },
         {
-            title: 'Tên HS',
-            dataIndex: 'student_id',
-            key: 'student_id',
-            width: 170,
-            render: name => <div style={{color: 'blue'}}>{name}</div>,
+            title: 'Thể loại',
+            dataIndex: ['essay','type_id'],
+            key: ['essay','type_id'],
+            width: 150,
+            filters: [
+                { text: 'English Writing', value: 0 },
+                { text: 'IELTS WRITING TASK 1', value: 1 },
+                { text: 'IELTS WRITING TASK 2', value: 2 },
+              ],
+            onFilter: (value, record) => record.essay.type_id === value,
+            render: kind => <div style={{color: 'blue'}}>{types[kind].type_name}</div>,
            },
+        {
+            title: 'Chủ đề',
+            dataIndex: 'topic_name',
+            key: 'topic_name',
+            width: 120
+          },
           {
             title: 'Tiêu đề bài viết',
             dataIndex: ['essay','title'],
             key: ['essay','title'],
             width: 450,
-            render: title => <div>{title.slice(0,65)}...</div>
+            render: title => <div>{title.slice(0,60)}...</div>
             
           },
           {
@@ -74,6 +95,7 @@ const AddWritingT = (props) =>{
             dataIndex: 'total_price',
             key: 'total_price',
             width: 100,
+            sorter: (a, b) => a.total_price - b.total_price,
            
           },
           {
@@ -82,11 +104,7 @@ const AddWritingT = (props) =>{
             key: 'deadline',
             width: 110,
           },
-          {
-            title: 'Chủ đề',
-            dataIndex: 'topic_name',
-            key: 'topic_name',
-          },
+          
             
           
     ];
@@ -120,6 +138,22 @@ const AddWritingT = (props) =>{
             <p style={{color:"blue", textAlign:"center", fontSize:'20px'}}>{week}</p>
         )
     }]
+
+    const handleSearch = () =>{
+    
+        setOrders(orders2);
+        const filteredEvents = orders2.filter((order) => {
+            const title = order.essay.title.toLowerCase();
+            return title.includes(searchTitle.toLowerCase());
+          });
+        setOrders(filteredEvents);
+    };
+
+    const handleReset = () =>{
+        setSearchTitle("");
+        setOrders(orders2);
+    }
+
     return (
         <>         
             <GlobalHeader />
@@ -159,14 +193,14 @@ const AddWritingT = (props) =>{
                     <div className="row bg-row margin padding ">
                     <div className="container-fluid">
                         <div className="row ">
-                            <div className="col col-8 mb-3 mt-3">
-                                <Input placeholder="Nhập tên bài viết cần tìm" />
+                        <div className="col col-8 mb-3 mt-3">
+                                <Input placeholder="Nhập đề bài viết bạn muốn tìm kiếm" value={searchTitle} onChange={(e)=>setSearchTitle(e.target.value)} />
                             </div>
                             <div className="col col-2 mb-auto mt-auto ">
-                                <Button outline color="secondary" block>Đặt lại</Button>
+                                <Button outline color="secondary" block onClick={handleReset}>Đặt lại</Button>
                             </div>
                             <div className="col col-2 mb-auto mt-auto ">
-                                <Button color="primary" block>Tìm kiếm</Button>
+                                <Button color="primary" block onClick={handleSearch}>Tìm kiếm </Button>
                             </div>
                         </div>
                         <div className="row mt-4" style={{height:'710px'}}>
