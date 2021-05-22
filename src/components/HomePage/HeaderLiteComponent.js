@@ -3,14 +3,13 @@ import { Navbar, NavbarToggler, Nav, NavbarBrand, Button, Jumbotron, Collapse, N
 import { NavLink } from 'react-router-dom';
 import logo from '../../img/logo.png';
 import "./home.css"
-const Header = (props) => {
+const HeaderLite = (props) => {
     const [collapsed, setCollapsed] = useState(false);
-    const [bgcolor, setBgColor] = useState('transparent');
     const toggleNavbar = () => setCollapsed(!collapsed);
 
     return (
         <React.Fragment>
-            <div >
+            <div  >
                 <Navbar light expand="sm" className="navBar " fixed="top" >
                     <div className="d-flex flex-nowrap">
                     <NavbarBrand href="/Home">
@@ -20,8 +19,8 @@ const Header = (props) => {
                     </div>
 
                     <Collapse isOpen={!collapsed} navbar>
-                        <Nav navbar className="navbar-nav ml-auto nav-option ">
-                            <NavItem className="nav-link js-scroll-trigge" ><a href="/Home#homepage"><strong>Trang chủ</strong> </a></NavItem>
+                        <Nav navbar className="navbar-nav ml-auto nav-option">
+                            <NavItem className="nav-link js-scroll-trigge" ><a href="/Home#homepage"> <strong>Trang chủ</strong> </a></NavItem>
                             <NavItem className="nav-link js-scroll-trigge"><a href="/Home#discover">Tìm hiểu</a></NavItem>
                             <NavItem className="nav-link js-scroll-trigge"><a href="/Home#aboutus">Đội ngũ </a></NavItem>
 
@@ -30,13 +29,10 @@ const Header = (props) => {
                 </Navbar>
                 <div className="container" style={{ marginBottom: 20 }}>
                     <div className="row align-items-center">
-                        <img src={logo} alt="Score My Essay" className="img-fluid mr-auto ml-auto imglogo" />
+                        <img src={logo} alt="Score My Essay" className="img-fluid mr-auto ml-auto imglogolite" />
                     </div>
                     <div className="row align-items-center">
                         <h6 className="subtitle mr-auto ml-auto">Cải thiện điểm số Tiếng Anh của bạn và còn hơn thế nữa!</h6>
-                    </div>
-                    <div style={{marginTop: 20}}className="row align-items-center">
-                        <Button outline color='info' className=" mr-auto ml-auto" >Khám phá Score My Essay</Button>
                     </div>
                 </div>
             </div>
@@ -46,4 +42,4 @@ const Header = (props) => {
 
 }
 
-export default Header;
+export default HeaderLite;

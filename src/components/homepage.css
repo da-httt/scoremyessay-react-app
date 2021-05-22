@@ -1,19 +1,10 @@
 
-
 .back {
     background-image: url("./../img/landingpage-bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-
-
 .curved-div svg {
     display: block;
-}
-
-
-
-section {
-    scroll-behavior: smooth;
 }

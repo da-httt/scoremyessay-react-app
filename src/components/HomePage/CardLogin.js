@@ -90,7 +90,7 @@ const CardLogin = (props) => {
     </Card> */}
             <>
                 <a style={{ cursor: 'pointer' }} onClick={toggle}>
-                    <Card className="card" style={style}>
+                    <Card className="card-login" style={style}>
                         <CardImg
                             alt="..."
                             src={image}

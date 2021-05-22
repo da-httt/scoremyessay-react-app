@@ -14,7 +14,6 @@ import HomeTeacher from './TeacherPage/HomePageTeacher';
 import PublicRoute from '../Utils/PublicRoute';
 import PrivateRoute from '../Utils/PrivateRoute';
 import AdminRoute from '../Utils/AdminRoute';
-import "./HomePage/home.css"
 import AddWritingT from './TeacherPage/AddWrittingT';
 import DetailReq from './TeacherPage/DetailRequirements';
 import ScoreEssay from './TeacherPage/ScoreEssay';

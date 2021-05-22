@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Label, FormGroup, Input, Col, Row, Alert } from 'reactstrap';
 import Footer from '../HomePage/FooterComponent';
-import Header from '../HomePage/HeaderComponent';
+import HeaderLite from '../HomePage/HeaderLiteComponent';
 import { Radio } from 'antd';
 import { withRouter } from 'react-router';
 import { getBaseURL } from '../../Utils/Common';
-
+import "./register.css"
 
 const api = getBaseURL();
+
+
+const titleStyle = {
+    fontWeigh: 700,
+    colo: "#2596be"
+}
 
 const StuRegister = (props) => {
     const [type, setType] = useState("password");
@@ -43,15 +49,15 @@ const StuRegister = (props) => {
     const [genders, setGenders] = useState([]);
     const [colorAlert, setColorAlert] = useState('danger');
 
-    useEffect( () => {
-        async function fetchData(){
+    useEffect(() => {
+        async function fetchData() {
             api.get('/jobs').then(response => {
                 const jobs = response.data.data;
                 setJobs(jobs);
-                
-            })  
+
+            })
             api.get('/genders').then(response => {
-                const genders = response.data.data; 
+                const genders = response.data.data;
                 setGenders(genders);
             })
         }
@@ -130,74 +136,81 @@ const StuRegister = (props) => {
 
     return (
         <React.Fragment>
-            <Header />
-            <div className="container bg-signup">
-                <Form >
-                    <div className="row align-items-center">
-                        <h3 className="ml-auto mr-auto mt-3">Đăng ký trở thành học viên</h3>
-                    </div>
-                    <div className="row " >
-                        <div className="col-12 col-md-6 offset-md-3 ">
-                            <FormGroup>
-                                <Label for="fullname">Họ và tên *</Label>
-                                <Input type="text" name="fullname" id="fullname" required onChange={e => setName(e.target.value)} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="birthday">Ngày, tháng, năm sinh *</Label>
-                                <Input type="date" name="birthday" id="birthday" required onChange={e => setBirthday(e.target.value)} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="gender">Giới tính</Label>
-                                <Radio.Group style={{ marginLeft: '20px' }} value={gender} onChange={e => setGender(e.target.value)}>
-                                    {gendersList}
-                                </Radio.Group>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="email">Email *</Label>
-                                <Input type="email" name="email" id="email" required onChange={e => setEmail(e.target.value)} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="carrier">Nghề nghiệp hiện tại *</Label>
-                                <Input type="select" name="carrier" id="carrier" required value={job} onChange={e => setJob(e.target.value)}>
-                                    {jobsList}
-                                </Input>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="tel">Số điện thoại *</Label>
-                                <Input type="tel" name="tel" id="tel" required onChange={e => setTel(e.target.value)} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="address">Địa chỉ</Label>
-                                <Input type="text" name="address" id="address" onChange={e => setAddress(e.target.value)} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="password">Mật khẩu *</Label>
-                                <Row style={{ marginRight: '0px' }}>
-                                    <Col xs="11" style={{ paddingRight: '0px' }}><Input type={type} name="password" id="password" required onChange={e => setPassword(e.target.value)} /></Col>
-                                    <Col xs="1" style={{ padding: '0px' }}>
-                                        <Button className={classNamePass} onClick={handleShowPassword1} style={{ height: "38px" }} /></Col>
-                                </Row>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="password">Nhập lại mật khẩu* </Label>
-                                <Row style={{ marginRight: '0px' }}>
-                                    <Col xs="11" style={{ paddingRight: '0px' }}><Input type={type1} name="passwordAgain" id="passwordAgain" required onChange={e => setPasswordAgain(e.target.value)} /></Col>
-                                    <Col xs="1" style={{ padding: '0px' }}>
-                                        <Button className={classNamePass1} onClick={handleShowPassword2} style={{ height: "38px" }} /></Col>
-                                </Row>
-                            </FormGroup>
+            <div className="back" >
+                <HeaderLite />
+                <div className="container bg-signup" >
+                    <Form style={{ marginBottom: 200, padding: "20px", backgroundColor: "transparent" }}>
+                        <div className="row " >
+                            <div className="col-12 col-md-6 offset-md-3 card-register" >
+                                <div className="row align-items-center" >
+                                    <h3 className="ml-auto mr-auto mt-3" style={{
+                                        fontWeight: 700,
+                                        color: "#2596be",
+                                        marginBottom: "50px"
+                                    }}>Đăng ký trở thành học viên</h3>
+                                </div>
+                                <FormGroup>
+                                    <Label for="fullname">Họ và tên *</Label>
+                                    <Input className="register-input" type="text" name="fullname" id="fullname" required onChange={e => setName(e.target.value)} />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="birthday">Ngày, tháng, năm sinh *</Label>
+                                    <Input className="register-input" type="date" name="birthday" id="birthday" required onChange={e => setBirthday(e.target.value)} />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="gender">Giới tính</Label>
+                                    <Radio.Group style={{ marginLeft: '20px' }} value={gender} onChange={e => setGender(e.target.value)}>
+                                        {gendersList}
+                                    </Radio.Group>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="email">Email *</Label>
+                                    <Input className="register-input" type="email" name="email" id="email" required onChange={e => setEmail(e.target.value)} />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="carrier">Nghề nghiệp hiện tại *</Label>
+                                    <Input className="register-input" type="select" name="carrier" id="carrier" required value={job} onChange={e => setJob(e.target.value)}>
+                                        {jobsList}
+                                    </Input>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="tel">Số điện thoại *</Label>
+                                    <Input className="register-input" type="tel" name="tel" id="tel" required onChange={e => setTel(e.target.value)} />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="address">Địa chỉ</Label>
+                                    <Input className="register-input" type="text" name="address" id="address" onChange={e => setAddress(e.target.value)} />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="password">Mật khẩu *</Label>
+                                    <Row style={{ marginRight: '0px' }}>
+                                        <Col xs="11" style={{ paddingRight: '0px' }}><Input className="register-input" type={type} name="password" id="password" required onChange={e => setPassword(e.target.value)} /></Col>
+                                        <Col xs="1" style={{ padding: '0px' }}>
+                                            <Button className={classNamePass} onClick={handleShowPassword1} style={{ height: "38px" }} /></Col>
+                                    </Row>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="password">Nhập lại mật khẩu* </Label>
+                                    <Row style={{ marginRight: '0px' }}>
+                                        <Col xs="11" style={{ paddingRight: '0px' }}><Input className="register-input" type={type1} name="passwordAgain" id="passwordAgain" required onChange={e => setPasswordAgain(e.target.value)} /></Col>
+                                        <Col xs="1" style={{ padding: '0px' }}>
+                                            <Button className={classNamePass1} onClick={handleShowPassword2} style={{ height: "38px" }} /></Col>
+                                    </Row>
+                                </FormGroup>
+                                <div className="row align-items-center">
+                                    <Label check className="mr-auto ml-auto"><Input type="checkbox" required style={{ fontSize: '20px', color: "dodgerblue" }} onClick={e => setAgree(!agree)} /> Chấp nhận mọi điều khoản và chính sách</Label>
+                                </div>
+                                <div className="row align-items-center mt-3">
+                                    {error && <Alert color={colorAlert} isOpen={show} style={{ margin: 'auto' }}>{error}</Alert>}
+                                </div>
+                                <div className="row align-items-center mt-3">
+                                    <Button color="primary" className="mr-auto ml-auto btn btn-primary btn-login submit px-3" onClick={handleSignUp}>{loading ? 'Đang xử lý...' : 'Đăng ký'}</Button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="row align-items-center">
-                        <Label check className="mr-auto ml-auto"><Input type="checkbox" required style={{fontSize:'20px',color:"dodgerblue"}} onClick={e => setAgree(!agree)} /> Chấp nhận mọi điều khoản và chính sách</Label>
-                    </div>
-                    <div className="row align-items-center mt-3">
-                        {error && <Alert color={colorAlert} isOpen={show} style={{ margin: 'auto' }}>{error}</Alert>}
-                    </div>
-                    <div className="row align-items-center mt-3">
-                        <Button color="primary" className="mr-auto ml-auto" onClick={handleSignUp}>{loading ? 'Đang xử lý...' : 'Đăng ký'}</Button>
-                    </div>
-                </Form>
+
+                    </Form>
+                </div>
             </div>
             <Footer />
         </React.Fragment>
