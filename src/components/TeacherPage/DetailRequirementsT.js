@@ -31,8 +31,8 @@ const DetailReq = (props) =>{
     const [sentDate, setSentdate] = useState();
     const [totalPrice, setTotalPrice] = useState("0 VNĐ");
 
-    const [options,setOptions] = useState();
-    const [types,setTypes] = useState();
+    const [options,setOptions] = useState([]);
+    const [types,setTypes] = useState([]);
 
     const [modal, setModal] = useState(false);
 
@@ -102,22 +102,26 @@ const DetailReq = (props) =>{
         fetchData();
         
     },[orderID]);
-    const ShowType= ()=>{
-        return(
+    function showType(id) {
+        return types.map((type) => (
+          type.type_id ==id &&(
             <div className="row" style={{marginBottom:'20px'}}>
-                <div className="col col-7">{types? types[type].type_name: ""}:</div>
-                <div className="col" style={{textAlign:'right'}}>{types? types[type].type_price: 0} VNĐ</div>
+            <div className="col col-7">{type.type_name}:</div>
+            <div className="col" style={{textAlign:'right'}}>{type.type_price} VNĐ</div>
+          </div>
+          )
+        ))
+      }
+    const showOptions= optionsTotal.map((id)=>{
+        return options.map((option) => (
+            option.option_id ===id &&(
+              <div className="row" style={{marginBottom:'20px'}}>
+              <div className="col col-7">{option.option_name}:</div>
+              <div className="col" style={{textAlign:'right'}}>{option.option_price} VNĐ</div>
             </div>
-        );
-    }
-    const showOptions= optionsTotal.map((option)=>(
-            <div className="row" style={{marginBottom:'20px'}}>
-                <div className="col col-7">{options? options[option].option_name: ""}:</div>
-                <div className="col" style={{textAlign:'right'}}>{options? options[option].option_price: ""} VNĐ</div>
-            </div>
-        
-    )
-    )
+            )
+          ))
+        } )
 
 
     const handleReceive = (e) =>{
@@ -206,7 +210,7 @@ const DetailReq = (props) =>{
                         <div className="ml-auto" style={{color:'grey', marginBottom:'5px'}}>Cập nhật lúc: {sentDate}</div>
                         <Card style={{ minHeight: '220px', marginTop:'5px'}}>
                             <div className="container">
-                                <ShowType/>
+                                {showType(type)}
                                 {showOptions}
                                 <hr/>
                                 <div className="row" style={{marginBottom:'20px'}}>

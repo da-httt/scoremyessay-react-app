@@ -155,10 +155,11 @@ option.option_type===0 && (
 
 )
 ));
-
 const optionTimeList = options.map((option)=>(
 option.option_type===1 && (
+  <>
   <Radio value={option.option_id} key={option.option_id}>{option.option_name} giờ</Radio>
+  </>
 )
 ));
 
@@ -179,22 +180,37 @@ function handleChangeLevel(e){
   }
 }
 
-const ShowType= ()=>{
-  return(
+function showType(id) {
+  return types.map((type) => (
+    type.type_id ==id &&(
       <div className="row" style={{marginBottom:'20px'}}>
-          <div className="col col-7">{types? types[type].type_name: ""}:</div>
-          <div className="col" style={{textAlign:'right'}}>{types? types[type].type_price: 0} VNĐ</div>
-      </div>
-  );
+      <div className="col col-7">{type.type_name}:</div>
+      <div className="col" style={{textAlign:'right'}}>{type.type_price} VNĐ</div>
+    </div>
+    )
+  ))
 }
-const ShowTime= ()=>{
-  return(
+
+const showOptionScore = optionScore.map((id) => {
+  return options.map((option) => (
+    option.option_id ===id &&(
       <div className="row" style={{marginBottom:'20px'}}>
-          <div className="col col-7">{options? options[optionTime].option_name: ""}:</div>
-          <div className="col" style={{textAlign:'right'}}>{options? options[optionTime].option_price: ""} VNĐ</div>
+      <div className="col col-7">{option.option_name}:</div>
+      <div className="col" style={{textAlign:'right'}}>{option.option_price} VNĐ</div>
+    </div>
+    )
+  ))
+    })
+
+
+function showTime(id) {
+  return options.map((option) => (
+    option.option_id===id && (
+      <div className="row" style={{marginBottom:'20px'}}>
+      <div className="col col-7">{ option.option_name}:</div>
+      <div className="col" style={{textAlign:'right'}}>{ option.option_price} VNĐ</div> 
       </div>
-  );
-}
+  )))}
 
 const uploadImage = async (e) =>{
   const file=e.target.files[0];
@@ -618,8 +634,9 @@ const handleDelete = (e) =>{
                     <CardBody>
                       
                       <div className="container-fluid">
-                        <ShowType/>
-                        <ShowTime/>
+                        {showType(type)}
+                        {showOptionScore}
+                        {showTime(optionTime)}
                       </div>
                   
                       <hr/>
