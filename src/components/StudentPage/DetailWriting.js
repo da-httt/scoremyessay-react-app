@@ -5,6 +5,7 @@ import GlobalHeader from './GlobalHeaderComponent';
 import { Breadcrumb, Rate, Table, Tabs } from 'antd';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
+import ProfileTeacher from '../ModalProfile/ProfileTeacher';
 
 const {TabPane} =Tabs;
 
@@ -30,6 +31,7 @@ const DetailWriting = (props) =>{
 
     const [sentences, setSentences] = useState([]);
     const [teacher, setTeacher] = useState();
+    const [teacherID, setTeacherID] = useState();
     const [topic, setTopic] = useState();
     const [spelling, setSpelling] = useState([]);
     const [numSentence, setNumSentence] =useState();
@@ -42,6 +44,13 @@ const DetailWriting = (props) =>{
     const [loadResponse, setLoadResponse] = useState(false);
     const [error, setError] = useState();
     const [show, setShow] = useState(false);
+
+    const [modal, setModal] = useState(false);
+
+    const toggle = () => setModal(!modal);
+    function handleChange(newValue){
+        setModal(newValue);
+    }
 
     const next = () => {
         setCurrent(current + 1);
@@ -57,6 +66,7 @@ const DetailWriting = (props) =>{
             api.get('/orders/'+orderID,{
                 headers: {Authorization: getTokenType() + ' ' + getToken()}
             }).then(response => {
+                setTeacherID(response.data.teacher_id);
                 setStatusWriting(response.data.status_id); 
                 setTitle(response.data.essay.title);
                 setContent(response.data.essay.content);
@@ -279,7 +289,8 @@ const DetailWriting = (props) =>{
             } 
         })
     }
-    const nameOfTeacher=<>Người chấm: <Button color="link">{teacher}</Button></>;
+    console.log(teacherID);
+    const nameOfTeacher=<>Người chấm: <Button color="link" onClick={toggle}>{teacher}</Button></>;
     return (
         <>         
             <GlobalHeader/>
@@ -308,6 +319,8 @@ const DetailWriting = (props) =>{
             <h4 style={{color: 'red', margin:"2px 40%"}}>Bài viết đã bị hủy!</h4>
         )}
         { statusWriting === 3 &&(
+            <>
+            <ProfileTeacher modal={modal} id={teacherID} onClick={handleChange} />
             <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
             <TabPane tab="Điểm số và đánh giá"  key="1">
             <div className="container-fluid mt-2" style={{fontSize: "medium", textAlign:"justify"}}>
@@ -402,6 +415,7 @@ const DetailWriting = (props) =>{
                 </div>
             </TabPane>
             </Tabs>
+            </>
         ) }
         { statusWriting === 2 &&(
             <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>

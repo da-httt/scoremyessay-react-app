@@ -30,7 +30,7 @@ const ProfileStudent = (props) =>{
         setID(id);
         if(modal){
         async function fetchData() {
-            api.get('/users/'+ID,{
+            await api.get('/users/'+ID,{
               headers: {Authorization: 'Bearer ' + getToken()}
             }
             ).then(response => {
@@ -44,12 +44,12 @@ const ProfileStudent = (props) =>{
                 })
             })
             
-            api.get('/jobs').then(response => {
+            await api.get('/jobs').then(response => {
                 const jobs = response.data.data;
                 setJobs(jobs);
                 
             })  
-            api.get('/genders').then(response => {
+            await api.get('/genders').then(response => {
                 const genders = response.data.data; 
                 setGenders(genders);
                 
