@@ -1,17 +1,9 @@
-.ten-project{
-    color: #55a2d6;
-    font-family: Helvetica;
-}
+
 .navBarDetail{
     background-color: white;
     padding: 0px 150px 0px 150px;
 }
-.detailPage{
-    background-color: #F8F8F8;
-    border-top:  #F8F8F8;
-    margin-top: 70px;
-    height: inherit;
-}
+
 
 .content{
     margin-top: 20px;
@@ -21,24 +13,26 @@
 .centerCol{
     max-width: 1050px;
     display: flexbox;
+    margin-top: 100px;
+
 }
 .leftCol{
     flex: 2;
     margin-right: 10px;
     max-width: 1050px;
     display: flexbox;
+    margin-top: 100px;
+
 }
 .rightCol{
     flex: 1;
     display: flexbox;
     max-width: 350px;
     margin-left: 10px;
+    margin-top: 100px;
+
 }
 
-.bg-row{
-    background-color: white;
-    
-}
 
 .margin{
     margin-top:10px;
@@ -82,7 +76,6 @@
 	min-height: 90%;
     margin-left: 10px;
 }
-
 .white{
     white-space: pre-line;
 }
@@ -93,4 +86,197 @@
     float: left;
     overflow-y: scroll;
     padding-right: 10px;
+}
+
+
+.navBarTeacher {
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    min-height:50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left:  100px;
+    padding-right: 100px;
+}
+
+.detailPageTeacher{
+    background-color: transparent;
+    border-top:  #F8F8F8;
+    height: inherit;
+}
+.navBarTeacherTitle {
+    color: #55a2d6;
+    font-weight: 900;
+    font-size: xx-large;
+    
+
+}
+
+.navbarBrandTeacher {
+    padding-top:0px !important; 
+    padding-bottom:0 !important; }
+
+.cart-link-teacher{
+    padding: 10px;
+    color: #2596be; 
+    margin-right: 10px;
+
+}
+.cart-link-teacher:hover {
+    background-color: #2596be; 
+    color: white;
+    border-radius: 10px;
+}
+
+.teacher-page {
+    background-image: url("./../../img/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.teacher-page input{
+    border-radius: 10px;
+ }
+ 
+
+
+.shadow-background {
+    box-shadow: 0 3px 6px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+
+}
+
+.content-header-teacher{
+    box-shadow: 0 3px 6px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+    background: #2596be;
+    background: -moz-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -webkit-gradient(left top, right bottom, color-stop(0%, #2bbaed), color-stop(100%, #2596be));
+    background: -webkit-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -o-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -ms-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -webkit-linear-gradient(315deg, #2596be 0%, #2bbaed 100%);
+    background: -o-linear-gradient(315deg, #2596be 0%, #2bbaed 100%);
+    background: linear-gradient(135deg, #2596be 0%, #2bbaed 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2596be', endColorstr='#2bbaed', GradientType=1 );
+    color: #fff;
+}
+
+.personal-background-teacher{
+    box-shadow: 0 3px 6px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+    background: #2596be;
+    background: -moz-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -webkit-gradient(left top, right bottom, color-stop(0%, #2bbaed), color-stop(100%, #2596be));
+    background: -webkit-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -o-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -ms-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -webkit-linear-gradient(315deg, #2596be 0%, #2bbaed 100%);
+    background: -o-linear-gradient(315deg, #2596be 0%, #2bbaed 100%);
+    background: linear-gradient(135deg, #2596be 0%, #2bbaed 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2596be', endColorstr='#2bbaed', GradientType=1 );
+    color: #fff;
+}
+
+.gradient-background-teacher{
+    box-shadow: 0 3px 6px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+    background: #2596be;
+    background: -moz-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -webkit-gradient(left top, right bottom, color-stop(0%, #2bbaed), color-stop(100%, #2596be));
+    background: -webkit-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -o-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -ms-linear-gradient(-45deg, #2596be 0%, #2bbaed 100%);
+    background: -webkit-linear-gradient(315deg, #2596be 0%, #2bbaed 100%);
+    background: -o-linear-gradient(315deg, #2596be 0%, #2bbaed 100%);
+    background: linear-gradient(135deg, #2596be 0%, #2bbaed 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2596be', endColorstr='#2bbaed', GradientType=1 );
+    color: #fff;
+}
+
+.gradient-background-teacher a:hover{
+    color: white
+}
+
+.content-teacher {
+    box-shadow: 0 3px 6px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+
+}
+
+.btn-teacher-outline {
+    cursor: pointer;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    font-size: 15px;
+    font-weight: 700;
+    border: 1px solid #2596be;
+    background: transparent;
+    color: #2596be; }
+ 
+.btn-teacher-outline:hover {
+    border: 1px solid transparent;
+    background: #2596be;
+    color: white;}
+
+
+.btn-teacher-link {
+    cursor: pointer;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    font-size: 15px;
+    font-weight: 500;
+    background: transparent;
+    color: #2596be; }
+
+.btn-teacher-link:hover {
+    font-weight: 700;
+
+    color: #2596be ;
+}
+
+
+
+.btn-homepage {
+    cursor: pointer;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 10px 10px;
+    border: none}
+    .btn-homepage:hover, .btn-homepage:active, .btn-homepage:focus {
+      outline: none; }
+    .btn-homepage.btn-primary {
+      color: #fff;
+      background: #2db6e7;
+    }
+      .btn-homepage.btn-primary:hover {
+        background: #2596be;
+        color: #fff; }
+      .btn-homepage.btn-primary.btn-outline-primary {
+        border: 1px solid #2596be;
+        background: transparent;
+        color: #2596be; }
+        .btn-homepage.btn-primary.btn-outline-primary:hover {
+          border: 1px solid rgb(8, 120, 148);
+          background: transparent;
+          color: rgb(8, 120, 148); }
+    .btn-homepage.btn-white {
+      background: #fff;
+      border: 1px solid #fff;
+      color: #fff; }
+      .btn-homepage.btn-white:hover {
+        border: 1px solid #fff;
+        background: transparent;
+        color: #fff; }
+      .btn-homepage.btn-white.btn-outline-white {
+        border: 1px solid #fff;
+        background: transparent;
+        color: #fff; }
+        .btn-homepage.btn-white.btn-outline-white:hover {
+          border: 1px solid transparent;
+          background: #fff;
+          color: #000; }
+
+
+.content-header-teacher-title {
+    font-family: Arial;
+    font-weight: 700;
+    color:white
 }
