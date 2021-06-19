@@ -1,7 +1,6 @@
 
 import React from 'react';
 import CardLogin from './HomePage/CardLogin';
-import ContactUs from './HomePage/ContactUS';
 import IntroVideo from './HomePage/IntroVideo';
 import WhyBox from './HomePage/WhyComponent';
 import imgStudent from '../img/student1.jpg';

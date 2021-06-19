@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Navbar, NavbarToggler, Nav, NavbarBrand, Button, Jumbotron, Collapse, NavItem } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { Navbar, NavbarToggler, Nav, NavbarBrand, Button, Collapse, NavItem } from 'reactstrap';
 import logo from '../../img/logo.png';
 import "./home.css"
 const Header = (props) => {
     const [collapsed, setCollapsed] = useState(false);
-    const [bgcolor, setBgColor] = useState('transparent');
+    // const [bgcolor, setBgColor] = useState('transparent');
     const toggleNavbar = () => setCollapsed(!collapsed);
 
     return (

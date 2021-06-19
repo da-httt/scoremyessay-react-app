@@ -14,9 +14,6 @@ const Cart = (props) => {
     const [orders, setOrders] = useState([]);
     const [orders2, setOrders2] = useState([]);
     const [types, setTypes] = useState([]);
-    const [statistic, setStatistic] = useState();
-    const [statistics, setStatistics] = useState();
-    const [topUsers, setTopUsers] = useState([]);
     const [searchTitle, setSearchTitle] = useState();
     useEffect(() => {
         async function fetchData() {
@@ -31,21 +28,6 @@ const Cart = (props) => {
                 const orders = response.data.data;
                 setOrders(orders);
                 setOrders2(orders);
-
-            })
-
-            api.get('/statistics/me', {
-                headers: { Authorization: 'Bearer ' + getToken() }
-            }
-            ).then(response => {
-                setStatistic([response.data]);
-                setStatistics(response.data);
-            })
-            api.get('/top_users', {
-                headers: { Authorization: 'Bearer ' + getToken() }
-            }
-            ).then(response => {
-                setTopUsers(response.data.top_users);
 
             })
         }
@@ -97,35 +79,7 @@ const Cart = (props) => {
         },
     ];
 
-    const columns = [{
-        title: 'Số lượng',
-        dataIndex: 'total_orders',
-        render: total => (
-            <p style={{ color: "blue", textAlign: "center", fontSize: '20px' }}>{total}</p>
-        )
-    },
-    {
-        title: 'Đã chấm',
-        dataIndex: 'total_done',
-        render: score => (
-            <p style={{ color: "blue", textAlign: "center", fontSize: '20px' }}>{score}</p>
-        )
-    }]
 
-    const columnsUser = [
-        {
-            title: 'Người dùng',
-            dataIndex: 'user_name',
-            width: 220,
-            render: username => <div style={{ color: 'blue' }}>{username}</div>,
-        },
-        {
-            title: 'Số bài',
-            dataIndex: 'order_count',
-            width: 90,
-
-        },
-    ];
     return (
         <div className="student-page">
 

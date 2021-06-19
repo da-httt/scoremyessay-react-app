@@ -78,18 +78,8 @@ const CardLogin = (props) => {
     const toggle = () => setModal(!modal);
     return (
         <React.Fragment>
-            {/*   <Card className="card">
-                <CardImg top width="100%" src={image} alt={nameCard}></CardImg>
-                <CardBody>
-                    <CardTitle tag="h4" >Trở thành {nameCard}</CardTitle>
-                    <CardText className="card-text">
-                        {contentCard}
-                    </CardText>
-                    <Button outline color="primary" onClick={toggle}>Let's go</Button>
-                </CardBody>
-    </Card> */}
             <>
-                <a style={{ cursor: 'pointer' }} onClick={toggle}>
+                <i style={{ cursor: 'pointer' }} onClick={toggle}>
                     <Card className="card-login" style={style}>
                         <CardImg
                             alt="..."
@@ -104,38 +94,9 @@ const CardLogin = (props) => {
                             </CardText>
                         </CardBody>
                     </Card>
-                </a>
+                </i>
             </>
 
-            {/*  <Modal isOpen={modal} toggle={toggle} onSubmit={handleLogin}>
-                <ModalHeader toggle={toggle}>Login</ModalHeader>
-                <ModalBody>
-                    <Form>
-                        <FormGroup>
-                            <Label for="email">Email</Label>
-                            <Input type="email" name="email" id="email" placeholder="Nhập Email" onChange={e => setGmail(e.target.value)} />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="password">Password</Label>
-                            <Input type="password" name="password" id="password" placeholder="Nhập password" onChange={e => setPassword(e.target.value)} />
-                        </FormGroup>
-                        <FormGroup check>
-                            <Label check>
-                                <Input type="checkbox" /> Lưu tài khoản
-                        </Label>
-                        </FormGroup>
-                        <Button type="submit" color="primary" >{loading ? 'Đang xử lý...' : 'Đăng nhập'}</Button>
-                        <Button color="link">Quên mật khẩu?</Button>
-                        {error && <Alert color='danger' isOpen={show} style={{ marginTop: '10px' }}>{error}</Alert>}
-                        <hr />
-                        <Label >Bạn là {nameCard} mới?</Label><br />
-                        <Button color="warning" href={linkSignUp}>Đăng ký</Button>
-                    </Form>
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" className="ml-auto" onClick={toggle}>Cancel</Button>
-                </ModalFooter>
-            </Modal>*/}
             <Modal
                 isOpen={modal}
                 toggle={toggle}

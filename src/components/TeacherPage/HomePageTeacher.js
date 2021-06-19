@@ -1,7 +1,7 @@
 import './Teacher.css';
 import { React, useEffect, useState } from 'react';
 import { Button, Input } from 'reactstrap';
-import { Breadcrumb, Radio, Table, Tag, Tabs } from 'antd';
+import { Breadcrumb, Table, Tag, Tabs, Rate, message } from 'antd';
 import GlobalHeader from './GlobalHeaderComponentT';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
@@ -14,13 +14,14 @@ const HomeTeacher = (props) => {
     const [orders, setOrders] = useState([]);
     const [orders2, setOrders2] = useState([]);
     const [status, setStatus] = useState([]);
-    //const [stateOrder,setStateOrder] = useState(2);
     const [statistics, setStatistics] = useState();
     const [statistic, setStatistic] = useState([]);
     const [deadline, setDeadline] = useState([]);
     const [types, setTypes] = useState([]);
 
     const [searchTitle, setSearchTitle] = useState();
+
+    const [rating, setRating] = useState(0);
     useEffect(() => {
         async function fetchData() {
             await api.get('/types',).then(response => {
@@ -47,6 +48,12 @@ const HomeTeacher = (props) => {
             ).then(response => {
                 setStatistic([response.data]);
                 setStatistics(response.data);
+                api.get('ratings/teacher/' + response.data.user_id, {
+                    headers: { Authorization: 'Bearer ' + getToken() }
+                }
+                ).then(response => {
+                    setRating(response.data.average_rating);
+                })
             })
 
             await api.get('/deadlines', {
@@ -55,16 +62,17 @@ const HomeTeacher = (props) => {
             ).then(response => {
                 setDeadline([response.data]);
             })
+
         }
         fetchData();
 
     }, []);
 
-    const statusList = status.map((state) => (
-        state.status_id !== 0 && state.status_id !== 1 && (
-            <Radio value={state.status_id}>{state.status_name}</Radio>
-        )
-    ));
+    // const statusList = status.map((state) => (
+    //     state.status_id !== 0 && state.status_id !== 1 && (
+    //         <Radio value={state.status_id}>{state.status_name}</Radio>
+    //     )
+    // ));
 
     const columnsEssay = [
         {
@@ -93,7 +101,7 @@ const HomeTeacher = (props) => {
             dataIndex: ['essay', 'title'],
             key: ['essay', 'title'],
             width: 230,
-            render: title => <div>{title.slice(0, 50)}...</div>
+            ellipsis: true
         },
 
         {
@@ -209,12 +217,6 @@ const HomeTeacher = (props) => {
                                     <div className="col col-8 mb-3 mt-3">
                                         <Input placeholder="Nhập đề bài viết bạn muốn tìm kiếm" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
                                     </div>
-                                    {/* <div className="col col-5 mb-auto mt-auto " >
-                            <Radio.Group  defaultValue={stateOrder} onChange={(e)=>{setStateOrder(e.target.value)}}>
-                                {statusList}
-                                <Radio value={5}>All</Radio>
-                            </Radio.Group>
-                            </div> */}
                                     <div className="col col-2 mb-auto mt-auto ">
                                         <Button outline color="secondary" block onClick={handleReset}>Đặt lại</Button>
                                     </div>
@@ -234,6 +236,7 @@ const HomeTeacher = (props) => {
                                                 onClick: event => <>
                                                     {record.status_id === 2 && (props.history.push("/HomeTeacherPage/ScoreEssay?order_id=" + record.order_id))}
                                                     {record.status_id === 3 && (props.history.push("/HomeTeacherPage/DetailResult?order_id=" + record.order_id))}
+                                                    {record.status_id === 4 && (message.info("Bài viết này đã bị hủy!"))}
                                                 </>,
                                             };
                                         }} />
@@ -260,13 +263,13 @@ const HomeTeacher = (props) => {
     </p>
                                 </div>
                                 <div >
-                                    <Tabs defaultActiveKey="1" style={{padding:"10px"}}>
+                                    <Tabs defaultActiveKey="1" style={{ padding: "10px" }}>
                                         <TabPane tab="Deadline tuần này" key="1">
-                                            <Table columns={columnsSchedule} 
-                                            dataSource={deadline} 
-                                            pagination={false} 
-                                            size="small"
-                                            bordered/>
+                                            <Table columns={columnsSchedule}
+                                                dataSource={deadline}
+                                                pagination={false}
+                                                size="small"
+                                                bordered />
                                         </TabPane>
                                         <TabPane tab="Thống kê" key="2">
                                             <Table columns={columns}
@@ -292,13 +295,12 @@ const HomeTeacher = (props) => {
 
                                                 <div className="row ">
                                                     <div className="col" style={{ fontSize: '30px', fontStyle: 'revert' }}>
-                                                        <span style={{ color: "orange" }}>{Number(statistics.monthly_payment).toLocaleString()} </span>VND
-                            </div>
+                                                        <span style={{ color: "orange" }}>{Number(statistics.monthly_payment).toLocaleString()} </span> {" "}VND
+                                                    </div>
                                                 </div>
                                                 <div className="row ">
                                                     <div className="col padding" style={{ fontSize: '18px' }}>
-                                                        So với tháng trước:
-                            {statistics.gross > 0 &&
+                                                        So với tháng trước: {statistics.gross > 0 &&
                                                             <i className="fa fa-sort-up" style={{ color: 'forestgreen' }} />}
                                                         {Math.round(statistics.gross) < 0 &&
                                                             <i className="fa fa-sort-down" style={{ color: 'darkorange' }} />}
@@ -320,15 +322,10 @@ const HomeTeacher = (props) => {
                                     <div className="row bg-row margin padding" >
                                         <div className="container-fluid">
                                             <div className="row ">
-                                                <div className="col" style={{ fontSize: '30px', fontStyle: 'revert' }}>{'4.95'} </div>
+                                                <Rate style={{ margin: "5px 14px " }} value={rating} disabled />
+                                                <p style={{ fontSize: '30px', fontStyle: 'revert' }}>{" " + rating} stars</p>
                                             </div>
-                                            <div className="row ">
-                                                <div className="col" style={{ fontSize: '18px', height: '57px' }}>
-                                                    So với tháng trước {'10% '}
-                                                    <i className="fa fa-sort-up" style={{ color: 'forestgreen' }}></i>
-                                                    <i className="fa fa-sort-down" style={{ color: 'darkorange' }} ></i>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </TabPane>

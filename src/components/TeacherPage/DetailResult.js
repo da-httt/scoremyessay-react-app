@@ -206,7 +206,7 @@ const DetailResult = (props) => {
 
                             </div>
 
-                            <Card style={{ padding: "10px", backgroundColor: 'sky', height: '505px' }} >
+                            <Card style={{ padding: "10px", backgroundColor: 'sky', Height: '505px' }} >
                                 <div key={sentence.sentence_index}>
                                     <strong>
                                         #{sentence.sentence_index}: {sentence.sentence}
@@ -265,7 +265,7 @@ const DetailResult = (props) => {
         <div className="teacher-page">
             <GlobalHeader />
             <div className="container-fluid detailPage"  >
-                <div className="row" style={{ height: window.innerHeight + 'px' }} >
+                <div className="row" style={{ minHeight: window.innerHeight + 'px' }} >
                     <div className="container-fluid centerCol ">
                         <div className="gradient-background-teacher padding">
                             <div className="row bg-row margin padding " >

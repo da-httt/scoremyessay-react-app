@@ -27,7 +27,7 @@ const ScoreEssay = (props) => {
     const [show, setShow] = useState(false);
     const [error, setError] = useState(null);
     const [colorAlert, setColorAlert] = useState("warning");
-    const [loadSave, setLoadSave] = useState(false);
+    // const [loadSave, setLoadSave] = useState(false);
 
     const [show2, setShow2] = useState(false);
     const [error2, setError2] = useState(null);
@@ -141,35 +141,27 @@ const ScoreEssay = (props) => {
     })
 
 
-    const handleSaveComment = (e) => {
-        setLoadSave(true);
-        api.put('/essay_comments/' + orderID, {
-            comments: comments
-        },
-            {
-                headers: { 'Authorization': 'Bearer ' + getToken() },
-            }).then(response => {
-                setLoadSave(false);
-                setShow(true);
-                setColorAlert("success");
-                alert("Bài chấm của bạn đã được lưu lại, hãy chuyển sang phần chẩm điểm & đánh giá!");
-            }).catch((error) => {
-                if (error.response) {
-                    setLoadSave(false);
-                    if (error.response.status === 401 || error.response.status === 400) {
-                        setShow(true);
-                        setColorAlert("danger");
-                        setError(error.response.data.detail);
-                    }
-                    else {
-                        setShow(true);
-                        setColorAlert("danger");
-                        setError("Something went wrong. Please try again later!");
-                    }
-
-                }
-            })
-    }
+    // const handleSaveComment = (e) => {
+    //     setLoadSave(true);
+    //     api.put('/essay_comments/' + orderID, {
+    //         comments: comments
+    //     },
+    //         {
+    //             headers: { 'Authorization': 'Bearer ' + getToken() },
+    //         }).then(response => {
+    //             setLoadSave(false);
+    //             setShow(true);
+    //             setColorAlert("success");
+    //             alert("Bài chấm của bạn đã được lưu lại, hãy chuyển sang phần chẩm điểm & đánh giá!");
+    //         }).catch((error) => {
+    //             if (error.response) {
+    //                 setLoadSave(false);
+    //                 setShow(true);
+    //                 setColorAlert("danger");
+    //                 setError(error.response.data.detail);
+    //             }
+    //         })
+    // }
 
     const handleSaveResult = (e) => {
         setLoadSave2(true);
@@ -242,7 +234,6 @@ const ScoreEssay = (props) => {
             })
     }
     function getHighlightedText(text, highlight) {
-        // Split on highlight term and include term into parts, ignore case
         const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
         return <span className="white"> {parts.map((part, i) =>
             <span key={i} style={part.toLowerCase() === highlight.toLowerCase() ? { color: "red" } : {}}>
@@ -263,7 +254,7 @@ const ScoreEssay = (props) => {
                                     {base64Image && <img src={`data:image/jpeg;base64,${base64Image}`} width="563px" alt="Title or Content"></img>}<br />
                                 </TabPane>
                                 <TabPane tab="Nội dung bài viết" key="2">
-                                    <div className="scroll" style={{height:'auto'}}><p>{getHighlightedText(content, sentence.sentence)}</p></div>
+                                    <div className="scroll" style={{ height: 'auto' }}><p>{getHighlightedText(content, sentence.sentence)}</p></div>
                                 </TabPane>
 
                             </Tabs>
@@ -383,7 +374,7 @@ const ScoreEssay = (props) => {
                         </div>
                         <div className="bg">
                             <div className="shadow-background" style={{ backgroundColor: "white", padding: '10px' }}>
-                                <div className="container-fluid" style={{marginBottom:"50px"}}>
+                                <div className="container-fluid" style={{ marginBottom: "50px" }}>
                                     <ProfileStudent modal={modal} id={studentID} onClick={handleChange} />
                                     <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
 
@@ -415,10 +406,10 @@ const ScoreEssay = (props) => {
                                                         {extraResultsUI}
                                                     </div>
                                                     <div className="col-5">
-                                                        <div className="mb-1" style={{textAlign:"center"}}>
+                                                        <div className="mb-1" style={{ textAlign: "center" }}>
                                                             <Button outline style={{ margin: "5px" }} color="primary" >Đặt lại</Button>
                                                             <Button outline style={{ margin: "5px" }} color="primary" onClick={handleSaveResult}>{loadSave2 ? 'Loading...' : 'Lưu lại'}</Button>
-                                                            <Button outline style={{ margin: "5px" }} color="primary"  onClick={handleDoneResult}>{loadDone2 ? 'Loading...' : 'Kết thúc chấm'}</Button>
+                                                            <Button outline style={{ margin: "5px" }} color="primary" onClick={handleDoneResult}>{loadDone2 ? 'Loading...' : 'Kết thúc chấm'}</Button>
                                                         </div>
                                                         <Card style={{ padding: "10px 30px ", minHeight: '265px' }}>
                                                             <Form >

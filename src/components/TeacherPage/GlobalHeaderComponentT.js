@@ -5,7 +5,7 @@ import { getBaseURL, getToken, removeUserSession } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 import { Dropdown, Menu } from 'antd';
 
-import { UserOutlined, AuditOutlined, LogoutOutlined, StarOutlined } from '@ant-design/icons';
+import {AuditOutlined, LogoutOutlined, StarOutlined } from '@ant-design/icons';
 
 const api = getBaseURL();
 
@@ -14,6 +14,11 @@ const GlobalHeader = (props) => {
   const [username, setUsername] = useState("Không xác định");
   const [avatar, setAvatar] = useState("")
 
+  const handleLogOut = () => {
+    removeUserSession();
+    props.history.push("/Home");
+  }
+  
   useEffect(() => {
     async function fetchData() {
       await api.get('/users/me', {
@@ -27,26 +32,19 @@ const GlobalHeader = (props) => {
           setAvatar(response.data.image_base64);
         })
       }).catch((error) => {
-        if (error.response) {
-          if (error.response.status === 401 || error.response.status === 400 || error.response.status === 403) {
-            setUsername(error.response.data.detail);
-          }
-          else {
-            setUsername("Không xác định");
-          }
-
+        if(error.response.data.detail === "Could not validate credentials"){
+          alert("Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại!");
+          removeUserSession();
+          props.history.push("/Home");
         }
       })
 
     }
     fetchData();
 
-  }, []);
+  }, [props.history]);
 
-  const handleLogOut = () => {
-    removeUserSession();
-    props.history.push("/Home");
-  }
+  
   const menu = (
     <Menu >
       <Menu.Item key="1" onClick={e => props.history.push("/HomeTeacherPage/PersonalInfo")} icon={<AuditOutlined />}>
@@ -68,7 +66,7 @@ const GlobalHeader = (props) => {
         </NavbarBrand>
         <div className="ml-auto" >
           <Dropdown overlay={menu} placement="bottomCenter" >
-            <a
+            <i
               class="dropdown-toggle d-flex align-items-center hidden-arrow"
               href="#"
               id="navbarDropdownMenuLink"
@@ -85,7 +83,7 @@ const GlobalHeader = (props) => {
                 alt=""
                 loading="lazy"
               />
-            </a>
+            </i>
           </Dropdown >
         </div>
 

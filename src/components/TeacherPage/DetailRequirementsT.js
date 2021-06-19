@@ -104,7 +104,7 @@ const DetailReq = (props) => {
     }, [orderID]);
     function showType(id) {
         return types.map((type) => (
-            type.type_id == id && (
+            type.type_id === id && (
                 <div className="row" style={{ marginBottom: '20px' }}>
                     <div className="col col-7">{type.type_name}:</div>
                     <div className="col" style={{ textAlign: 'right' }}>{type.type_price} VNĐ</div>
@@ -136,16 +136,10 @@ const DetailReq = (props) => {
         }).catch((error) => {
             if (error.response) {
                 setLoading(false);
-                if (error.response.status === 401 || error.response.status === 400) {
-                    setShow(true);
-                    setColorAlert("danger");
-                    setError(error.response.data.detail);
-                }
-                else {
-                    setShow(true);
-                    setColorAlert("danger");
-                    setError("Something went wrong. Please try again later!");
-                }
+                setShow(true);
+                setColorAlert("danger");
+                setError(error.response.data.detail);
+
 
             }
         })
@@ -180,7 +174,7 @@ const DetailReq = (props) => {
                         </div>
 
                         <div className="bg">
-                            <div className="shadow-background" style={{backgroundColor:"white"}}>
+                            <div className="shadow-background" style={{ backgroundColor: "white" }}>
                                 <div className="container-fluid mt-2" style={{ fontSize: "medium", textAlign: "justify" }}>
                                     <div className="row ">
                                         <div className="ml-auto mr-3">Người viết: <Button color="link" onClick={toggle}>{student}</Button></div>
@@ -188,7 +182,7 @@ const DetailReq = (props) => {
                                     </div>
                                     <hr />
                                     <div className="row ">
-                                        {error && <Alert color={colorAlert} isOpen={show} style={{ marginTop: '10px' }}>{error}</Alert>}
+                                       {error && <Alert color={colorAlert} isOpen={show} style={{ margin: '10px 320px',  }}>{error}</Alert>}
                                     </div>
                                     <div className="row ">
                                         <div className="col-7">
@@ -212,7 +206,7 @@ const DetailReq = (props) => {
                                                 <strong>YÊU CẦU BÀI</strong>
                                                 <div className="ml-auto" style={{ color: 'grey', marginBottom: '5px' }}>Cập nhật lúc: {sentDate}</div>
 
-                                                <Card style={{ minHeight: '220px', padding: "10px", marginTop: '20px', padding: "10px" }}>
+                                                <Card style={{ minHeight: '220px', marginTop: '20px', padding: "10px" }}>
                                                     <div className="container">
                                                         {showType(type)}
                                                         {showOptions}
