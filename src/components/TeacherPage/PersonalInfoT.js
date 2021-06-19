@@ -1,14 +1,14 @@
 import './Teacher.css';
 import React, { useEffect, useState } from 'react';
 import GlobalHeader from './GlobalHeaderComponentT';
-import { Col, Input, Row,Form, FormGroup, Label, Container, Button, Alert, Table } from 'reactstrap';
+import { Col, Input, Row, Form, FormGroup, Label, Container, Button, Alert, Table } from 'reactstrap';
 import { Radio, PageHeader } from 'antd';
 import { getBaseURL, getToken } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 
-const api= getBaseURL();
+const api = getBaseURL();
 
-const PersonalInfoTea =(props) =>{
+const PersonalInfoTea = (props) => {
     const [name, setName] = useState();
     const [id, setID] = useState();
     const [birthday, setBirthday] = useState();
@@ -19,8 +19,8 @@ const PersonalInfoTea =(props) =>{
     const [mail, setMail] = useState();
     const [base64Image, setBase64Image] = useState("");
 
-    const [jobs,setJobs] =useState([]);
-    const [genders,setGenders] =useState([]);
+    const [jobs, setJobs] = useState([]);
+    const [genders, setGenders] = useState([]);
 
     const [edit, setEdit] = useState(true);
     const [editAvt, setEditAvt] = useState(true);
@@ -29,24 +29,24 @@ const PersonalInfoTea =(props) =>{
     const [show, setShow] = useState(false);
     const [error, setError] = useState(null);
     const [colorAlert, setColorAlert] = useState("warning");
-    const [loadInfo, setLoadInfo] =useState(false);
+    const [loadInfo, setLoadInfo] = useState(false);
 
     const [show2, setShow2] = useState(false);
     const [error2, setError2] = useState(null);
-    const [loadAvt, setLoadAvt] =useState(false);
+    const [loadAvt, setLoadAvt] = useState(false);
 
     const [show3, setShow3] = useState(false);
     const [error3, setError3] = useState(null);
-    const [loadPass, setLoadPass] =useState(false);
+    const [loadPass, setLoadPass] = useState(false);
 
     const [pass, setPass] = useState();
-    const [passA, setPassA] =useState()
+    const [passA, setPassA] = useState()
     const [statistic, setStatistic] = useState();
 
-    useEffect( () => {
+    useEffect(() => {
         async function fetchData() {
-            api.get('/users/me',{
-              headers: {Authorization: 'Bearer ' + getToken()}
+            api.get('/users/me', {
+                headers: { Authorization: 'Bearer ' + getToken() }
             }
             ).then(response => {
                 setMail(response.data.email);
@@ -58,189 +58,182 @@ const PersonalInfoTea =(props) =>{
                 setGender(info.gender_id);
                 setJobID(info.job_id);
                 setPhone(info.phone_number);
-                api.get('/avatars/'+info.user_id,{
-                    headers: {Authorization: 'Bearer ' + getToken()}
-                  }).then(response =>{
+                api.get('/avatars/' + info.user_id, {
+                    headers: { Authorization: 'Bearer ' + getToken() }
+                }).then(response => {
                     setBase64Image(response.data.image_base64);
                 })
             })
-            
+
             api.get('/jobs').then(response => {
                 const jobs = response.data.data;
                 setJobs(jobs);
-                
-            })  
+
+            })
             api.get('/genders').then(response => {
-                const genders = response.data.data; 
+                const genders = response.data.data;
                 setGenders(genders);
-                
-            }) 
-            api.get('/statistics/me',{
-                headers: {Authorization: 'Bearer ' + getToken()}
-              }
-              ).then(response => {
-                 setStatistic(response.data);
-              })
-     
+
+            })
+            api.get('/statistics/me', {
+                headers: { Authorization: 'Bearer ' + getToken() }
+            }
+            ).then(response => {
+                setStatistic(response.data);
+            })
+
         }
         fetchData();
-    },[]);
+    }, []);
 
     const jobsList = jobs.map((job) => (
-       <option key={job.job_id} value={job.job_id} >{job.job_name}</option>
+        <option key={job.job_id} value={job.job_id} >{job.job_name}</option>
     ));
 
     const gendersList = genders.map((gender) => (
         <>
-        {gender.gender_id===1 &&(
-            <><Radio value={gender.gender_id} key={gender.gender_id}>{gender.gender_name}</Radio><br/></>
-        )}
-        {gender.gender_id!==1 &&(
-            <Radio value={gender.gender_id} key={gender.gender_id}>{gender.gender_name}</Radio>
-        )}
-        
+            {gender.gender_id === 1 && (
+                <><Radio value={gender.gender_id} key={gender.gender_id}>{gender.gender_name}</Radio><br /></>
+            )}
+            {gender.gender_id !== 1 && (
+                <Radio value={gender.gender_id} key={gender.gender_id}>{gender.gender_name}</Radio>
+            )}
+
         </>
     ));
-    const uploadImage = async (e) =>{
-        const file=e.target.files[0];
+    const uploadImage = async (e) => {
+        const file = e.target.files[0];
         const base64 = await convertBase64(file);
-        const a= base64.split(",");
+        const a = base64.split(",");
         setBase64Image(a[1]);
     }
-    const convertBase64=(file)=>{
-        return new Promise((resolve, reject)=>{
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file);
 
-            fileReader.onload =() =>{
+            fileReader.onload = () => {
                 resolve(fileReader.result);
             };
 
-            fileReader.onerror=(error) =>{
+            fileReader.onerror = (error) => {
                 reject(error)
             };
         });
     };
 
-    const handleChangeInfo =(e)=>{
+    const handleChangeInfo = (e) => {
         setLoadInfo(true);
-        api.put('/users/'+id, {
+        api.put('/users/' + id, {
             "name": name,
             "address": address,
             "date_of_birth": birthday,
             "gender_id": gender,
             "job_id": jobID,
             "phone_number": phone
-        }, 
-          {
-            headers: {'Authorization': 'Bearer ' + getToken()},
-          }).then(response => {
-            setLoadInfo(false);
-            setShow(true);
-            setColorAlert("success");
-            setEdit(true);
-            alert("Thông tin của bạn đã được cập nhật!");
-          }).catch((error) => {
-            if(error.response){
+        },
+            {
+                headers: { 'Authorization': 'Bearer ' + getToken() },
+            }).then(response => {
                 setLoadInfo(false);
-                if(error.response.status === 401 || error.response.status === 400){
+                setShow(true);
+                setColorAlert("success");
+                setEdit(true);
+                alert("Thông tin của bạn đã được cập nhật!");
+            }).catch((error) => {
+                if (error.response) {
+                    setLoadInfo(false);
                     setShow(true);
                     setColorAlert("danger");
                     setError(error.response.data.detail);
+
+
                 }
-                else{
-                    setShow(true);
-                    setColorAlert("danger");
-                    setError("Something went wrong. Please try again later!");
-                }
-                
-            } 
-          })
+            })
     }
 
-    const handleChangeAvt =(e)=>{
+    const handleChangeAvt = (e) => {
         setLoadAvt(true);
-        api.put('/avatars/'+id, {
+        api.put('/avatars/' + id, {
             "base64": base64Image,
-        }, 
-          {
-            headers: {'Authorization': 'Bearer ' + getToken()},
-          }).then(response => {
-            setLoadAvt(false);
-            setShow2(true);
-            setColorAlert("success");
-            setEditAvt(true);
-            alert("Ảnh đại diện của bạn đã được cập nhật!");
-          }).catch((error) => {
-            if(error.response){
+        },
+            {
+                headers: { 'Authorization': 'Bearer ' + getToken() },
+            }).then(response => {
                 setLoadAvt(false);
-                if(error.response.status === 401 || error.response.status === 400){
-                    setShow2(true);
-                    setColorAlert("danger");
-                    setError2(error.response.data.detail);
+                setShow2(true);
+                setColorAlert("success");
+                setEditAvt(true);
+                alert("Ảnh đại diện của bạn đã được cập nhật!");
+            }).catch((error) => {
+                if (error.response) {
+                    setLoadAvt(false);
+                    if (error.response.status === 401 || error.response.status === 400) {
+                        setShow2(true);
+                        setColorAlert("danger");
+                        setError2(error.response.data.detail);
+                    }
+                    else {
+                        setShow2(true);
+                        setColorAlert("danger");
+                        setError2("Something went wrong. Please try again later!");
+                    }
+
                 }
-                else{
-                    setShow2(true);
-                    setColorAlert("danger");
-                    setError2("Something went wrong. Please try again later!");
-                }
-                
-            } 
-          })
+            })
     }
-    
-    const handleChangePass =(e)=>{
-        if(pass !== passA){
+
+    const handleChangePass = (e) => {
+        if (pass !== passA) {
             setShow3(true);
             setColorAlert("warning");
             setError3("Mật khẩu chưa trùng khớp, vui lòng kiểm tra lại!");
         }
-        else{
+        else {
             setLoadPass(true);
-            api.put('/change_password/me?new_password='+pass.toString(),{},{
-                headers: {Authorization: 'Bearer ' + getToken()},
-              }
-              ).then(response => {
+            api.put('/change_password/me?new_password=' + pass.toString(), {}, {
+                headers: { Authorization: 'Bearer ' + getToken() },
+            }
+            ).then(response => {
                 setLoadPass(false);
                 setShow3(true);
                 setColorAlert("success");
                 alert("Mật khẩu của bạn đã được cập nhật!");
                 setEditPass(true);
-              }).catch((error) => {
-                if(error.response){
+            }).catch((error) => {
+                if (error.response) {
                     setLoadPass(false);
-                    if(error.response.status === 401 || error.response.status === 400){
+                    if (error.response.status === 401 || error.response.status === 400) {
                         setShow3(true);
                         setColorAlert("danger");
                         setError3(error.response.data.detail);
                     }
-                    else{
+                    else {
                         setShow3(true);
                         setColorAlert("danger");
                         setError3("Something went wrong. Please try again later!");
                     }
-                    
-                } 
-              })
+
+                }
+            })
 
         }
     }
 
-    return(
+    return (
         <div className="teacher-page">
             <GlobalHeader />
             <div className="container-fluid detailPageTeacher" style={{ height: window.innerHeight + 'px' }} >
                 <div className="row "  >
                     <div className="container-fluid centerCol" style={{ borderRadius: "10px" }}>
-                        <div className="row margin padding shadow-background personal-background-teacher" style={{  color: "white" }}>
+                        <div className="row margin padding shadow-background personal-background-teacher" style={{ color: "white" }}>
                             <PageHeader
                                 className="site-page-header"
                                 title={<span style={{ color: "white" }}>THÔNG TIN CÁ NHÂN</span>}
                             />,
-                            <h3 className="mr-auto ml-auto"></h3>
                         </div>
                         <div className="row shadow-background" >
-                            <div className="col-4 padding " style={{ backgroundColor:"white", textAlign: "center", padding: "20px" }}>
+                            <div className="col-4 padding " style={{ backgroundColor: "white", textAlign: "center", padding: "20px" }}>
                                 <img style={{ borderRadius: "10px", marginTop: "50px" }} src={`data:image/jpeg;base64,${base64Image}`} height="273px" width="273px" className="ml-3" alt="Avatar"></img>
 
                                 <div style={{ padding: "20px", marginTop: "10px" }}>

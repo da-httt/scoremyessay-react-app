@@ -1,13 +1,10 @@
 import './Student.css';
 import { React, useEffect, useState } from 'react';
 import { Button, Input } from 'reactstrap';
-import { Breadcrumb, Popconfirm, Radio, Table, Tag } from 'antd';
+import { Breadcrumb, Popconfirm, Table, Tag } from 'antd';
 import GlobalHeader from './GlobalHeaderComponent';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
-import { Tabs } from 'antd';
-
-const { TabPane } = Tabs;
 const api = getBaseURL();
 
 const HomeStudent = (props) => {
@@ -16,7 +13,6 @@ const HomeStudent = (props) => {
     const [orders2, setOrders2] = useState([]);
     const [types, setTypes] = useState([]);
     const [status, setStatus] = useState([]);
-    //const [stateOrder,setStateOrder] = useState(1);
     const [statistic, setStatistic] = useState();
     const [statistics, setStatistics] = useState();
     const [topUsers, setTopUsers] = useState([]);
@@ -59,13 +55,6 @@ const HomeStudent = (props) => {
         fetchData();
 
     }, []);
-
-    // const statusList = status.map((state) => (
-    //     state.status_id!==0 && (
-    //     <Radio value={state.status_id}>{state.status_name}</Radio>
-    //     )
-    // ));
-
     const handleDelete = (order_ID) => {
         api.delete("orders/" + order_ID, {
             headers: { Authorization: 'Bearer ' + getToken() }
@@ -123,7 +112,7 @@ const HomeStudent = (props) => {
             dataIndex: ['essay', 'title'],
             key: ['essay', 'title'],
             width: 310,
-            render: title => <div>{title.slice(0, 40)}...</div>,
+            ellipsis: true
 
         },
 
@@ -168,11 +157,13 @@ const HomeStudent = (props) => {
         {
             title: 'Action',
             fixed: 'right',
+            width: "250px",
             render: (_, record) =>
                 orders.length >= 1 ? (
                     <>
                         <Button outline color="link" style={{ color: "rgb(8, 120, 148)", margin: '0px 0px' }} onClick={event => (props.history.push("/HomeStudentPage/DetailWriting?order_id=" + record.order_id))}>View</Button>
-                        <Button outline color="link" style={{ color: "green", margin: '0px 0px' }} onClick={event => (props.history.push("/HomeStudentPage/DetailResult?order_id=" + record.order_id))}>Result</Button>
+                        {record.status_id === 3 && 
+                        <Button outline color="link" style={{ color: "green", margin: '0px 0px' }} onClick={event => (props.history.push("/HomeStudentPage/DetailResult?order_id=" + record.order_id))}>Result</Button>}
                         {(record.status_id === 1 || record.status_id === 2) && (
                             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.order_id)}>
                                 <Button outline color="link " style={{ color: "red", margin: '0px 0px' }}>Delete</Button>
@@ -322,7 +313,7 @@ const HomeStudent = (props) => {
                                         </div>
                                         <div className="row ">
                                             <div className="col" style={{ fontSize: '16px' }}>
-                                                So với tháng trước:
+                                                So với tháng trước:<br/>
                              {statistics.gross > 0 &&
                                                     <i className="fa fa-sort-up" style={{ color: 'forestgreen' }}></i>}
                                                 {statistics.gross < 0 &&

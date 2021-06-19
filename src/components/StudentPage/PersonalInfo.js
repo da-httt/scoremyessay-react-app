@@ -143,16 +143,10 @@ const PersonalInfo = (props) => {
             }).catch((error) => {
                 if (error.response) {
                     setLoadInfo(false);
-                    if (error.response.status === 401 || error.response.status === 400) {
-                        setShow(true);
-                        setColorAlert("danger");
-                        setError(error.response.data.detail);
-                    }
-                    else {
-                        setShow(true);
-                        setColorAlert("danger");
-                        setError("Something went wrong. Please try again later!");
-                    }
+                    setShow(true);
+                    setColorAlert("danger");
+                    setError(error.response.data.detail);
+
 
                 }
             })
@@ -232,15 +226,14 @@ const PersonalInfo = (props) => {
             <div className="container-fluid detailPageStudent" style={{ height: window.innerHeight + 'px' }} >
                 <div className="row "  >
                     <div className="container-fluid centerCol" style={{ borderRadius: "10px" }}>
-                        <div className="row margin padding shadow-background personal-background-student" style={{  color: "white" }}>
+                        <div className="row margin padding shadow-background personal-background-student" style={{ color: "white" }}>
                             <PageHeader
                                 className="site-page-header"
                                 title={<span style={{ color: "white" }}>THÔNG TIN CÁ NHÂN</span>}
                             />,
-                            <h3 className="mr-auto ml-auto"></h3>
                         </div>
                         <div className="row shadow-background" >
-                            <div className="col-4 padding " style={{ backgroundColor:"white", textAlign: "center", padding: "20px" }}>
+                            <div className="col-4 padding " style={{ backgroundColor: "white", textAlign: "center", padding: "20px" }}>
                                 <img style={{ borderRadius: "10px", marginTop: "50px" }} src={`data:image/jpeg;base64,${base64Image}`} height="273px" width="273px" className="ml-3" alt="Avatar"></img>
 
                                 <div style={{ padding: "20px", marginTop: "10px" }}>

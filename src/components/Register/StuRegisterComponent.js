@@ -9,12 +9,6 @@ import "./register.css"
 
 const api = getBaseURL();
 
-
-const titleStyle = {
-    fontWeigh: 700,
-    colo: "#2596be"
-}
-
 const StuRegister = (props) => {
     const [type, setType] = useState("password");
     const [classNamePass, setClassNamePass] = useState("fa fa-eye ");
@@ -103,16 +97,10 @@ const StuRegister = (props) => {
                         }).catch((error) => {
                             if (error.response) {
                                 setLoading(false);
-                                if (error.response.status === 401 || error.response.status === 400) {
-                                    setShow(true);
-                                    setColorAlert("danger");
-                                    setError(error.response.data.detail);
-                                }
-                                else {
-                                    setShow(true);
-                                    setColorAlert("danger");
-                                    setError("Something went wrong. Please try again later!");
-                                }
+                                setShow(true);
+                                setColorAlert("danger");
+                                setError(error.response.data.detail);
+
 
                             }
                         })

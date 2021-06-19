@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Navbar, NavbarToggler, Nav, NavbarBrand, Button, Jumbotron, Collapse, NavItem } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { Navbar, NavbarToggler, Nav, NavbarBrand, Collapse, NavItem } from 'reactstrap';
 import logo from '../../img/logo.png';
 import "./home.css"
 const HeaderLite = (props) => {

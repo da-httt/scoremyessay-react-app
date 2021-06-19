@@ -181,7 +181,7 @@ const Stepp = (props) => {
 
   function showType(id) {
     return types.map((type) => (
-      type.type_id == id && (
+      type.type_id === id && (
         <div className="row" style={{ marginBottom: '20px' }}>
           <div className="col col-7">{type.type_name}:</div>
           <div className="col" style={{ textAlign: 'right' }}>{type.type_price} VNĐ</div>
@@ -404,34 +404,18 @@ const Stepp = (props) => {
                   }).catch((error) => {
                     if (error.response) {
                       setLoadPay(false);
-                      if (error.response.status === 401 || error.response.status === 400) {
                         setShow(true);
                         setColorAlert("danger");
                         setError(error.response.data.detail);
-                      }
-                      else {
-                        setShow(true);
-                        setColorAlert("danger");
-                        setError("Something went wrong. Please try again later!");
-                      }
-
                     }
                   })
 
               }).catch((error) => {
                 if (error.response) {
                   setLoadPay(false);
-                  if (error.response.status === 401 || error.response.status === 400) {
                     setShow(true);
                     setColorAlert("danger");
                     setError(error.response.data.detail);
-                  }
-                  else {
-                    setShow(true);
-                    setColorAlert("danger");
-                    setError("Something went wrong. Please try again later!");
-                  }
-
                 }
               })
           }
@@ -457,19 +441,13 @@ const Stepp = (props) => {
               }).catch((error) => {
                 if (error.response) {
                   setLoadPay(false);
-                  if (error.response.status === 401 || error.response.status === 400) {
+                  
                     setShow(true);
                     setColorAlert("danger");
                     setError(error.response.data.detail);
-                  }
-                  else {
-                    setShow(true);
-                    setColorAlert("danger");
-                    setError("Something went wrong. Please try again later!");
-                  }
 
-                }
-              })
+              }
+            })
           }
 
 

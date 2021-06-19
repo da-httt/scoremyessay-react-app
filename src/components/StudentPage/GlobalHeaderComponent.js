@@ -5,8 +5,7 @@ import { getBaseURL, getToken, removeUserSession } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 import { Dropdown, Menu } from 'antd';
 
-import { UserOutlined, AuditOutlined, LogoutOutlined, StarOutlined } from '@ant-design/icons';
-import { Button } from 'reactstrap';
+import { AuditOutlined, LogoutOutlined, StarOutlined } from '@ant-design/icons';
 
 const api = getBaseURL();
 
@@ -28,21 +27,17 @@ const GlobalHeader = (props) => {
           setAvatar(response.data.image_base64);
       })
       }).catch((error) => {
-        if (error.response) {
-          if (error.response.status === 401 || error.response.status === 400 || error.response.status === 403) {
-            setUsername(error.response.data.detail);
-          }
-          else {
-            setUsername("Không xác định");
-          }
-
+        if(error.response.data.detail === "Could not validate credentials"){
+          alert("Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại!");
+          removeUserSession();
+          props.history.push("/Home");
         }
       })
 
     }
     fetchData();
 
-  }, []);
+  }, [props.history]);
 
   const handleLogOut = () => {
     removeUserSession();
@@ -70,7 +65,7 @@ const GlobalHeader = (props) => {
         <div className="ml-auto" >
           <a color="link" className="cart-link-student" href="/HomeStudentPage/Cart" > Giỏ hàng  <i className="fa fa-cart-arrow-down fa-lg" /></a>
           <Dropdown overlay={menu} placement="bottomCenter" >
-            <a
+            <i
               class="dropdown-toggle d-flex align-items-center hidden-arrow"
               href="#"
               id="navbarDropdownMenuLink"
@@ -87,7 +82,7 @@ const GlobalHeader = (props) => {
                 alt=""
                 loading="lazy"
               />
-            </a>
+            </i>
           </Dropdown >
         </div>
 

@@ -8,7 +8,6 @@ const { TabPane } = Tabs;
 
 export const Database = (props) => {
     const [genders, setGenders] = useState([]);
-    const [types, setTypes] = useState([]);
     const [status, setStatus] = useState([]);
     const [jobs, setJobs] = useState([]);
     const [options, setOptions] = useState([]);
@@ -35,11 +34,6 @@ export const Database = (props) => {
             await api.get('/options',).then(response => {
                 const options = response.data.data;
                 setOptions(options);
-            })
-
-            await api.get('/types',).then(response => {
-                const types = response.data.data;
-                setTypes(types);
             })
 
             await api.get('/status',).then(response => {

@@ -15,10 +15,6 @@ const AddWritingT = (props) => {
     const rowSelection = useState([]);
     const [orders, setOrders] = useState([]);
 
-    const [statistic, setStatistic] = useState([]);
-    const [statistics, setStatistics] = useState();
-    const [deadline, setDeadline] = useState([]);
-
     const [types, setTypes] = useState([]);
     const [searchTitle, setSearchTitle] = useState();
     const [orders2, setOrders2] = useState([]);
@@ -37,20 +33,6 @@ const AddWritingT = (props) => {
                 setOrders2(orders);
             })
 
-            await api.get('/statistics/me', {
-                headers: { Authorization: 'Bearer ' + getToken() }
-            }
-            ).then(response => {
-                setStatistic([response.data]);
-                setStatistics(response.data);
-            })
-
-            await api.get('/deadlines', {
-                headers: { Authorization: 'Bearer ' + getToken() }
-            }
-            ).then(response => {
-                setDeadline([response.data]);
-            })
         }
         fetchData();
 
@@ -108,36 +90,6 @@ const AddWritingT = (props) => {
 
 
     ];
-
-    const columns = [{
-        title: 'Số lượng',
-        dataIndex: 'total_orders',
-        render: total => (
-            <p style={{ color: "blue", textAlign: "center", fontSize: '20px' }}>{total}</p>
-        )
-    },
-    {
-        title: 'Đã chấm',
-        dataIndex: 'total_done',
-        render: score => (
-            <p style={{ color: "blue", textAlign: "center", fontSize: '20px' }}>{score}</p>
-        )
-    }]
-
-    const columnsSchedule = [{
-        title: 'Ngày hôm nay',
-        dataIndex: 'today_deadline',
-        render: today => (
-            <p style={{ color: "blue", textAlign: "center", fontSize: '20px' }}>{today}</p>
-        )
-    },
-    {
-        title: 'Tuần này',
-        dataIndex: 'week_deadline',
-        render: week => (
-            <p style={{ color: "blue", textAlign: "center", fontSize: '20px' }}>{week}</p>
-        )
-    }]
 
     const handleSearch = () => {
 

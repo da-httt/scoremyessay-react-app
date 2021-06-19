@@ -13,8 +13,10 @@ const api = getBaseURL();
 const TeaRegister = (props) => {
     const [jobs, setJobs] = useState([]);
     const [genders, setGenders] = useState([]);
+    const [levels, setLevels] = useState([]);
     const [job, setJob] = useState(0);
     const [gender, setGender] = useState(0);
+    const [level, setLevel] = useState(0);
     const [name, setName] = useState();
     const [birthday, setBirthday] = useState();
     const [email, setEmail] = useState();
@@ -40,6 +42,10 @@ const TeaRegister = (props) => {
                 const genders = response.data.data;
                 setGenders(genders);
             })
+            await api.get('/levels').then(response => {
+                const levels = response.data.data;
+                setLevels(levels);
+            })
         }
         fetchData();
 
@@ -52,6 +58,12 @@ const TeaRegister = (props) => {
     const gendersList = genders.map((gender) => (
 
         <Radio value={gender.gender_id} key={gender.gender_id}>{gender.gender_name}</Radio>
+    )
+    );
+
+    const levelsList = levels.map((level) => (
+
+        <Radio value={level.level_id} key={level.level_id}>{level.level_name}</Radio>
     )
     );
 
@@ -76,7 +88,6 @@ const TeaRegister = (props) => {
             };
         });
     };
-    console.log(agree);
     const handleSignUp = (e) => {
         if (name && birthday && email && tel && base64Image && coverLetter) {
             if (agree === true) {
@@ -90,6 +101,7 @@ const TeaRegister = (props) => {
                     "job_id": job,
                     "phone_number": tel,
                     "date_of_birth": birthday,
+                    "level_id": level,
                     "avatar": base64Image,
                     "cover_letter": coverLetter
                 })
@@ -99,19 +111,11 @@ const TeaRegister = (props) => {
                     }).catch((error) => {
                         if (error.response) {
                             setLoading(false);
-                            if (error.response.status === 401 || error.response.status === 400) {
                                 setShow(true);
                                 setColorAlert("danger");
                                 setError(error.response.data.detail);
-                            }
-                            else {
-                                setShow(true);
-                                setColorAlert("danger");
-                                setError("Something went wrong. Please try again later!");
-                            }
-
-                        }
-                    })
+                    }
+                })
             }
             else {
                 setShow(true);
@@ -132,13 +136,13 @@ const TeaRegister = (props) => {
             <div className="back">
                 <HeaderLite />
                 <div className="container bg-signup">
-                    <Form className="card-register" style={{ marginBottom: 200}}>
+                    <Form className="card-register" style={{ marginBottom: 200 }}>
                         <div className="row align-items-center">
                             <h3 className="ml-auto mr-auto mt-3" style={{
-                                        fontWeight: 700,
-                                        color: "#2596be",
-                                        marginBottom: "20px"
-                                    }}>Đăng ký trở thành giảng viên, chuyên gia</h3>
+                                fontWeight: 700,
+                                color: "#2596be",
+                                marginBottom: "20px"
+                            }}>Đăng ký trở thành giảng viên, chuyên gia</h3>
                         </div>
                         <div className="row " >
                             <Card className="card-tea-register">
@@ -219,13 +223,21 @@ const TeaRegister = (props) => {
                                 <CardBody>
                                     <div className="container">
                                         <FormGroup row>
-                                            <Label for="fullname" sm={3}>Ảnh đại diện</Label>
+                                            <Label for="fullname" sm={3}>Ảnh đại diện *</Label>
                                             <Col >
                                                 <CustomInput className="register-input" type="file" accept="image/*" onChange={(e) => { uploadImage(e) }} />
                                             </Col>
                                         </FormGroup>
                                         <FormGroup row>
-                                            <Label for="fullname" sm={3}>Lý do bạn muốn trở thành giảng viên, giáo viên của hệ thống? </Label>
+                                            <Label for="fullname" sm={3}>Trình độ chấm bài</Label>
+                                            <Col >
+                                                <Radio.Group style={{ marginLeft: '20px' }} value={level} onChange={e => setLevel(e.target.value)}>
+                                                    {levelsList}
+                                                </Radio.Group>
+                                            </Col>
+                                        </FormGroup>
+                                        <FormGroup row>
+                                            <Label for="fullname" sm={3}>Lý do bạn muốn trở thành giảng viên, giáo viên của hệ thống? *</Label>
 
                                             <Col >
                                                 <Input className="register-input" type="textarea" rows={4} onChange={e => setCoverLetter(e.target.value)} />
@@ -239,7 +251,7 @@ const TeaRegister = (props) => {
 
                         </div>
                         <div className="row align-items-center">
-                            <Label check className="mr-auto ml-auto" style={{ marginTop: '20px'}} onClick={e => setAgree(!agree)}><Input type="checkbox" /> Chấp nhận mọi điều khoản và chính sách</Label>
+                            <Label check className="mr-auto ml-auto" style={{ marginTop: '20px' }} onClick={e => setAgree(!agree)}><Input type="checkbox" /> Chấp nhận mọi điều khoản và chính sách</Label>
 
                         </div>
                         <div className="row align-items-center mt-3">
