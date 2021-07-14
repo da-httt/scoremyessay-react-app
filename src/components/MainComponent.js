@@ -6,22 +6,21 @@ import HomePage from './HomePageComponent';
 import TeaRegister from './Register/TeaRegisterComponent';
 import StuRegister from './Register/StuRegisterComponent';
 
-import HomeStudent from './StudentPage/HomePageStu';
-import AddNewWriting from './StudentPage/AddWriting';
-import DetailWriting from './StudentPage/DetailWriting';
-import DetailRequirement from './StudentPage/DetailRequirements';
-import PersonalInfo from './StudentPage/PersonalInfo';
-import MyReviews from './StudentPage/MyReview';
-import Test from './StudentPage/test';
-import Cart from './StudentPage/Cart';
+import HomeStudent from './student/homepage';
+import AddNewWriting from './student/addNewWriting';
+import DetailWriting from './student/DetailWriting';
+import DetailRequirement from './student/DetailRequirements';
+import PersonalInfo from './student/PersonalInfo';
+import MyReviews from './student/MyReview';
+import Cart from './student/Cart';
 
-import HomeTeacher from './TeacherPage/HomePageTeacher';
-import AddWritingT from './TeacherPage/AddWrittingT';
-import DetailReq from './TeacherPage/DetailRequirementsT';
-import ScoreEssay from './TeacherPage/ScoreEssay';
-import DetailResult from './TeacherPage/DetailResult';
-import MyRating from './TeacherPage/MyRating';
-import PersonalInfoTea from './TeacherPage/PersonalInfoT';
+import HomeTeacher from './teacher/HomePageTeacher';
+import AddWritingT from './teacher/AddWrittingT';
+import DetailReq from './teacher/DetailRequirementsT';
+import ScoreEssay from './teacher/ScoreEssay';
+import DetailResult from './teacher/DetailResult';
+import MyRating from './teacher/MyRating';
+import PersonalInfoTea from './teacher/PersonalInfoT';
 
 
 import PublicRoute from '../Utils/PublicRoute';
@@ -57,7 +56,7 @@ class Main extends Component{
                     <PrivateRoute exact path="/HomeTeacherPage/DetailResult" component={() => <DetailResult/>}/>
                     <PrivateRoute exact path="/HomeTeacherPage/MyRating" component={() => <MyRating/>}/>
 
-                    <Route exact path="/test" component={() => <Test/>}/>
+                    
                     <AdminRoute exact path="/admin" component={() => <Admin />}/>
                     <Redirect to="/Home"/>
                 </Switch>

@@ -3,7 +3,7 @@ import './register.css';
 import { Button, Form, Label, Input, FormGroup, CustomInput, Card, CardHeader, CardBody, Col, Alert } from 'reactstrap';
 import Footer from '../HomePage/FooterComponent';
 import HeaderLite from '../HomePage/HeaderLiteComponent';
-import { Radio } from 'antd';
+import { message, Radio } from 'antd';
 import { getBaseURL } from '../../Utils/Common';
 import { useState } from 'react/cjs/react.development';
 import { withRouter } from 'react-router-dom';
@@ -106,7 +106,7 @@ const TeaRegister = (props) => {
                     "cover_letter": coverLetter
                 })
                     .then(response => {
-                        alert("Bạn đã đăng ký tài khoản thành công!")
+                        message.success("Bạn đã đăng ký tài khoản thành công!")
                         props.history.push("/Home");
                     }).catch((error) => {
                         if (error.response) {

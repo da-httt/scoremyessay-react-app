@@ -1,8 +1,8 @@
 import './Student.css';
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Card, Input } from 'reactstrap';
-import GlobalHeader from './GlobalHeaderComponent';
-import { Breadcrumb, Rate, Table, Tabs } from 'antd';
+import GlobalHeader from './header'
+import { Breadcrumb, message, Rate, Table, Tabs } from 'antd';
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 import ProfileTeacher from '../ModalProfile/ProfileTeacher';
@@ -267,7 +267,7 @@ const DetailWriting = (props) => {
             {
                 headers: { 'Authorization': 'Bearer ' + getToken() },
             }).then(response => {
-                alert("Cảm ơn bạn đã phản hồi!");
+                message.info("Cảm ơn bạn đã phản hồi!");
                 setResponse(false);
             }).catch((error) => {
                 if (error.response) {

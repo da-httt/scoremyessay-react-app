@@ -2,7 +2,7 @@ import './Student.css';
 import { React, useEffect, useState } from 'react';
 import { Button, Input } from 'reactstrap';
 import { Breadcrumb, Table } from 'antd';
-import GlobalHeader from './GlobalHeaderComponent';
+import GlobalHeader from './header'
 import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
 import { withRouter } from 'react-router';
 
@@ -55,13 +55,13 @@ const Cart = (props) => {
             title: 'Thể loại',
             dataIndex: ['essay', 'type_id'],
             width: 'auto',
-            render: kind => <div style={{ color: 'blue' }}>{types[kind].type_name}</div>,
+            render: kind => <div style={{ color: 'blue' }}>{types.find((type) => type.type_id === kind).type_name}</div>,
         },
         {
             title: 'Đề bài',
             dataIndex: ['essay', 'title'],
             width: 'auto',
-            render: title => <div>{title.slice(0, 70)}...</div>
+            ellipsis: true,
 
         },
 

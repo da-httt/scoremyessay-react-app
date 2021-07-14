@@ -39,7 +39,6 @@ const CardLogin = (props) => {
     const handleLogin = (e) => {
         setLoading(true);
         e.preventDefault();
-        console.log(gmail)
 
         api.post('/login', {
             username: gmail,
