@@ -37,7 +37,7 @@ const Footer = (props) => {
 
                                     scoremyessay.dut@gmail.com
           </p>
-                                <p> (+84) 0915469728</p>
+                                <p> (+84) 915469728</p>
                             </div>
                         </div>
                     </div>

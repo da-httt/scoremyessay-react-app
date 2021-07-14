@@ -1,7 +1,7 @@
 import './Student.css';
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'reactstrap';
-import GlobalHeader from './GlobalHeaderComponent';
+import GlobalHeader from './header'
 import { Breadcrumb } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { getBaseURL, getToken } from '../../Utils/Common';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Label, FormGroup, Input, Col, Row, Alert } from 'reactstrap';
 import Footer from '../HomePage/FooterComponent';
 import HeaderLite from '../HomePage/HeaderLiteComponent';
-import { Radio } from 'antd';
+import { message, Radio } from 'antd';
 import { withRouter } from 'react-router';
 import { getBaseURL } from '../../Utils/Common';
 import "./register.css"
@@ -38,7 +38,6 @@ const StuRegister = (props) => {
     const [password, setPassword] = useState();
     const [passwordAgain, setPasswordAgain] = useState();
     const [agree, setAgree] = useState(false);
-    console.log(agree);
     const [jobs, setJobs] = useState([]);
     const [genders, setGenders] = useState([]);
     const [colorAlert, setColorAlert] = useState('danger');
@@ -92,7 +91,7 @@ const StuRegister = (props) => {
                         phone_number: tel
                     })
                         .then(response => {
-                            alert("Bạn đã đăng ký tài khoản thành công!")
+                            message.success("Bạn đã đăng ký tài khoản thành công!")
                             props.history.push("/Home");
                         }).catch((error) => {
                             if (error.response) {

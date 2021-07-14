@@ -1,0 +1,22 @@
+.navBarStudentTitle {
+  color: #55a2d6;
+  font-weight: 900;
+  font-size: xx-large;
+}
+
+.navbarBrandStudent {
+  padding-top: 0px !important;
+  padding-bottom: 0 !important;
+}
+
+.cart-link-student {
+  padding: 10px;
+  color: #2596be;
+  margin-right: 10px;
+}
+
+.cart-link-student:hover {
+  background-color: #2596be;
+  color: white;
+  border-radius: 10px;
+}

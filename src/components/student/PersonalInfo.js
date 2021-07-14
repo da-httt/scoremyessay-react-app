@@ -1,8 +1,8 @@
 import './Student.css';
 import React, { useEffect, useState } from 'react';
-import GlobalHeader from './GlobalHeaderComponent';
+import GlobalHeader from './header'
 import { Col, Input, Row, Form, FormGroup, Label, Container, Button, Alert, Table } from 'reactstrap';
-import { Radio, PageHeader } from 'antd';
+import { Radio, PageHeader, message } from 'antd';
 import { getBaseURL, getToken } from '../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 
@@ -139,7 +139,7 @@ const PersonalInfo = (props) => {
                 setShow(true);
                 setColorAlert("success");
                 setEdit(true);
-                alert("Thông tin của bạn đã được cập nhật!");
+                message.success("Thông tin của bạn đã được cập nhật!");
             }).catch((error) => {
                 if (error.response) {
                     setLoadInfo(false);
@@ -164,7 +164,7 @@ const PersonalInfo = (props) => {
                 setShow2(true);
                 setColorAlert("success");
                 setEditAvt(true);
-                alert("Ảnh đại diện của bạn đã được cập nhật!");
+                message.success("Ảnh đại diện của bạn đã được cập nhật!");
             }).catch((error) => {
                 if (error.response) {
                     setLoadAvt(false);
@@ -198,7 +198,7 @@ const PersonalInfo = (props) => {
                 setLoadPass(false);
                 setShow3(true);
                 setColorAlert("success");
-                alert("Mật khẩu của bạn đã được cập nhật!");
+                message.success("Mật khẩu của bạn đã được cập nhật!");
                 setEditPass(true);
             }).catch((error) => {
                 if (error.response) {
@@ -230,7 +230,7 @@ const PersonalInfo = (props) => {
                             <PageHeader
                                 className="site-page-header"
                                 title={<span style={{ color: "white" }}>THÔNG TIN CÁ NHÂN</span>}
-                            />,
+                            />
                         </div>
                         <div className="row shadow-background" >
                             <div className="col-4 padding " style={{ backgroundColor: "white", textAlign: "center", padding: "20px" }}>
