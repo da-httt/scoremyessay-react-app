@@ -49,7 +49,6 @@ const Order = (props) => {
             })
             if (result.isCriteria) {
                 result.criteria_results.map((criteria_result) => {
-                    console.log(criteria_result);
                     form.setFieldsValue({
                         [criteria_result.criteria_id + ".grade"]: criteria_result.criteria_score,
                         [criteria_result.criteria_id + ".comment"]: criteria_result.criteria_comment
@@ -102,7 +101,6 @@ const Order = (props) => {
                 }
             })
         } else {
-            console.log("Updating result.....")
 
             const criteria_results = result.isCriteria ? result.criteria_results.map((criteria_result) => ({
                 "criteria_id": criteria_result.criteria_id,

@@ -1,15 +1,21 @@
 import { getBaseURL, getToken, getTokenType } from "../../../Utils/Common";
-import { showMessage } from "../../messageComponent";
 
 const api = getBaseURL();
-
-export function getStatus(setStatus) {
-  api.get("/status").then((response) => {
-    setStatus(response.data.data);
+export function getTypes(setTypes) {
+  api.get("/types").then((response) => {
+    const types = response.data.data;
+    setTypes(types);
   });
 }
 
-export function getOrders(setOrders, setOrders2, setSpinning) {
+export function getStatus(setStatus) {
+  api.get("/status").then((response) => {
+    const status = response.data.data;
+    setStatus(status);
+  });
+}
+
+export function getOrders(setOrders, setOrders2) {
   api
     .get("/orders", {
       headers: { Authorization: getTokenType() + " " + getToken() },
@@ -18,11 +24,10 @@ export function getOrders(setOrders, setOrders2, setSpinning) {
       const orders = response.data.data;
       setOrders(orders);
       setOrders2(orders);
-      setSpinning(false);
     });
 }
 
-export function getStatistic(setStatistic, setStatistics) {
+export function getStatistics(setStatistic, setStatistics, setRating) {
   api
     .get("/statistics/me", {
       headers: { Authorization: "Bearer " + getToken() },
@@ -30,29 +35,22 @@ export function getStatistic(setStatistic, setStatistics) {
     .then((response) => {
       setStatistic([response.data]);
       setStatistics(response.data);
+      api
+        .get("ratings/teacher/" + response.data.user_id, {
+          headers: { Authorization: "Bearer " + getToken() },
+        })
+        .then((response) => {
+          setRating(response.data.average_rating);
+        });
     });
 }
 
-export function getTopUser(setTopUsers) {
+export function getDeadline(setDeadline) {
   api
-    .get("/top_users", {
+    .get("/deadlines", {
       headers: { Authorization: "Bearer " + getToken() },
     })
     .then((response) => {
-      setTopUsers(response.data.top_users);
-    });
-}
-
-export function deleteEssay(ID) {
-  api
-    .delete("orders/" + ID, {
-      headers: { Authorization: "Bearer " + getToken() },
-    })
-    .then(() => {
-      showMessage("Bài viết của bạn đã được hủy thành công!", "success");
-      window.location.reload();
-    })
-    .catch((err) => {
-      showMessage(err.response.data.detail, "error");
+      setDeadline([response.data]);
     });
 }

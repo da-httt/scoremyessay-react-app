@@ -19,8 +19,6 @@ export const Login = (props) => {
     const [form] = Form.useForm();
 
     const handleLogin = (e) => {
-        console.log("loginging...")
-
         api.post('/login', {
             username: form.getFieldValue('email'),
             password: form.getFieldValue('password'),
@@ -32,7 +30,6 @@ export const Login = (props) => {
                 }).then(response => {
                     localStorage.setItem("roleID", response.data.role_id);
                     const role = response.data.role_id;
-                    console.log(role)
                     props.history.push("/admin")
                 })
             }).catch((error) => {

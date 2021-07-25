@@ -1,40 +1,40 @@
-import { AuditOutlined, LogoutOutlined, StarOutlined } from '@ant-design/icons';
-import { Dropdown, Menu } from 'antd';
-import { React, useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Navbar, NavbarBrand } from 'reactstrap';
-import { removeUserSession } from '../../../Utils/Common';
-import '../Student.css';
-import { getInfo } from './api';
-import './header.css';
+import { AuditOutlined, LogoutOutlined, StarOutlined } from "@ant-design/icons";
+import { Dropdown, Menu } from "antd";
+import { React, useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
+import { Navbar, NavbarBrand } from "reactstrap";
+import { removeUserSession } from "../../../Utils/Common";
+import { getUserInfo } from "./api";
+import "../Teacher.css";
 
 const GlobalHeader = (props) => {
   const [username, setUsername] = useState("Không xác định");
   const [avatar, setAvatar] = useState("");
 
-  useEffect(() => {
-      getInfo(setUsername, setAvatar, props.history);
-  }, [props.history]);
-
   const handleLogOut = () => {
     removeUserSession();
     props.history.push("/Home");
   };
+
+  useEffect(() => {
+    getUserInfo(setUsername, setAvatar, props.history);
+  }, [props.history]);
+
   const menu = (
     <Menu>
       <Menu.Item
         key="1"
-        onClick={(e) => props.history.push("/HomeStudentPage/PersonalInfo")}
+        onClick={(e) => props.history.push("/HomeTeacherPage/PersonalInfo")}
         icon={<AuditOutlined />}
       >
         Thông tin cá nhân
       </Menu.Item>
       <Menu.Item
-        key="2"
-        onClick={(e) => props.history.push("/HomeStudentPage/MyReview")}
+        key="1"
+        onClick={(e) => props.history.push("/HomeTeacherPage/MyRating")}
         icon={<StarOutlined />}
       >
-        Đánh giá của tôi
+        Xếp hạng của tôi
       </Menu.Item>
       <Menu.Item key="3" onClick={handleLogOut} icon={<LogoutOutlined />}>
         Đăng xuất
@@ -43,19 +43,11 @@ const GlobalHeader = (props) => {
   );
   return (
     <>
-      <Navbar className="navBarStudent" fixed="top">
-        <NavbarBrand className="navbarBrandStudent" href="/Home">
-          <span className="navBarStudentTitle">ScoreMyEssay</span>
+      <Navbar className="navBarTeacher" fixed="top">
+        <NavbarBrand className="navbarBrandTeacher" href="/Home">
+          <span className="navBarTeacherTitle">ScoreMyEssay</span>
         </NavbarBrand>
         <div className="ml-auto">
-          <a
-            color="link"
-            className="cart-link-student"
-            href="/HomeStudentPage/Cart"
-          >
-            {" "}
-            Giỏ hàng <i className="fa fa-cart-arrow-down fa-lg" />
-          </a>
           <Dropdown overlay={menu} placement="bottomCenter">
             <i
               className="dropdown-toggle d-flex align-items-center hidden-arrow"

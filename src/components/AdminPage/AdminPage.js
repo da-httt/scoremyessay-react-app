@@ -19,7 +19,6 @@ const AdminPage = (props) => {
     props.history.push("/admin");
   }
   const handleMenuClick = menu => {
-    console.log("update render key with key = " + menu.key)
     updateRender(menu.key);
   };
 

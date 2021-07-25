@@ -1,22 +1,79 @@
 import { Breadcrumb, Table } from "antd";
 import { React, useEffect, useState } from "react";
-import { withRouter } from "react-router";
-import { Button, Input } from "reactstrap";
+import { withRouter } from "react-router-dom";
+import {
+    Button,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText
+} from "reactstrap";
 import { getTypes } from "../../api";
-import { getOrders } from "./api";
 import GlobalHeader from "../header";
-import "../Student.css";
+import "../Teacher.css";
+import { getOrdersWaiting } from "./api";
 
-const Cart = (props) => {
+const AddWritingT = (props) => {
   const rowSelection = useState([]);
   const [orders, setOrders] = useState([]);
-  const [orders2, setOrders2] = useState([]);
+
   const [types, setTypes] = useState([]);
   const [searchTitle, setSearchTitle] = useState();
+  const [orders2, setOrders2] = useState([]);
   useEffect(() => {
     getTypes(setTypes);
-    getOrders(setOrders, setOrders2);
+    getOrdersWaiting(setOrders, setOrders2);
   }, []);
+
+  const columnsEssay = [
+    {
+      title: "ID",
+      dataIndex: "order_id",
+      key: "order_id",
+      width: 20,
+    },
+    {
+      title: "Thể loại",
+      dataIndex: ["essay", "type_id"],
+      key: ["essay", "type_id"],
+      width: 150,
+      filters: [
+        { text: "English Writing", value: 0 },
+        { text: "IELTS WRITING TASK 1", value: 1 },
+        { text: "IELTS WRITING TASK 2", value: 2 },
+      ],
+      onFilter: (value, record) => record.essay.type_id === value,
+      render: (kind) => (
+        <div style={{ color: "blue" }}>{types[kind].type_name}</div>
+      ),
+    },
+    {
+      title: "Chủ đề",
+      dataIndex: "topic_name",
+      key: "topic_name",
+      width: 120,
+    },
+    {
+      title: "Tiêu đề bài viết",
+      dataIndex: ["essay", "title"],
+      key: ["essay", "title"],
+      width: 450,
+      render: (title) => <div>{title.slice(0, 60)}...</div>,
+    },
+    {
+      title: "Mức giá",
+      dataIndex: "total_price",
+      key: "total_price",
+      width: 100,
+      sorter: (a, b) => a.total_price - b.total_price,
+    },
+    {
+      title: "Hạn giao bài viết",
+      dataIndex: "deadline",
+      key: "deadline",
+      width: "auto",
+    },
+  ];
 
   const handleSearch = () => {
     setOrders(orders2);
@@ -32,67 +89,56 @@ const Cart = (props) => {
     setOrders(orders2);
   };
 
-  const columnsEssay = [
-    {
-      title: "Thể loại",
-      dataIndex: ["essay", "type_id"],
-      width: "auto",
-      render: (kind) => (
-        <div style={{ color: "blue" }}>
-          {types.find((type) => type.type_id === kind).type_name}
-        </div>
-      ),
-    },
-    {
-      title: "Đề bài",
-      dataIndex: ["essay", "title"],
-      width: "auto",
-      ellipsis: true,
-    },
-
-    {
-      title: "Thời gian gửi",
-      dataIndex: "sent_date",
-      width: "auto",
-    },
-    {
-      title: "Giá tiền",
-      dataIndex: "total_price",
-      width: "auto",
-    },
-  ];
-
   return (
-    <div className="student-page">
-      <GlobalHeader username="Canh Ngo" />
+    <div className="teacher-page">
+      <GlobalHeader />
 
       <div className="container-fluid detailPage">
         <div className="row" style={{ minHeight: window.innerHeight + "px" }}>
           <div className="container-fluid centerCol">
-            <div className="gradient-background-student padding">
-              <div className="row padding ">
-                <Breadcrumb className="mt-1">
+            <div className="content-header-teacher padding">
+              <div className="row bg-row margin padding">
+                <Breadcrumb className="mt-1" style={{ fontSize: "large" }}>
                   <Breadcrumb.Item>
                     <a href="/Home">Trang chủ</a>
                   </Breadcrumb.Item>
                   <Breadcrumb.Item>
-                    <a href="/HomeStudentPage">Quản lý bài viết</a>
+                    <a href="/HomeTeacherPage">Quản lý bài viết</a>
                   </Breadcrumb.Item>
                   <Breadcrumb.Item style={{ color: "white" }}>
-                    Giỏ Hàng
+                    Danh sách bài viết mới{" "}
                   </Breadcrumb.Item>
                 </Breadcrumb>
               </div>
               <div className="row bg-row padding">
                 <br />
-                <h3 style={{ color: "white", fontWeight: "700" }}>
-                  GIỎ HÀNG CỦA BẠN
-                </h3>
+                <div className="col-8" style={{ textAlign: "left" }}>
+                  <h3 style={{ color: "white", fontWeight: "700" }}>
+                    DANH SÁCH BÀI VIẾT MỚI
+                  </h3>
+                </div>
+                <div className="col-4 ">
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>Chủ Đề</InputGroupText>
+                    </InputGroupAddon>
+                    <Input type="select">
+                      <option>SCIENCE {"&"} TECH</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Input>
+                  </InputGroup>
+                </div>
               </div>
             </div>
-            <div className="content-student" style={{ padding: "10px" }}>
+            <div
+              className=" shadow-background"
+              style={{ backgroundColor: "transparent" }}
+            >
               <div
-                className="container-fluid"
+                className="container-fluid "
                 style={{ backgroundColor: "white" }}
               >
                 <div className="row ">
@@ -127,7 +173,7 @@ const Cart = (props) => {
                     </Button>
                   </div>
                 </div>
-                <div className="row">
+                <div className="row " style={{ padding: "10px" }}>
                   <Table
                     style={{ width: "auto", minWidth: "unset" }}
                     rowKey={(order) => order.order_id}
@@ -135,16 +181,15 @@ const Cart = (props) => {
                     dataSource={orders}
                     pagination={{ pageSize: 5 }}
                     rowSelection={{ rowSelection }}
-                    onRow={(record, rowIndex) => {
+                    onRow={(record) => {
                       return {
                         onClick: (event) =>
                           props.history.push(
-                            "/HomeStudentPage/AddNewWriting/?order_id=" +
+                            "/HomeTeacherPage/DetailRequirement?order_id=" +
                               record.order_id
                           ),
                       };
                     }}
-                    scroll={{ x: 1000 }}
                   />
                 </div>
               </div>
@@ -156,4 +201,4 @@ const Cart = (props) => {
   );
 };
 
-export default withRouter(Cart);
+export default withRouter(AddWritingT);

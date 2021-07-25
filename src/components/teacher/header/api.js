@@ -1,9 +1,8 @@
-import { message } from "antd";
 import { getBaseURL, getToken, removeUserSession } from "../../../Utils/Common";
 import { showMessage } from "../../messageComponent";
 
 const api = getBaseURL();
-export function getInfo(setUsername, setAvatar, history) {
+export function getUserInfo(setUsername, setAvatar, history) {
   api
     .get("/users/me", {
       headers: { Authorization: "Bearer " + getToken() },

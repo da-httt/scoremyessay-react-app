@@ -12,13 +12,15 @@ export function getInfoWriting(
   setContent,
   setType,
   setLevel,
-  setLoading
+  setLoading,
+  setSpinning
 ) {
   api
     .get("/orders/" + orderID, {
       headers: { Authorization: "Bearer " + getToken() },
     })
     .then((response) => {
+      setSpinning(false);
       const essay = response.data.essay;
       const optionsS = response.data.option_list;
       setOptionsTotal(optionsS);
@@ -37,15 +39,7 @@ export function getInfoWriting(
     .catch((error) => {
       if (error.response) {
         setLoading(false);
-        if (
-          error.response.status === 401 ||
-          error.response.status === 400 ||
-          error.response.status === 403
-        ) {
-          showMessage(error.response.data.detail, "error");
-        } else {
-          showMessage("Something went wrong. Please try again later!", "error");
-        }
+        showMessage(error.response.data.detail, "error");
       }
     });
 }
@@ -71,21 +65,34 @@ export function getImage(orderID, setBase64Image) {
     });
 }
 
-export function postWriting(
+const callSuccessApiSaved = (props, setLoading) => {
+  setLoading(false);
+  showMessage("Bài viết của bạn đã được lưu vào giỏ hàng!", "success");
+  props.history.push("/HomeStudentPage/Cart");
+};
+
+const callSuccessApiPayment = (props, setLoading) => {
+  setLoading(false);
+  showMessage(
+    "Bài viết của bạn đã được thanh toán và đang tìm giáo viên chấm!",
+    "success"
+  );
+  props.history.push("/HomeStudentPage");
+};
+
+export function apiPostWriting(
   props,
-  status_id,
   title,
   content,
   type,
   optionsTotal,
   base64Image,
-  setLoading,
-  messageSuccess,
-  linkSuccess
+  isSaved,
+  setLoading
 ) {
-  return api
+  api
     .post(
-      "/orders?status_id=" + status_id,
+      "/orders",
       {
         essay: {
           title: title,
@@ -109,51 +116,49 @@ export function postWriting(
             headers: { Authorization: "Bearer " + getToken() },
           }
         )
-        .then(() => {
-          setLoading(false);
-          showMessage(messageSuccess, "success");
-          props.history.push(linkSuccess);
+        .then((response) => {
+          if (isSaved) {
+            callSuccessApiSaved(props, setLoading);
+          } else {
+            api
+              .post(
+                "orders/payment/" +
+                  response.data.order_id +
+                  "?payment_type=CREDIT_CARD",
+                {},
+                { headers: { Authorization: "Bearer " + getToken() } }
+              )
+              .then(() => {
+                callSuccessApiPayment(props, setLoading);
+              })
+              .catch((error) => {
+                setLoading(false);
+                showMessage(error.response.data.detail, "error");
+              });
+          }
         })
         .catch((error) => {
-          if (error.response) {
-            setLoading(false);
-            if (
-              error.response.status === 401 ||
-              error.response.status === 400
-            ) {
-              showMessage(error.response.data.detail, "error");
-            } else {
-              showMessage(
-                "Something went wrong. Please try again later!",
-                "error"
-              );
-            }
-          }
+          setLoading(false);
+          showMessage(error.response.data.detail, "error");
         });
     })
     .catch((error) => {
       if (error.response) {
         setLoading(false);
-        if (error.response.status === 401 || error.response.status === 400) {
-          showMessage(error.response.data.detail, "error");
-        } else {
-          showMessage("Something went wrong. Please try again later!", "error");
-        }
+        showMessage(error.response.data.detail, "error");
       }
     });
 }
 
-export function postWritingWasSaved(
+export function apiPostWritingWasSaved(
   props,
   orderID,
   title,
   content,
   type,
   optionsTotal,
-  status_id,
-  setLoading,
-  messageSuccess,
-  linkSuccess
+  isSaved,
+  setLoading
 ) {
   api
     .put(
@@ -165,16 +170,39 @@ export function postWritingWasSaved(
           type_id: type,
         },
         option_list: optionsTotal,
-        status_id: status_id,
       },
       {
         headers: { Authorization: "Bearer " + getToken() },
       }
     )
     .then((response) => {
-      setLoading(false);
-      showMessage(messageSuccess, "success");
-      props.history.push(linkSuccess);
+      if (isSaved) {
+        callSuccessApiSaved(props, setLoading);
+      } else {
+        api
+          .post(
+            "orders/payment/" +
+              response.data.order_id +
+              "?payment_type=CREDIT_CARD",
+            {},
+            { headers: { Authorization: "Bearer " + getToken() } }
+          )
+          .then(() => {
+            callSuccessApiPayment(props, setLoading);
+          })
+          .catch((error) => {
+            setLoading(false);
+            if (error.response.data.detail === "All Teachers are busy") {
+              showMessage(
+                "Tất cả giáo viên hiện đang bận, bài viết của bạn đã được lưu trong giỏ hàng. Vui lòng đăng bài lại trong vài phút sau!",
+                "info"
+              );
+            } else {
+              showMessage(error.response.data.detail, "error");
+            }
+            props.history.push("/HomeStudentPage/Cart");
+          });
+      }
     })
     .catch((error) => {
       if (error.response) {
@@ -203,5 +231,70 @@ export function deleteWriting(props, orderID, setLoadDel) {
           showMessage("Something went wrong. Please try again later!", "error");
         }
       }
+    });
+}
+
+export function getInfoCard(
+  total,
+  setInfoCard,
+  setIsHasCard,
+  setCallApiPaymentMethod
+) {
+  api
+    .get("/credit_card/me", {
+      headers: { Authorization: "Bearer " + getToken() },
+    })
+    .then((response) => {
+      if (response.data.provider !== null) {
+        if (response.data.balance < total) {
+          showMessage(
+            "Hiện tài khoản của bạn không đủ tiền! Vui lòng kiểm tra lại",
+            "info"
+          );
+        } else {
+          setInfoCard(response.data);
+          setIsHasCard(true);
+          setCallApiPaymentMethod(true);
+        }
+      } else {
+        setInfoCard(response.data);
+        setIsHasCard(false);
+        setCallApiPaymentMethod(true);
+      }
+    });
+}
+
+export function putInfoCreditCard(
+  provider,
+  accountNo,
+  expiryDate,
+  setIsHasCard,
+  setInfoCard,
+  setCallApiPaymentMethod,
+  totalPrice
+) {
+  api
+    .put(
+      "/credit_card/me",
+      {
+        provider: provider,
+        account_no: accountNo,
+        expiry_date: expiryDate,
+      },
+      {
+        headers: { Authorization: "Bearer " + getToken() },
+      }
+    )
+    .then(() => {
+      getInfoCard(
+        totalPrice,
+        setInfoCard,
+        setIsHasCard,
+        setCallApiPaymentMethod
+      );
+    })
+    .catch((error) => {
+      setIsHasCard(false);
+      showMessage(error.response.data.detail, "error");
     });
 }

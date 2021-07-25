@@ -1,14 +1,14 @@
-import './Student.css';
+import '../Teacher.css';
 import React, { useEffect, useState } from 'react';
-import GlobalHeader from './header'
+import GlobalHeader from '../header';
 import { Col, Input, Row, Form, FormGroup, Label, Container, Button, Alert, Table } from 'reactstrap';
-import { Radio, PageHeader, message } from 'antd';
-import { getBaseURL, getToken } from '../../Utils/Common';
+import { Radio, PageHeader } from 'antd';
+import { getBaseURL, getToken } from '../../../Utils/Common';
 import { withRouter } from 'react-router-dom';
 
 const api = getBaseURL();
 
-const PersonalInfo = (props) => {
+const PersonalInfoTea = (props) => {
     const [name, setName] = useState();
     const [id, setID] = useState();
     const [birthday, setBirthday] = useState();
@@ -139,7 +139,7 @@ const PersonalInfo = (props) => {
                 setShow(true);
                 setColorAlert("success");
                 setEdit(true);
-                message.success("Thông tin của bạn đã được cập nhật!");
+                alert("Thông tin của bạn đã được cập nhật!");
             }).catch((error) => {
                 if (error.response) {
                     setLoadInfo(false);
@@ -164,7 +164,7 @@ const PersonalInfo = (props) => {
                 setShow2(true);
                 setColorAlert("success");
                 setEditAvt(true);
-                message.success("Ảnh đại diện của bạn đã được cập nhật!");
+                alert("Ảnh đại diện của bạn đã được cập nhật!");
             }).catch((error) => {
                 if (error.response) {
                     setLoadAvt(false);
@@ -198,7 +198,7 @@ const PersonalInfo = (props) => {
                 setLoadPass(false);
                 setShow3(true);
                 setColorAlert("success");
-                message.success("Mật khẩu của bạn đã được cập nhật!");
+                alert("Mật khẩu của bạn đã được cập nhật!");
                 setEditPass(true);
             }).catch((error) => {
                 if (error.response) {
@@ -221,12 +221,12 @@ const PersonalInfo = (props) => {
     }
 
     return (
-        <div className="student-page">
+        <div className="teacher-page">
             <GlobalHeader />
-            <div className="container-fluid detailPageStudent" style={{ height: window.innerHeight + 'px' }} >
+            <div className="container-fluid detailPageTeacher" style={{ height: window.innerHeight + 'px' }} >
                 <div className="row "  >
                     <div className="container-fluid centerCol" style={{ borderRadius: "10px" }}>
-                        <div className="row margin padding shadow-background personal-background-student" style={{ color: "white" }}>
+                        <div className="row margin padding shadow-background personal-background-teacher" style={{ color: "white" }}>
                             <PageHeader
                                 className="site-page-header"
                                 title={<span style={{ color: "white" }}>THÔNG TIN CÁ NHÂN</span>}
@@ -238,7 +238,7 @@ const PersonalInfo = (props) => {
 
                                 <div style={{ padding: "20px", marginTop: "10px" }}>
                                     <h3 style={{ fontWeight: "900" }}>{name}</h3>
-                                    <h6 ><span style={{ padding: "5px", borderRadius: "5px", backgroundColor: "#2596be", color: "white", fontWeight: "400" }}>Học viên</span> </h6>
+                                    <h6 ><span style={{ padding: "5px", borderRadius: "5px", backgroundColor: "orange", color: "white", fontWeight: "400" }}>Giáo viên </span> </h6>
 
 
                                 </div>
@@ -260,17 +260,17 @@ const PersonalInfo = (props) => {
                                         </div>
                                     </> :
                                     <div className="mt-2 ml-3 mr-3">
-                                        <Button className="btn-student-link" color="link" outline block onClick={e => setEditAvt(false)}>Thay đổi ảnh đại diện</Button>
+                                        <Button className="btn-teacher-link" color="link" outline block onClick={e => setEditAvt(false)}>Thay đổi ảnh đại diện</Button>
                                     </div>
                                 }
 
                                 <div className="mt-2 ml-3 mr-3">
-                                    <Button className="btn-student-link"
+                                    <Button className="btn-teacher-link"
                                         color="link" outline block
                                         onClick={e => { setEdit(false); setEditPass(true); setEditAvt(true) }}>Thay đổi thông tin cá nhân</Button>
                                 </div>
                                 <div className="mt-2 ml-3 mr-3">
-                                    <Button className="btn-student-link" color="link" outline block onClick={e => { setEditPass(false); setEditAvt(true); setEdit(true) }}>Thay đổi mật khẩu</Button>
+                                    <Button className="btn-teacher-link" color="link" outline block onClick={e => { setEditPass(false); setEditAvt(true); setEdit(true) }}>Thay đổi mật khẩu</Button>
                                 </div>
                             </div>
                             <div className="col-8 padding " style={{ backgroundColor: "white" }}>
@@ -280,7 +280,7 @@ const PersonalInfo = (props) => {
                                             <Row>
                                                 <Col xs="6" >
                                                     <FormGroup style={{ fontSize: '17px' }}>
-                                                        <Label for="id">Mã học sinh *</Label>
+                                                        <Label for="id">Mã Giáo viên  *</Label>
                                                         <Input type="text" name="id" id="id" disabled value={id} />
                                                     </FormGroup>
                                                 </Col>
@@ -386,29 +386,29 @@ const PersonalInfo = (props) => {
                                         {statistic && (
                                             <Table bordered  >
                                                 <tr>
-                                                    <th >Tổng số bài đăng</th>
+                                                    <th >Tổng số chấm</th>
                                                     <td>{statistic.total_orders} bài</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Số bài được chấm</th>
-                                                    <td>{statistic.total_done} bài</td>
+                                                    <th>Số bài đã chấm</th>
+                                                    <td>{Number(statistic.total_done).toLocaleString()} bài</td>
                                                 </tr>
                                                 <tr>
-                                                    <th >Tổng chi</th>
-                                                    <td>{statistic.total_payment} VNĐ</td>
+                                                    <th >Tổng thu</th>
+                                                    <td>{Number(statistic.total_payment).toLocaleString()} VNĐ</td>
                                                 </tr>
                                                 <tr>
-                                                    <th >Trung bình chi theo tháng</th>
-                                                    <td>{statistic.monthly_payment} VNĐ</td>
+                                                    <th >Trung bình thu theo tháng</th>
+                                                    <td>{Number(statistic.monthly_payment).toLocaleString()} VNĐ</td>
                                                 </tr>
                                                 <tr>
-                                                    <th >Tổng chi so với tháng trước</th>
+                                                    <th >Tổng thu so với tháng trước</th>
                                                     <td>
-                                                        {statistic.gross > 0 &&
+                                                        {Math.round(statistic.gross) > 0 &&
                                                             <i className="fa fa-sort-up" style={{ color: 'forestgreen' }} />}
-                                                        {statistic.gross < 0 &&
+                                                        {Math.round(statistic.gross) < 0 &&
                                                             <i className="fa fa-sort-down" style={{ color: 'darkorange' }} />}
-                                                        {statistic.gross} %
+                                                        {Math.round(statistic.gross)} %
                                         </td>
                                                 </tr>
                                             </Table>
@@ -427,4 +427,4 @@ const PersonalInfo = (props) => {
     );
 }
 
-export default withRouter(PersonalInfo);
+export default withRouter(PersonalInfoTea);

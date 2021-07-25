@@ -2,23 +2,21 @@ import { PageHeader, Radio } from "antd";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import {
-    Button,
-    Col,
-    Container,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Row,
-    Table
+  Button,
+  Col,
+  Container,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Table
 } from "reactstrap";
 import { showMessage } from "../../messageComponent";
-import { getBaseURL, getToken } from "../../Utils/Common";
-import { getGenders, getJobs, getPersonalInfo, getStatistic } from "./api";
-import GlobalHeader from "./header";
-import "./Student.css";
-
-const api = getBaseURL();
+import GlobalHeader from "../header";
+import "../Student.css";
+import { getGenders, getJobs, getPersonalInfo, getStatistic, putChangeAvatar, putChangeInfo, putChangePassword } from "./api";
+import "./personalInfo.css";
 
 const PersonalInfo = () => {
   const [name, setName] = useState();
@@ -115,64 +113,12 @@ const PersonalInfo = () => {
 
   const handleChangeInfo = (e) => {
     setLoadInfo(true);
-    api
-      .put(
-        "/users/" + id,
-        {
-          name: name,
-          address: address,
-          date_of_birth: birthday,
-          gender_id: gender,
-          job_id: jobID,
-          phone_number: phone,
-        },
-        {
-          headers: { Authorization: "Bearer " + getToken() },
-        }
-      )
-      .then((response) => {
-        setLoadInfo(false);
-        setEdit(true);
-        showMessage("Thông tin của bạn đã được cập nhật!", "success");
-      })
-      .catch((error) => {
-        if (error.response) {
-          setLoadInfo(false);
-          showMessage(error.response.data.detail, "error");
-        }
-      });
+    putChangeInfo(id, name, address, birthday, gender, jobID, phone, setLoadInfo, setEdit);
   };
 
   const handleChangeAvt = (e) => {
     setLoadAvt(true);
-    api
-      .put(
-        "/avatars/" + id,
-        {
-          base64: base64Image,
-        },
-        {
-          headers: { Authorization: "Bearer " + getToken() },
-        }
-      )
-      .then(() => {
-        setLoadAvt(false);
-        setEditAvt(true);
-        showMessage("Ảnh đại diện của bạn đã được cập nhật!", "success");
-      })
-      .catch((error) => {
-        if (error.response) {
-          setLoadAvt(false);
-          if (error.response.status === 401 || error.response.status === 400) {
-            showMessage(error.response.data.detail, "error");
-          } else {
-            showMessage(
-              "Something went wrong. Please try again later!",
-              "error"
-            );
-          }
-        }
-      });
+    putChangeAvatar(id, base64Image, setLoadAvt, setEditAvt);
   };
 
   const handleChangePass = (e) => {
@@ -183,35 +129,7 @@ const PersonalInfo = () => {
       );
     } else {
       setLoadPass(true);
-      api
-        .put(
-          "/change_password/me?new_password=" + pass.toString(),
-          {},
-          {
-            headers: { Authorization: "Bearer " + getToken() },
-          }
-        )
-        .then((response) => {
-          setLoadPass(false);
-          showMessage("Mật khẩu của bạn đã được cập nhật!", "success");
-          setEditPass(true);
-        })
-        .catch((error) => {
-          if (error.response) {
-            setLoadPass(false);
-            if (
-              error.response.status === 401 ||
-              error.response.status === 400
-            ) {
-              showMessage(error.response.data.detail, "error");
-            } else {
-              showMessage(
-                "Something went wrong. Please try again later!",
-                "error"
-              );
-            }
-          }
-        });
+      putChangePassword(pass, setLoadPass, setEditPass);
     }
   };
 
@@ -551,7 +469,7 @@ const PersonalInfo = () => {
                         style={{ margin: "0px 7px" }}
                         onClick={handleChangePass}
                       >
-                        {loadInfo ? "Đang xử lý..." : "Lưu lại"}
+                        {loadPass ? "Đang xử lý..." : "Lưu lại"}
                       </Button>
                       <Button
                         color="primary"

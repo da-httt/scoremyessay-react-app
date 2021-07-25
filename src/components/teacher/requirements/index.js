@@ -1,11 +1,11 @@
-import './Teacher.css';
+import '../Teacher.css';
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Alert, Input } from 'reactstrap';
-import GlobalHeader from './GlobalHeaderComponentT';
-import ProfileStudent from '../ModalProfile/ProfileStudent';
+import GlobalHeader from '../header';
+import ProfileStudent from '../../ModalProfile/ProfileStudent';
 import { Breadcrumb, Tabs } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { getBaseURL, getToken, getTokenType } from '../../Utils/Common';
+import { getBaseURL, getToken, getTokenType } from '../../../Utils/Common';
 const { TabPane } = Tabs
 const api = getBaseURL();
 const DetailReq = (props) => {
@@ -105,7 +105,7 @@ const DetailReq = (props) => {
     function showType(id) {
         return types.map((type) => (
             type.type_id === id && (
-                <div className="row" style={{ marginBottom: '20px' }}>
+                <div className="row" style={{ marginBottom: '20px' }} key={id}>
                     <div className="col col-7">{type.type_name}:</div>
                     <div className="col" style={{ textAlign: 'right' }}>{type.type_price} VNĐ</div>
                 </div>
@@ -115,7 +115,7 @@ const DetailReq = (props) => {
     const showOptions = optionsTotal.map((id) => {
         return options.map((option) => (
             option.option_id === id && (
-                <div className="row" style={{ marginBottom: '20px' }}>
+                <div className="row" style={{ marginBottom: '20px' }} key={id}>
                     <div className="col col-7">{option.option_name}:</div>
                     <div className="col" style={{ textAlign: 'right' }}>{option.option_price} VNĐ</div>
                 </div>
