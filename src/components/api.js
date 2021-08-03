@@ -1,4 +1,4 @@
-import { getBaseURL } from "../../Utils/Common"
+import { getBaseURL } from "../Utils/Common"
 
 const api = getBaseURL()
 

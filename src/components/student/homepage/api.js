@@ -1,16 +1,16 @@
 import { getBaseURL, getToken, getTokenType } from "../../../Utils/Common";
-import { showMessage } from "../../messageComponent";
+import { showMessage } from "../../commonFormat";
 
 const api = getBaseURL();
 
-export function getStatus(setStatus) {
-  api.get("/status").then((response) => {
+export async function getStatus(setStatus) {
+  await api.get("/status").then((response) => {
     setStatus(response.data.data);
   });
 }
 
-export function getOrders(setOrders, setOrders2) {
-  api
+export async function getOrders(setOrders, setOrders2, setSpinning) {
+  await api
     .get("/orders", {
       headers: { Authorization: getTokenType() + " " + getToken() },
     })
@@ -18,11 +18,12 @@ export function getOrders(setOrders, setOrders2) {
       const orders = response.data.data;
       setOrders(orders);
       setOrders2(orders);
+      setSpinning(false);
     });
 }
 
-export function getStatistic(setStatistic, setStatistics) {
-  api
+export async function getStatistic(setStatistic, setStatistics) {
+  await api
     .get("/statistics/me", {
       headers: { Authorization: "Bearer " + getToken() },
     })
@@ -32,8 +33,8 @@ export function getStatistic(setStatistic, setStatistics) {
     });
 }
 
-export function getTopUser(setTopUsers) {
-  api
+export async function getTopUser(setTopUsers) {
+  await api
     .get("/top_users", {
       headers: { Authorization: "Bearer " + getToken() },
     })
@@ -42,8 +43,8 @@ export function getTopUser(setTopUsers) {
     });
 }
 
-export function deleteEssay(ID) {
-  api
+export async function deleteEssay(ID) {
+  await api
     .delete("orders/" + ID, {
       headers: { Authorization: "Bearer " + getToken() },
     })

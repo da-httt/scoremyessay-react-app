@@ -155,16 +155,6 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0, 0, 0, 0.05);
 }
 
-/* personal-info */
-.btn-student-link {
-  cursor: pointer;
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
-  font-size: 15px;
-  font-weight: 500;
-  background: transparent;
-  color: #2596be;
-}
 
 .btn-student-link:hover {
   font-weight: 700;

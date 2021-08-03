@@ -1,0 +1,9 @@
+.btn-student-link {
+    cursor: pointer;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    font-size: 15px;
+    font-weight: 500;
+    background: transparent;
+    color: #2596be;
+  }

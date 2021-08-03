@@ -15,3 +15,17 @@ export function showMessage(content, type) {
       return 
   }
 }
+
+export function formatNumber(value){
+   return (String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+};
+
+export function formatTitle(titlePara, setTitleSub){
+  const title = String(titlePara);
+  if(title.length > 50){
+    setTitleSub(title.slice(0,50)+"...");
+  }
+  else{
+    setTitleSub(title);
+  }
+}

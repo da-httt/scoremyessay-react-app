@@ -8,9 +8,6 @@ import Login from "./Login"
 
 
 const Admin = (props) => {
-
-    console.log("admin page")
-    console.log(getRoleID() === '0')
     return (
             (getToken() && getRoleID() ==='0')? <AdminPage />
             : <Login history={props.history}/>
