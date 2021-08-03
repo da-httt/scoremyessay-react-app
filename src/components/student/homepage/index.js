@@ -2,8 +2,9 @@ import { Breadcrumb, Popconfirm, Spin, Table, Tag } from "antd";
 import { React, useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import { Button, Input } from "reactstrap";
-import GlobalHeader from "../header";
 import { getTypes } from "../../api";
+import { formatNumber } from "../../commonFormat";
+import GlobalHeader from "../header";
 import "../Student.css";
 import {
   deleteEssay,
@@ -14,7 +15,6 @@ import {
 } from "./api";
 import "./homepage.css";
 import { columns, columnsUser } from "./template";
-import { formatMoney } from "../../messageComponent";
 
 const HomeStudent = () => {
   const rowSelection = useState([]);
@@ -30,16 +30,17 @@ const HomeStudent = () => {
   const history = useHistory();
   useEffect(() => {
     async function fetchData() {
-      await getTypes(setTypes);
+      getTypes(setTypes);
+
+      await getStatus(setStatus);
+
+      await getOrders(setOrders, setOrders2, setSpinning);
+
+      await getStatistic(setStatistic, setStatistics);
+
+      await getTopUser(setTopUsers);
     }
     fetchData();
-    getStatus(setStatus);
-
-    getOrders(setOrders, setOrders2, setSpinning);
-
-    getStatistic(setStatistic, setStatistics);
-
-    getTopUser(setTopUsers);
   }, []);
 
   const columnsEssay = [
@@ -63,15 +64,10 @@ const HomeStudent = () => {
       ],
       onFilter: (value, record) => record.essay.type_id === value,
       render: (kind) => (
-        <div style={{ color: "blue" }}>{types.find((typeEl) => typeEl.type_id === kind).type_name}</div>
+        <div style={{ color: "blue" }}>
+          {types.find((typeEl) => typeEl.type_id === kind).type_name}
+        </div>
       ),
-    },
-    {
-      title: "Chủ đề",
-      dataIndex: "topic_name",
-      key: "topic_name",
-      width: 130,
-      sorter: (a, b) => a.topic_name.localeCompare(b.topic_name),
     },
     {
       title: "Đề bài",
@@ -93,7 +89,7 @@ const HomeStudent = () => {
       dataIndex: "total_price",
       key: "total_price",
       width: "100",
-      render: (money) => formatMoney(money),
+      render: (money) => formatNumber(money),
       sorter: (a, b) => a.total_price - b.total_price,
     },
     {
@@ -372,7 +368,7 @@ const HomeStudent = () => {
                           style={{ fontSize: "30px", fontStyle: "revert" }}
                         >
                           <span style={{ color: "orange" }}>
-                            {formatMoney(statistics.monthly_payment)}
+                            {formatNumber(statistics.monthly_payment)}
                           </span>
                           VND
                         </div>

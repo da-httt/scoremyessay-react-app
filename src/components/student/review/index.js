@@ -1,4 +1,4 @@
-import { Breadcrumb, Table } from "antd";
+import { Breadcrumb, Spin, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Button } from "reactstrap";
@@ -7,9 +7,11 @@ import "../Student.css";
 import { getReview } from "./api";
 
 const MyReviews = (props) => {
+
+  const [spinning, setSpinning] = useState(true);
   const [reviews, setReviews] = useState();
   useEffect(() => {
-    getReview(setReviews);
+    getReview(setReviews, setSpinning);
   }, []);
 
   const columns = [
@@ -28,6 +30,7 @@ const MyReviews = (props) => {
       title: "Bình luận & Nhận xét",
       dataIndex: "comment",
       width: 450,
+      ellipsis: true,
     },
     {
       render: (_, record) =>
@@ -51,49 +54,51 @@ const MyReviews = (props) => {
   return (
     <div className="student-page">
       <GlobalHeader />
-      <div className="container-fluid detailPage">
-        <div className="row" style={{ height: window.innerHeight + "px" }}>
-          <div className="container-fluid centerCol padding">
-            <div className="gradient-background-student padding">
-              <div className="row bg-row margin padding ">
-                <Breadcrumb className="mt-1" style={{ fontSize: "large" }}>
-                  <Breadcrumb.Item>
-                    <a style={{ color: "white" }} href="/Home">
-                      Trang chủ
-                    </a>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item style={{ color: "white" }}>
-                    Đánh giá của tôi
-                  </Breadcrumb.Item>
-                </Breadcrumb>
+      <Spin spinning={spinning}>
+        <div className="container-fluid detailPage">
+          <div className="row" style={{ height: window.innerHeight + "px" }}>
+            <div className="container-fluid centerCol padding">
+              <div className="gradient-background-student padding">
+                <div className="row bg-row margin padding ">
+                  <Breadcrumb className="mt-1" style={{ fontSize: "large" }}>
+                    <Breadcrumb.Item>
+                      <a style={{ color: "white" }} href="/Home">
+                        Trang chủ
+                      </a>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item style={{ color: "white" }}>
+                      Đánh giá của tôi
+                    </Breadcrumb.Item>
+                  </Breadcrumb>
+                </div>
+                <div className="row bg-row padding">
+                  <br />
+                  <h3
+                    className="mt-auto mb-auto"
+                    style={{ color: "white", fontWeight: "700" }}
+                  >
+                    {" "}
+                    ĐÁNH GIÁ CỦA TÔI
+                  </h3>
+                </div>
               </div>
-              <div className="row bg-row padding">
-                <br />
-                <h3
-                  className="mt-auto mb-auto"
-                  style={{ color: "white", fontWeight: "700" }}
-                >
-                  {" "}
-                  ĐÁNH GIÁ CỦA TÔI
-                </h3>
-              </div>
-            </div>
 
-            <div className="bg" style={{ backgroundColor: "white" }}>
-              <div className="row bg-row margin padding">
-                <div className="container-fluid">
-                  <Table
-                    rowKey={(order) => order.order_id}
-                    columns={columns}
-                    dataSource={reviews}
-                    pagination={{ pageSize: 5 }}
-                  />
+              <div className="bg" style={{ backgroundColor: "white" }}>
+                <div className="row bg-row margin padding">
+                  <div className="container-fluid">
+                    <Table
+                      rowKey={(order) => order.order_id}
+                      columns={columns}
+                      dataSource={reviews}
+                      pagination={{ pageSize: 5 }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Spin>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { PageHeader, Radio } from "antd";
+import { PageHeader, Radio, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import {
@@ -10,15 +10,24 @@ import {
   Input,
   Label,
   Row,
-  Table
+  Table,
 } from "reactstrap";
-import { showMessage } from "../../messageComponent";
+import { formatNumber, showMessage } from "../../commonFormat";
 import GlobalHeader from "../header";
 import "../Student.css";
-import { getGenders, getJobs, getPersonalInfo, getStatistic, putChangeAvatar, putChangeInfo, putChangePassword } from "./api";
+import {
+  getGenders,
+  getJobs,
+  getPersonalInfo,
+  getStatistic,
+  putChangeAvatar,
+  putChangeInfo,
+  putChangePassword,
+} from "./api";
 import "./personalInfo.css";
 
 const PersonalInfo = () => {
+  const [spinning, setSpinning] = useState(true);
   const [name, setName] = useState();
   const [id, setID] = useState();
   const [birthday, setBirthday] = useState();
@@ -57,7 +66,8 @@ const PersonalInfo = () => {
         setGender,
         setJobID,
         setPhone,
-        setBase64Image
+        setBase64Image,
+        setSpinning
       );
 
       getJobs(setJobs);
@@ -113,7 +123,17 @@ const PersonalInfo = () => {
 
   const handleChangeInfo = (e) => {
     setLoadInfo(true);
-    putChangeInfo(id, name, address, birthday, gender, jobID, phone, setLoadInfo, setEdit);
+    putChangeInfo(
+      id,
+      name,
+      address,
+      birthday,
+      gender,
+      jobID,
+      phone,
+      setLoadInfo,
+      setEdit
+    );
   };
 
   const handleChangeAvt = (e) => {
@@ -136,401 +156,407 @@ const PersonalInfo = () => {
   return (
     <div className="student-page">
       <GlobalHeader />
-      <div
-        className="container-fluid detailPageStudent"
-        style={{ height: window.innerHeight + "px" }}
-      >
-        <div className="row ">
-          <div
-            className="container-fluid centerCol"
-            style={{ borderRadius: "10px" }}
-          >
+      <Spin spinning={spinning}>
+        <div
+          className="container-fluid detailPageStudent"
+          style={{ height: window.innerHeight + "px" }}
+        >
+          <div className="row ">
             <div
-              className="row margin padding shadow-background personal-background-student"
-              style={{ color: "white" }}
+              className="container-fluid centerCol"
+              style={{ borderRadius: "10px" }}
             >
-              <PageHeader
-                className="site-page-header"
-                title={
-                  <span style={{ color: "white" }}>THÔNG TIN CÁ NHÂN</span>
-                }
-              />
-            </div>
-            <div className="row shadow-background">
               <div
-                className="col-4 padding "
-                style={{
-                  backgroundColor: "white",
-                  textAlign: "center",
-                  padding: "20px",
-                }}
+                className="row margin padding shadow-background personal-background-student"
+                style={{ color: "white" }}
               >
-                <img
-                  style={{ borderRadius: "10px", marginTop: "50px" }}
-                  src={`data:image/jpeg;base64,${base64Image}`}
-                  height="273px"
-                  width="273px"
-                  className="ml-3"
-                  alt="Avatar"
-                ></img>
+                <PageHeader
+                  className="site-page-header"
+                  title={
+                    <span style={{ color: "white" }}>THÔNG TIN CÁ NHÂN</span>
+                  }
+                />
+              </div>
+              <div className="row shadow-background">
+                <div
+                  className="col-4 padding "
+                  style={{
+                    backgroundColor: "white",
+                    textAlign: "center",
+                    padding: "20px",
+                  }}
+                >
+                  <img
+                    style={{ borderRadius: "10px", marginTop: "50px" }}
+                    src={`data:image/jpeg;base64,${base64Image}`}
+                    height="273px"
+                    width="273px"
+                    className="ml-3"
+                    alt="Avatar"
+                  ></img>
 
-                <div style={{ padding: "20px", marginTop: "10px" }}>
-                  <h3 style={{ fontWeight: "900" }}>{name}</h3>
-                  <h6>
-                    <span
-                      style={{
-                        padding: "5px",
-                        borderRadius: "5px",
-                        backgroundColor: "#2596be",
-                        color: "white",
-                        fontWeight: "400",
-                      }}
-                    >
-                      Học viên
-                    </span>{" "}
-                  </h6>
-                </div>
-                {!editAvt ? (
-                  <>
-                    <div className="mt-2 ml-3 mr-3">
-                      <Input
-                        type="file"
-                        onChange={(e) => {
-                          uploadImage(e);
+                  <div style={{ padding: "20px", marginTop: "10px" }}>
+                    <h3 style={{ fontWeight: "900" }}>{name}</h3>
+                    <h6>
+                      <span
+                        style={{
+                          padding: "5px",
+                          borderRadius: "5px",
+                          backgroundColor: "#2596be",
+                          color: "white",
+                          fontWeight: "400",
                         }}
-                        accept="image/*"
-                      />
+                      >
+                        Học viên
+                      </span>{" "}
+                    </h6>
+                  </div>
+                  {!editAvt ? (
+                    <>
+                      <div className="mt-2 ml-3 mr-3">
+                        <Input
+                          type="file"
+                          onChange={(e) => {
+                            uploadImage(e);
+                          }}
+                          accept="image/*"
+                        />
+                      </div>
+                      <div className="mt-2 mb-3 ml-3 mr-3">
+                        <Row>
+                          <Col sm="6">
+                            <Button
+                              color="info"
+                              outline
+                              block
+                              onClick={handleChangeAvt}
+                            >
+                              {loadAvt ? "Đang xử lý..." : "Lưu thay đổi"}
+                            </Button>
+                          </Col>
+                          <Col sm="6">
+                            <Button
+                              color="info"
+                              outline
+                              block
+                              onClick={(e) => setEditAvt(true)}
+                            >
+                              Trở lại
+                            </Button>
+                          </Col>
+                        </Row>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="mt-2 ml-3 mr-3">
+                      <Button
+                        className="btn-student-link"
+                        color="link"
+                        outline
+                        block
+                        onClick={(e) => setEditAvt(false)}
+                      >
+                        Thay đổi ảnh đại diện
+                      </Button>
                     </div>
-                    <div className="mt-2 mb-3 ml-3 mr-3">
-                      <Row>
-                        <Col sm="6">
-                          <Button
-                            color="info"
-                            outline
-                            block
-                            onClick={handleChangeAvt}
-                          >
-                            {loadAvt ? "Đang xử lý..." : "Lưu thay đổi"}
-                          </Button>
-                        </Col>
-                        <Col sm="6">
-                          <Button
-                            color="info"
-                            outline
-                            block
-                            onClick={(e) => setEditAvt(true)}
-                          >
-                            Trở lại
-                          </Button>
-                        </Col>
-                      </Row>
-                    </div>
-                  </>
-                ) : (
+                  )}
+
                   <div className="mt-2 ml-3 mr-3">
                     <Button
                       className="btn-student-link"
                       color="link"
                       outline
                       block
-                      onClick={(e) => setEditAvt(false)}
+                      onClick={(e) => {
+                        setEdit(false);
+                        setEditPass(true);
+                        setEditAvt(true);
+                      }}
                     >
-                      Thay đổi ảnh đại diện
+                      Thay đổi thông tin cá nhân
                     </Button>
                   </div>
-                )}
-
-                <div className="mt-2 ml-3 mr-3">
-                  <Button
-                    className="btn-student-link"
-                    color="link"
-                    outline
-                    block
-                    onClick={(e) => {
-                      setEdit(false);
-                      setEditPass(true);
-                      setEditAvt(true);
-                    }}
-                  >
-                    Thay đổi thông tin cá nhân
-                  </Button>
+                  <div className="mt-2 ml-3 mr-3">
+                    <Button
+                      className="btn-student-link"
+                      color="link"
+                      outline
+                      block
+                      onClick={(e) => {
+                        setEditPass(false);
+                        setEditAvt(true);
+                        setEdit(true);
+                      }}
+                    >
+                      Thay đổi mật khẩu
+                    </Button>
+                  </div>
                 </div>
-                <div className="mt-2 ml-3 mr-3">
-                  <Button
-                    className="btn-student-link"
-                    color="link"
-                    outline
-                    block
-                    onClick={(e) => {
-                      setEditPass(false);
-                      setEditAvt(true);
-                      setEdit(true);
-                    }}
-                  >
-                    Thay đổi mật khẩu
-                  </Button>
-                </div>
-              </div>
-              <div
-                className="col-8 padding "
-                style={{ backgroundColor: "white" }}
-              >
-                <div className="row  bg-row padding">
-                  <Container>
-                    <Form>
-                      <Row>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="id">Mã học sinh *</Label>
-                            <Input
-                              type="text"
-                              name="id"
-                              id="id"
-                              disabled
-                              value={id}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="fullname">Họ và tên *</Label>
-                            <Input
-                              style={{ backgroundColor: "white" }}
-                              type="text"
-                              name="fullname"
-                              id="fullname"
-                              required
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                              disabled={edit}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="datebirth">Ngày tháng năm sinh *</Label>
-                            <Input
-                              style={{ backgroundColor: "white" }}
-                              type="date"
-                              name="datebirth"
-                              id="datebirth"
-                              required
-                              value={birthday}
-                              onChange={(e) => setBirthday(e.target.value)}
-                              disabled={edit}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="gender">Giới tính *</Label>
-                            <br />
-                            <Radio.Group
-                              value={gender}
-                              onChange={(e) => setGender(e.target.value)}
-                              disabled={edit}
-                            >
-                              {gendersList}
-                            </Radio.Group>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="gmail">Gmail *</Label>
-                            <Input
-                              type="email"
-                              name="gmail"
-                              id="gmail"
-                              required
-                              value={mail}
-                              onChange={(e) => setMail(e.target.value)}
-                              disabled
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="address">Địa chỉ *</Label>
-                            <Input
-                              style={{ backgroundColor: "white" }}
-                              type="text"
-                              name="address"
-                              id="address"
-                              required
-                              value={address}
-                              onChange={(e) => setAddress(e.target.value)}
-                              disabled={edit}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="job">Nghề nghiệp *</Label>
-                            <Input
-                              style={{ backgroundColor: "white" }}
-                              type="select"
-                              name="carrier"
-                              id="carrier"
-                              required
-                              value={jobID}
-                              onChange={(e) => setJobID(e.target.value)}
-                              disabled={edit}
-                            >
-                              {jobsList}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                        <Col xs="6">
-                          <FormGroup style={{ fontSize: "17px" }}>
-                            <Label for="tel">Số điện thoại *</Label>
-                            <Input
-                              style={{ backgroundColor: "white" }}
-                              type="tel"
-                              name="tel"
-                              id="tel"
-                              required
-                              value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              disabled={edit}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </Form>
-                  </Container>
-                  {!edit && (
-                    <div className=" mt-2 mr-3 ml-auto">
-                      <Button
-                        color="primary"
-                        outline
-                        onClick={handleChangeInfo}
-                        style={{ margin: "0px 7px" }}
-                      >
-                        {loadInfo ? "Đang xử lý..." : "Lưu lại"}
-                      </Button>
-                      <Button
-                        color="primary"
-                        outline
-                        onClick={(e) => setEdit(true)}
-                      >
-                        Trở lại
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                {!editPass ? (
-                  <div className="row  bg-row padding margin">
-                    <h5>
-                      <strong>Thay đổi mật khẩu</strong>
-                    </h5>
+                <div
+                  className="col-8 padding "
+                  style={{ backgroundColor: "white" }}
+                >
+                  <div className="row  bg-row padding">
                     <Container>
                       <Form>
                         <Row>
                           <Col xs="6">
                             <FormGroup style={{ fontSize: "17px" }}>
-                              <Label for="password">Mật khẩu mới *</Label>
+                              <Label for="id">Mã học sinh *</Label>
                               <Input
-                                type="password"
-                                name="password"
-                                id="password"
-                                required
-                                onChange={(e) => setPass(e.target.value)}
+                                type="text"
+                                name="id"
+                                id="id"
+                                disabled
+                                value={id}
                               />
                             </FormGroup>
                           </Col>
                           <Col xs="6">
                             <FormGroup style={{ fontSize: "17px" }}>
-                              <Label for="passwordAgain">
-                                Nhập lại mật khẩu mới *
+                              <Label for="fullname">Họ và tên *</Label>
+                              <Input
+                                style={{ backgroundColor: "white" }}
+                                type="text"
+                                name="fullname"
+                                id="fullname"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                disabled={edit}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col xs="6">
+                            <FormGroup style={{ fontSize: "17px" }}>
+                              <Label for="datebirth">
+                                Ngày tháng năm sinh *
                               </Label>
                               <Input
-                                type="password"
-                                name="passwordAgain"
-                                id="passwordAgain"
+                                style={{ backgroundColor: "white" }}
+                                type="date"
+                                name="datebirth"
+                                id="datebirth"
                                 required
-                                onChange={(e) => setPassA(e.target.value)}
+                                value={birthday}
+                                onChange={(e) => setBirthday(e.target.value)}
+                                disabled={edit}
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col xs="6">
+                            <FormGroup style={{ fontSize: "17px" }}>
+                              <Label for="gender">Giới tính *</Label>
+                              <br />
+                              <Radio.Group
+                                value={gender}
+                                onChange={(e) => setGender(e.target.value)}
+                                disabled={edit}
+                              >
+                                {gendersList}
+                              </Radio.Group>
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col xs="6">
+                            <FormGroup style={{ fontSize: "17px" }}>
+                              <Label for="gmail">Gmail *</Label>
+                              <Input
+                                type="email"
+                                name="gmail"
+                                id="gmail"
+                                required
+                                value={mail}
+                                onChange={(e) => setMail(e.target.value)}
+                                disabled
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col xs="6">
+                            <FormGroup style={{ fontSize: "17px" }}>
+                              <Label for="address">Địa chỉ *</Label>
+                              <Input
+                                style={{ backgroundColor: "white" }}
+                                type="text"
+                                name="address"
+                                id="address"
+                                required
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                disabled={edit}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col xs="6">
+                            <FormGroup style={{ fontSize: "17px" }}>
+                              <Label for="job">Nghề nghiệp *</Label>
+                              <Input
+                                style={{ backgroundColor: "white" }}
+                                type="select"
+                                name="carrier"
+                                id="carrier"
+                                required
+                                value={jobID}
+                                onChange={(e) => setJobID(e.target.value)}
+                                disabled={edit}
+                              >
+                                {jobsList}
+                              </Input>
+                            </FormGroup>
+                          </Col>
+                          <Col xs="6">
+                            <FormGroup style={{ fontSize: "17px" }}>
+                              <Label for="tel">Số điện thoại *</Label>
+                              <Input
+                                style={{ backgroundColor: "white" }}
+                                type="tel"
+                                name="tel"
+                                id="tel"
+                                required
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                disabled={edit}
                               />
                             </FormGroup>
                           </Col>
                         </Row>
                       </Form>
                     </Container>
-                    <div className=" mt-2 mr-3 ml-auto">
-                      <Button
-                        color="primary"
-                        outline
-                        style={{ margin: "0px 7px" }}
-                        onClick={handleChangePass}
-                      >
-                        {loadPass ? "Đang xử lý..." : "Lưu lại"}
-                      </Button>
-                      <Button
-                        color="primary"
-                        outline
-                        onClick={(e) => setEditPass(true)}
-                      >
-                        Trở lại
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="row  bg-row padding margin">
-                    <h5>
-                      <strong>Thông tin hoạt động</strong>
-                    </h5>
-                    <br />
-                    {statistic && (
-                      <Table bordered>
-                        <tr>
-                          <th>Tổng số bài đăng</th>
-                          <td>{statistic.total_orders} bài</td>
-                        </tr>
-                        <tr>
-                          <th>Số bài được chấm</th>
-                          <td>{statistic.total_done} bài</td>
-                        </tr>
-                        <tr>
-                          <th>Tổng chi</th>
-                          <td>{statistic.total_payment} VNĐ</td>
-                        </tr>
-                        <tr>
-                          <th>Trung bình chi theo tháng</th>
-                          <td>{statistic.monthly_payment} VNĐ</td>
-                        </tr>
-                        <tr>
-                          <th>Tổng chi so với tháng trước</th>
-                          <td>
-                            {statistic.gross > 0 && (
-                              <i
-                                className="fa fa-sort-up"
-                                style={{ color: "forestgreen" }}
-                              />
-                            )}
-                            {statistic.gross < 0 && (
-                              <i
-                                className="fa fa-sort-down"
-                                style={{ color: "darkorange" }}
-                              />
-                            )}
-                            {statistic.gross} %
-                          </td>
-                        </tr>
-                      </Table>
+                    {!edit && (
+                      <div className=" mt-2 mr-3 ml-auto">
+                        <Button
+                          color="primary"
+                          outline
+                          onClick={handleChangeInfo}
+                          style={{ margin: "0px 7px" }}
+                        >
+                          {loadInfo ? "Đang xử lý..." : "Lưu lại"}
+                        </Button>
+                        <Button
+                          color="primary"
+                          outline
+                          onClick={(e) => setEdit(true)}
+                        >
+                          Trở lại
+                        </Button>
+                      </div>
                     )}
                   </div>
-                )}
+
+                  {!editPass ? (
+                    <div className="row  bg-row padding margin">
+                      <h5>
+                        <strong>Thay đổi mật khẩu</strong>
+                      </h5>
+                      <Container>
+                        <Form>
+                          <Row>
+                            <Col xs="6">
+                              <FormGroup style={{ fontSize: "17px" }}>
+                                <Label for="password">Mật khẩu mới *</Label>
+                                <Input
+                                  type="password"
+                                  name="password"
+                                  id="password"
+                                  required
+                                  onChange={(e) => setPass(e.target.value)}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col xs="6">
+                              <FormGroup style={{ fontSize: "17px" }}>
+                                <Label for="passwordAgain">
+                                  Nhập lại mật khẩu mới *
+                                </Label>
+                                <Input
+                                  type="password"
+                                  name="passwordAgain"
+                                  id="passwordAgain"
+                                  required
+                                  onChange={(e) => setPassA(e.target.value)}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                        </Form>
+                      </Container>
+                      <div className=" mt-2 mr-3 ml-auto">
+                        <Button
+                          color="primary"
+                          outline
+                          style={{ margin: "0px 7px" }}
+                          onClick={handleChangePass}
+                        >
+                          {loadPass ? "Đang xử lý..." : "Lưu lại"}
+                        </Button>
+                        <Button
+                          color="primary"
+                          outline
+                          onClick={(e) => setEditPass(true)}
+                        >
+                          Trở lại
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="row  bg-row padding margin">
+                      <h5>
+                        <strong>Thông tin hoạt động</strong>
+                      </h5>
+                      <br />
+                      {statistic && (
+                        <Table bordered>
+                          <tr>
+                            <th>Tổng số bài đăng</th>
+                            <td>{statistic.total_orders} bài</td>
+                          </tr>
+                          <tr>
+                            <th>Số bài được chấm</th>
+                            <td>{statistic.total_done} bài</td>
+                          </tr>
+                          <tr>
+                            <th>Tổng chi</th>
+                            <td>{formatNumber(statistic.total_payment)} VNĐ</td>
+                          </tr>
+                          <tr>
+                            <th>Trung bình chi theo tháng</th>
+                            <td>
+                              {formatNumber(statistic.monthly_payment)} VNĐ
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>Tổng chi so với tháng trước</th>
+                            <td>
+                              {statistic.gross > 0 && (
+                                <i
+                                  className="fa fa-sort-up"
+                                  style={{ color: "forestgreen" }}
+                                />
+                              )}
+                              {statistic.gross < 0 && (
+                                <i
+                                  className="fa fa-sort-down"
+                                  style={{ color: "darkorange" }}
+                                />
+                              )}
+                              {statistic.gross} %
+                            </td>
+                          </tr>
+                        </Table>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Spin>
     </div>
   );
 };

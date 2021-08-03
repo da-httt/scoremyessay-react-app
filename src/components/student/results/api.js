@@ -1,5 +1,5 @@
 import { getBaseURL, getToken, getTokenType } from "../../../Utils/Common";
-import { showMessage } from "../../messageComponent";
+import { formatTitle, showMessage } from "../../commonFormat";
 
 const api = getBaseURL();
 export function getOrderInfo(
@@ -9,18 +9,20 @@ export function getOrderInfo(
   setTitle,
   setContent,
   setTitleS,
-  setTeacher
+  setTeacher,
+  setSpinning
 ) {
   api
     .get("/orders/" + orderID, {
       headers: { Authorization: getTokenType() + " " + getToken() },
     })
     .then((response) => {
+      setSpinning(false);
       setTeacherID(response.data.teacher_id);
       setStatusWriting(response.data.status_id);
       setTitle(response.data.essay.title);
       setContent(response.data.essay.content);
-      setTitleS(response.data.essay.title.slice(0, 65));
+      formatTitle(response.data.essay.title, setTitleS);
       if (response.data.status_id !== 1) {
         api
           .get("/users/" + response.data.teacher_id, {

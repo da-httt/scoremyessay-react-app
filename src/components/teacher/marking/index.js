@@ -1,4 +1,4 @@
-import { Breadcrumb, Tabs } from "antd";
+import { Breadcrumb, Spin, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Button, Card, Col, Form, FormGroup, Input, Label } from "reactstrap";
@@ -20,7 +20,8 @@ const ScoreEssay = (props) => {
   const url = window.location.href.split("=");
   const orderID = Number(url[1]);
 
-  const [current, setCurrent] = React.useState(0);
+const [spinning, setSpinning] = useState(true);
+  const [current, setCurrent] = useState(0);
 
   const next = () => {
     setCurrent(current + 1);
@@ -64,7 +65,7 @@ const ScoreEssay = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      await getOrder(orderID, setStudentID, setStudent, setDeadline, setTitleS);
+      await getOrder(orderID, setStudentID, setStudent, setDeadline, setTitleS, setSpinning);
       getImage(orderID, setBase64Image);
 
       await getComments(orderID, setTitle, setContent, setSentences);
@@ -355,171 +356,176 @@ const ScoreEssay = (props) => {
   return (
     <div className="teacher-page">
       <GlobalHeader />
-      <div className="container-fluid detailPage">
-        <div className="row" style={{ height: window.innerHeight + "px" }}>
-          <div className="container-fluid centerCol ">
-            <div className="gradient-background-teacher padding">
-              <div className="row bg-row margin padding ">
-                <Breadcrumb className="mt-1" style={{ fontSize: "large" }}>
-                  <Breadcrumb.Item>
-                    <a href="/Home">Trang chủ</a>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item>
-                    <a href="/HomeTeacherPage">Quản lý bài viết</a>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item style={{ color: "white" }}>
-                    Xem bài viết
-                  </Breadcrumb.Item>
-                </Breadcrumb>
+      <Spin spinning={spinning}>
+        <div className="container-fluid detailPage">
+          <div className="row" style={{ height: window.innerHeight + "px" }}>
+            <div className="container-fluid centerCol ">
+              <div className="gradient-background-teacher padding">
+                <div className="row bg-row margin padding ">
+                  <Breadcrumb className="mt-1" style={{ fontSize: "large" }}>
+                    <Breadcrumb.Item>
+                      <a href="/Home">Trang chủ</a>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                      <a href="/HomeTeacherPage">Quản lý bài viết</a>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item style={{ color: "white" }}>
+                      Xem bài viết
+                    </Breadcrumb.Item>
+                  </Breadcrumb>
+                </div>
+                <div className="row bg-row padding">
+                  <br />
+                  <h3
+                    className="mt-auto mb-auto"
+                    style={{ color: "white", fontWeight: "700" }}
+                  >
+                    #{orderID} {titleS}
+                  </h3>
+                </div>
               </div>
-              <div className="row bg-row padding">
-                <br />
-                <h3
-                  className="mt-auto mb-auto"
-                  style={{ color: "white", fontWeight: "700" }}
-                >
-                  #{orderID} {titleS}...
-                </h3>
-              </div>
-            </div>
-            <div className="bg">
-              <div
-                className="shadow-background"
-                style={{ backgroundColor: "white", padding: "10px" }}
-              >
+              <div className="bg">
                 <div
-                  className="container-fluid"
-                  style={{ marginBottom: "50px" }}
+                  className="shadow-background"
+                  style={{ backgroundColor: "white", padding: "10px" }}
                 >
-                  <ProfileStudent
-                    modal={modal}
-                    id={studentID}
-                    onClick={handleChange}
-                  />
-                  <Tabs defaultActiveKey="1" tabBarExtraContent={nameOfTeacher}>
-                    <TabPane tab="Sửa lỗi" key="1">
-                      <div
-                        className="container-fluid mt-2"
-                        style={{ fontSize: "medium", textAlign: "justify" }}
-                      >
-                        <div className="row ">{sentenceList}</div>
-                      </div>
-                    </TabPane>
+                  <div
+                    className="container-fluid"
+                    style={{ marginBottom: "50px" }}
+                  >
+                    <ProfileStudent
+                      modal={modal}
+                      id={studentID}
+                      onClick={handleChange}
+                    />
+                    <Tabs
+                      defaultActiveKey="1"
+                      tabBarExtraContent={nameOfTeacher}
+                    >
+                      <TabPane tab="Sửa lỗi" key="1">
+                        <div
+                          className="container-fluid mt-2"
+                          style={{ fontSize: "medium", textAlign: "justify" }}
+                        >
+                          <div className="row ">{sentenceList}</div>
+                        </div>
+                      </TabPane>
 
-                    <TabPane tab="Chấm điểm và đánh giá" key="2">
-                      <div
-                        className="container-fluid mt-2"
-                        style={{ fontSize: "medium", textAlign: "justify" }}
-                      >
-                        <div className="row ">
-                          <div className="col-7">
-                            <strong>Đánh giá bài làm</strong>
-                            <Input
-                              type="textarea"
-                              id="review"
-                              rows={4}
-                              placeholder="Nhập đánh giá chung cho bài viết"
-                              defaultValue={review}
-                              onChange={(e) => setReview(e.target.value)}
-                            ></Input>
-                            <br />
-                            <strong>Nhận xét về bài làm</strong>
-                            <Input
-                              type="textarea"
-                              id="generalComment"
-                              rows={4}
-                              placeholder="Nhập nhận xét chung cho bài viết"
-                              defaultValue={commentGeneral}
-                              onChange={(e) =>
-                                setCommentGeneral(e.target.value)
-                              }
-                            ></Input>
-                            <br />
-                            {extraResultsUI}
-                          </div>
-                          <div className="col-5">
-                            <div
-                              className="mb-1"
-                              style={{ textAlign: "center" }}
-                            >
-                              <Button
-                                outline
-                                style={{ margin: "5px" }}
-                                color="primary"
-                              >
-                                Đặt lại
-                              </Button>
-                              <Button
-                                outline
-                                style={{ margin: "5px" }}
-                                color="primary"
-                                onClick={handleSaveResult}
-                              >
-                                {loadSave2 ? "Loading..." : "Lưu lại"}
-                              </Button>
-                              <Button
-                                outline
-                                style={{ margin: "5px" }}
-                                color="primary"
-                                onClick={handleDoneResult}
-                              >
-                                {loadDone2 ? "Loading..." : "Kết thúc chấm"}
-                              </Button>
+                      <TabPane tab="Chấm điểm và đánh giá" key="2">
+                        <div
+                          className="container-fluid mt-2"
+                          style={{ fontSize: "medium", textAlign: "justify" }}
+                        >
+                          <div className="row ">
+                            <div className="col-7">
+                              <strong>Đánh giá bài làm</strong>
+                              <Input
+                                type="textarea"
+                                id="review"
+                                rows={4}
+                                placeholder="Nhập đánh giá chung cho bài viết"
+                                defaultValue={review}
+                                onChange={(e) => setReview(e.target.value)}
+                              ></Input>
+                              <br />
+                              <strong>Nhận xét về bài làm</strong>
+                              <Input
+                                type="textarea"
+                                id="generalComment"
+                                rows={4}
+                                placeholder="Nhập nhận xét chung cho bài viết"
+                                defaultValue={commentGeneral}
+                                onChange={(e) =>
+                                  setCommentGeneral(e.target.value)
+                                }
+                              ></Input>
+                              <br />
+                              {extraResultsUI}
                             </div>
-                            <Card
-                              style={{
-                                padding: "10px 30px ",
-                                minHeight: "265px",
-                              }}
-                            >
-                              <Form>
-                                <FormGroup row>
-                                  <strong>Điểm số</strong>
-                                  <br />
-                                  <Input
-                                    type="number"
-                                    defaultValue={grade}
-                                    name="grade"
-                                    id="grade"
-                                    placeholder="Nhập điểm"
-                                    onChange={(e) => setGrade(e.target.value)}
-                                  />
-                                </FormGroup>
-                                <FormGroup row>
-                                  <strong>Nhận xét về điểm</strong>
-                                  <br />
-                                  <Input
-                                    type="textarea"
-                                    defaultValue={gradeComment}
-                                    rows="3"
-                                    name="commentGrade"
-                                    id="commentGrade"
-                                    placeholder="Nhập Nhận xét"
-                                    onChange={(e) =>
-                                      setGradeComment(e.target.value)
-                                    }
-                                  />
-                                </FormGroup>
-                                {isCriteria === true && (
+                            <div className="col-5">
+                              <div
+                                className="mb-1"
+                                style={{ textAlign: "center" }}
+                              >
+                                <Button
+                                  outline
+                                  style={{ margin: "5px" }}
+                                  color="primary"
+                                >
+                                  Đặt lại
+                                </Button>
+                                <Button
+                                  outline
+                                  style={{ margin: "5px" }}
+                                  color="primary"
+                                  onClick={handleSaveResult}
+                                >
+                                  {loadSave2 ? "Loading..." : "Lưu lại"}
+                                </Button>
+                                <Button
+                                  outline
+                                  style={{ margin: "5px" }}
+                                  color="primary"
+                                  onClick={handleDoneResult}
+                                >
+                                  {loadDone2 ? "Loading..." : "Kết thúc chấm"}
+                                </Button>
+                              </div>
+                              <Card
+                                style={{
+                                  padding: "10px 30px ",
+                                  minHeight: "265px",
+                                }}
+                              >
+                                <Form>
                                   <FormGroup row>
-                                    <strong>Điểm thành phần</strong>
+                                    <strong>Điểm số</strong>
                                     <br />
+                                    <Input
+                                      type="number"
+                                      defaultValue={grade}
+                                      name="grade"
+                                      id="grade"
+                                      placeholder="Nhập điểm"
+                                      onChange={(e) => setGrade(e.target.value)}
+                                    />
                                   </FormGroup>
-                                )}
-                                {criteriaResultsUI}
-                              </Form>
-                            </Card>
+                                  <FormGroup row>
+                                    <strong>Nhận xét về điểm</strong>
+                                    <br />
+                                    <Input
+                                      type="textarea"
+                                      defaultValue={gradeComment}
+                                      rows="3"
+                                      name="commentGrade"
+                                      id="commentGrade"
+                                      placeholder="Nhập Nhận xét"
+                                      onChange={(e) =>
+                                        setGradeComment(e.target.value)
+                                      }
+                                    />
+                                  </FormGroup>
+                                  {isCriteria === true && (
+                                    <FormGroup row>
+                                      <strong>Điểm thành phần</strong>
+                                      <br />
+                                    </FormGroup>
+                                  )}
+                                  {criteriaResultsUI}
+                                </Form>
+                              </Card>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </TabPane>
-                  </Tabs>
+                      </TabPane>
+                    </Tabs>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Spin>
     </div>
   );
 };

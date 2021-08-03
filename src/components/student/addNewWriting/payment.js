@@ -17,7 +17,7 @@ import {
   Row,
 } from "reactstrap";
 import { getBaseURL, getToken } from "../../../Utils/Common";
-import { formatMoney, showMessage } from "../../messageComponent";
+import { formatNumber, showMessage } from "../../commonFormat";
 import "../Student.css";
 
 const api = getBaseURL();
@@ -100,7 +100,7 @@ export const Invoice = (props) => {
                       >
                         <div className="col col-7">Tổng:</div>
                         <div className="col" style={{ textAlign: "right" }}>
-                          {formatMoney(props.total)} VNĐ
+                          {formatNumber(props.total)} VNĐ
                         </div>
                       </div>
                     </div>
@@ -172,7 +172,7 @@ export const ContinuePayment = (props) => {
         <div className="row" style={{ marginBottom: "20px" }}>
           <div className="col-6">Tổng giá trị đơn hàng: </div>
           <div className="col-6" style={{ textAlign: "right" }}>
-            {formatMoney(props.amount)} VNĐ
+            {formatNumber(props.amount)} VNĐ
           </div>
         </div>
 

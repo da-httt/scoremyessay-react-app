@@ -15,7 +15,7 @@ import {
   Label,
 } from "reactstrap";
 import { getTypes } from "../../api";
-import { formatMoney, showMessage } from "../../messageComponent";
+import { formatNumber, showMessage } from "../../commonFormat";
 import {
   apiPostWriting,
   apiPostWritingWasSaved,
@@ -54,7 +54,7 @@ const Stepp = (props) => {
   const prev = () => {
     setCurrent(current - 1);
   };
-  const [spinning, setSpinning] = useState(true);
+  const [spinning, setSpinning] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadPay, setLoadPay] = useState(false);
   const [loadDel, setLoadDel] = useState(false);
@@ -88,6 +88,7 @@ const Stepp = (props) => {
     getTypes(setTypes);
 
     if (isUpdate) {
+      setSpinning(true);
       getInfoWriting(
         orderID,
         setOptionsTotal,
@@ -102,7 +103,6 @@ const Stepp = (props) => {
       );
       getImage(orderID, setBase64Image);
     }
-    setSpinning(false);
   }, [isUpdate, orderID]);
 
   const levelList = levels.map((level) => (
@@ -208,7 +208,7 @@ const Stepp = (props) => {
       <div className="row" style={{ marginBottom: "20px" }} key={name}>
         <div className="col col-7">{name}:</div>
         <div className="col" style={{ textAlign: "right" }}>
-          {formatMoney(price)} VNĐ
+          {formatNumber(price)} VNĐ
         </div>
       </div>
     );
@@ -295,6 +295,7 @@ const Stepp = (props) => {
           );
         } else {
           optionsTotal.push(optionTime);
+          setLoadPay(true);
           if (!isUpdate) {
             apiPostWriting(
               props,
@@ -501,10 +502,10 @@ const Stepp = (props) => {
                         rows="15"
                         onChange={(e) => setContent(e.target.value)}
                         defaultValue={content}
-                        maxLength={1000}
+                        maxLength={2500}
                       />
                       <FormText color="muted">
-                        Độ dài tối đa: 1000 chữ.
+                        Độ dài tối đa: 2500.
                       </FormText>
                     </Col>
                   </FormGroup>
@@ -606,7 +607,7 @@ const Stepp = (props) => {
                           >
                             <div className="col col-7">Tổng:</div>
                             <div className="col" style={{ textAlign: "right" }}>
-                              {formatMoney(totalPrice)} VNĐ
+                              {formatNumber(totalPrice)} VNĐ
                             </div>
                           </div>
                         </div>

@@ -1,7 +1,7 @@
 import { getBaseURL, getToken } from "../../../Utils/Common";
 
 const api = getBaseURL();
-export function getReview(setReviews){
+export function getReview(setReviews, setSpinning){
     api
         .get("/users/me", {
           headers: { Authorization: "Bearer " + getToken() },
@@ -13,6 +13,7 @@ export function getReview(setReviews){
             })
             .then((response) => {
               setReviews(response.data.data);
+              setSpinning(false);
             });
         });
 }

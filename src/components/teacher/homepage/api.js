@@ -15,7 +15,7 @@ export function getStatus(setStatus) {
   });
 }
 
-export function getOrders(setOrders, setOrders2) {
+export function getOrders(setOrders, setOrders2,setSpinning) {
   api
     .get("/orders", {
       headers: { Authorization: getTokenType() + " " + getToken() },
@@ -24,6 +24,7 @@ export function getOrders(setOrders, setOrders2) {
       const orders = response.data.data;
       setOrders(orders);
       setOrders2(orders);
+      setSpinning(false);
     });
 }
 

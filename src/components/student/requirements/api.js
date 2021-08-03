@@ -1,4 +1,5 @@
 import { getBaseURL, getToken } from "../../../Utils/Common";
+import { formatTitle } from "../../commonFormat";
 
 const api = getBaseURL();
 export function getOrderInfo(
@@ -10,7 +11,7 @@ export function getOrderInfo(
   setTitleSub,
   setContent,
   setType,
-  setLevel
+  setSpinning
 ) {
   api
     .get("/orders/" + orderID, {
@@ -18,19 +19,15 @@ export function getOrderInfo(
     })
     .then((response) => {
       setSentdate(response.data.sent_date);
-      setTotalPrice(response.data.total_price + " VNĐ");
+      setTotalPrice(response.data.total_price);
       const essay = response.data.essay;
       const options = response.data.option_list;
       setOptionsTotal(options);
       setTitle(essay.title);
-      setTitleSub(essay.title.slice(0, 50));
+      formatTitle(essay.title, setTitleSub);
       setContent(essay.content);
       setType(essay.type_id);
-      if (essay.type_id === 0) {
-        setLevel(0);
-      } else {
-        setLevel(1);
-      }
+      setSpinning(false);
     });
 }
 

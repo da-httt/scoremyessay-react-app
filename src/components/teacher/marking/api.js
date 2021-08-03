@@ -1,5 +1,5 @@
 import { getBaseURL, getToken, getTokenType } from "../../../Utils/Common";
-import { showMessage } from "../../messageComponent";
+import { formatTitle, showMessage } from "../../commonFormat";
 
 const api = getBaseURL();
 export async function getOrder(
@@ -7,7 +7,8 @@ export async function getOrder(
   setStudentID,
   setStudent,
   setDeadline,
-  setTitleS
+  setTitleS,
+  setSpinning
 ) {
   api
     .get("/orders/" + orderID, {
@@ -24,7 +25,8 @@ export async function getOrder(
           setStudent(response.data.name);
         });
       setDeadline(order.deadline);
-      setTitleS(order.essay.title.slice(0, 65));
+      formatTitle(order.essay.title, setTitleS);
+      setSpinning(false);
     });
 }
 
@@ -130,7 +132,7 @@ export function putResults(
     .put(
       "/results/" + orderID + "?status_id=3",
       {
-        grade: 9,
+        grade: grade,
         grade_comment: gradeComment,
         review: review,
         comment: commentGeneral,

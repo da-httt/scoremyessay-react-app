@@ -2,7 +2,7 @@ import { getBaseURL, getToken } from "../../../Utils/Common";
 import { showMessage } from "../../commonFormat";
 
 const api = getBaseURL();
-export function getPersonalInfo(
+export function getUserInfo(
   setMail,
   setName,
   setID,
@@ -39,14 +39,18 @@ export function getPersonalInfo(
     });
 }
 
-export function getGenders(setGenders) {
-  api.get("/genders").then((response) => {
-    const genders = response.data.data;
-    setGenders(genders);
+export function getJobs(setJobs) {
+  api.get("/jobs").then((response) => {
+    setJobs(response.data.data);
   });
 }
 
-export function getStatistic(setStatistic) {
+export function getGenders(setGenders) {
+  api.get("/genders").then((response) => {
+    setGenders(response.data.data);
+  });
+}
+export function getStatistics(setStatistic) {
   api
     .get("/statistics/me", {
       headers: { Authorization: "Bearer " + getToken() },
@@ -56,14 +60,7 @@ export function getStatistic(setStatistic) {
     });
 }
 
-export function getJobs(setJobs) {
-  api.get("/jobs").then((response) => {
-    const jobs = response.data.data;
-    setJobs(jobs);
-  });
-}
-
-export function putChangeInfo(
+export function putUsers(
   id,
   name,
   address,
@@ -102,7 +99,7 @@ export function putChangeInfo(
     });
 }
 
-export function putChangeAvatar(id, base64Image, setLoadAvt, setEditAvt) {
+export function putAvatar(id, base64Image, setEditAvt, setLoadAvt) {
   api
     .put(
       "/avatars/" + id,
@@ -126,24 +123,24 @@ export function putChangeAvatar(id, base64Image, setLoadAvt, setEditAvt) {
     });
 }
 
-export function putChangePassword(pass, setLoadPass, setEditPass){
+export function putPassword(pass, setLoadPass, setEditPass) {
   api
-        .put(
-          "/change_password/me?new_password=" + pass.toString(),
-          {},
-          {
-            headers: { Authorization: "Bearer " + getToken() },
-          }
-        )
-        .then((response) => {
-          setLoadPass(false);
-          showMessage("Mật khẩu của bạn đã được cập nhật!", "success");
-          setEditPass(true);
-        })
-        .catch((error) => {
-          if (error.response) {
-            setLoadPass(false);
-              showMessage(error.response.data.detail, "error");
-          }
-        });
+    .put(
+      "/change_password/me?new_password=" + pass.toString(),
+      {},
+      {
+        headers: { Authorization: "Bearer " + getToken() },
+      }
+    )
+    .then(() => {
+      setLoadPass(false);
+      showMessage("Mật khẩu của bạn đã được cập nhật!", "success");
+      setEditPass(true);
+    })
+    .catch((error) => {
+      if (error.response) {
+        setLoadPass(false);
+        showMessage(error.response.data.detail, "error");
+      }
+    });
 }

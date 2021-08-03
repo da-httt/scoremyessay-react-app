@@ -1,6 +1,7 @@
 import { getBaseURL, getToken, getTokenType } from '../../../../Utils/Common';
 import { List, Tabs, Input, Modal, Form, Badge, Descriptions, Image, Space, Tag,Button,  Divider, InputNumber } from 'antd';
 import { React, useEffect, useState } from 'react';
+import { formatNumber } from '../../../commonFormat';
 
 const { TabPane } = Tabs;
 const api = getBaseURL();
@@ -326,7 +327,7 @@ const Order = (props) => {
                                     )}
                                 />
                             </Descriptions.Item>
-                            <Descriptions.Item label="Total Price">{order.total_price} VNĐ</Descriptions.Item>
+                            <Descriptions.Item label="Total Price">{formatNumber(order.total_price)} VNĐ</Descriptions.Item>
                         </Descriptions>
                     </TabPane>
                     <TabPane tab="Bài Viết" key="2" >

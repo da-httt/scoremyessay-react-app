@@ -1,5 +1,5 @@
 import { getBaseURL, getToken } from "../../../Utils/Common";
-import { showMessage } from "../../messageComponent";
+import { showMessage } from "../../commonFormat";
 
 const api = getBaseURL();
 
@@ -225,11 +225,7 @@ export function deleteWriting(props, orderID, setLoadDel) {
     .catch((error) => {
       if (error.response) {
         setLoadDel(false);
-        if (error.response.status === 401 || error.response.status === 400) {
-          showMessage(error.response.data.detail, "error");
-        } else {
-          showMessage("Something went wrong. Please try again later!", "error");
-        }
+        showMessage(error.response.data.detail, "error");
       }
     });
 }

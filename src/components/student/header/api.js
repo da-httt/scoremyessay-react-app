@@ -1,6 +1,4 @@
-import { message } from "antd";
 import { getBaseURL, getToken, removeUserSession } from "../../../Utils/Common";
-import { showMessage } from "../../messageComponent";
 
 const api = getBaseURL();
 export function getInfo(setUsername, setAvatar, history) {
@@ -20,10 +18,6 @@ export function getInfo(setUsername, setAvatar, history) {
     })
     .catch((error) => {
       if (error.response.data.detail === "Could not validate credentials") {
-        showMessage(
-          "Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại!",
-          "info"
-        );
         removeUserSession();
         history.push("/Home");
       }

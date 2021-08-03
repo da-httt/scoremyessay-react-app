@@ -1,10 +1,17 @@
-import { Breadcrumb, Rate, Table, Tabs } from "antd";
+import { Breadcrumb, Rate, Spin, Table, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Button, Card, Input } from "reactstrap";
 import GlobalHeader from "../header";
 import ProfileTeacher from "../../ModalProfile/ProfileTeacher";
-import { getComments, getOrderInfo, getRating, getResults, getSpellingErrors, postRating } from "./api";
+import {
+  getComments,
+  getOrderInfo,
+  getRating,
+  getResults,
+  getSpellingErrors,
+  postRating,
+} from "./api";
 import "../Student.css";
 
 const { TabPane } = Tabs;
@@ -12,7 +19,7 @@ const { TabPane } = Tabs;
 const DetailResultStu = () => {
   const url = window.location.href.split("=");
   const orderID = Number(url[1]);
-
+  const [spinning, setSpinning] = useState(true);
   const [statusWriting, setStatusWriting] = useState();
   const [current, setCurrent] = React.useState(0);
 
@@ -65,10 +72,10 @@ const DetailResultStu = () => {
         setTitle,
         setContent,
         setTitleS,
-        setTeacher
+        setTeacher,
+        setSpinning
       );
-      statusWriting === 3 &&
-        statusWriting === 2 &&
+      if (statusWriting === 3) {
         getSpellingErrors(
           orderID,
           setTopic,
@@ -77,8 +84,6 @@ const DetailResultStu = () => {
           setAverage,
           setNumErrors
         );
-
-      statusWriting === 3 &&
         getResults(
           orderID,
           setIsCriteria,
@@ -89,11 +94,9 @@ const DetailResultStu = () => {
           setCriteriaResults,
           setExtraResults
         );
-
-      statusWriting === 3 && getComments(orderID, setSentences);
-
-      statusWriting === 3 &&
+        getComments(orderID, setSentences);
         getRating(orderID, setResponse, setRate, setComment);
+      }
     }
     fetchData();
   }, [orderID, statusWriting]);
@@ -159,7 +162,7 @@ const DetailResultStu = () => {
   const sentenceList = sentences.map((sentence) => (
     <>
       {current === sentence.sentence_index && (
-        <div key={sentence.sentence_id}>
+        <div key={sentence.sentence_id} className="row">
           <div className="col-7">
             <strong>Đề bài</strong>
             <span>
@@ -286,213 +289,228 @@ const DetailResultStu = () => {
   return (
     <div className="student-page">
       <GlobalHeader />
-      <div className="container-fluid detailPage">
-        <div className="row" style={{ height: window.innerHeight + "px" }}>
-          <div className="container-fluid centerCol ">
-            <div
-              className="gradient-background-student"
-              style={{ padding: "10px" }}
-            >
-              <div className="row bg-row margin padding ">
-                <Breadcrumb className="mt-1" style={{ fontSize: "large" }}>
-                  <Breadcrumb.Item>
-                    <a href="/Home">Trang chủ</a>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item>
-                    <a href="/HomeStudentPage">Quản lý bài viết</a>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item style={{ color: "white" }}>
-                    Xem bài viết
-                  </Breadcrumb.Item>
-                </Breadcrumb>
-              </div>
-              <div className="row bg-row padding">
-                <br />
-                <h3 className="mt-auto mb-auto" style={{ color: "white" }}>
-                  {" "}
-                  #{orderID} {titleS}...
-                </h3>
-              </div>
-            </div>
-            <div className="bg">
+      <Spin spinning={spinning}>
+        <div className="container-fluid detailPage">
+          <div className="row" style={{ height: window.innerHeight + "px" }}>
+            <div className="container-fluid centerCol ">
               <div
-                className="shadow-background"
-                style={{ backgroundColor: "white", padding: "10px" }}
+                className="gradient-background-student"
+                style={{ padding: "10px" }}
               >
-                <div className="container-fluid">
-                  {statusWriting === 3 && (
-                    <>
-                      <ProfileTeacher
-                        modal={modal}
-                        id={teacherID}
-                        onClick={handleChange}
-                      />
-                      <Tabs
-                        defaultActiveKey="1"
-                        tabBarExtraContent={nameOfTeacher}
-                      >
-                        <TabPane tab="Điểm số và đánh giá" key="1">
-                          <div
-                            className="container-fluid mt-2"
-                            style={{
-                              marginBottom: "20px",
-                              fontSize: "medium",
-                              textAlign: "justify",
-                            }}
-                          >
-                            <div className="row ">
-                              <div className="col-7">
-                                <div className="margin">
-                                  <strong>Đánh Giá</strong>
-                                  <br />
-                                  <span style={{ color: "" }}>
-                                    <p>{review}</p>
-                                  </span>
-                                </div>
-                                <div className="margin">
-                                  <strong>Nhận xét</strong>
-                                  <br />
-                                  <span>
-                                    <p>{commentGeneral}</p>
-                                  </span>
-                                </div>
-                                <div className="margin">{extraResultsUI}</div>
-                              </div>
-                              <div className="col-5">
-                                <Card
-                                  style={{
-                                    minHeight: "150px",
-                                    padding: "10px 30px ",
-                                  }}
-                                >
-                                  <strong>Điểm số</strong>
-                                  <div className="container-fluid">
-                                    <div
-                                      className="row"
-                                      style={{
-                                        color: "green",
-                                        paddingTop: "0px",
-                                        fontSize: "75px",
-                                      }}
-                                    >
-                                      {grade}
-                                    </div>
-                                    <div className="row">
-                                      <p>{gradeComment}</p>
-                                    </div>
-                                  </div>
-                                  {isCriteria === true && (
-                                    <strong>Điểm thành phần</strong>
-                                  )}
-                                  {criteriaResultsUI}
-                                </Card>
-                              </div>
-                            </div>
-                          </div>
-                        </TabPane>
-                        <TabPane tab="Sửa lỗi tự động" key="2">
-                          <div
-                            className="container-fluid mt-2"
-                            style={{ fontSize: "medium", textAlign: "justify" }}
-                          >
-                            <div className="row ">
-                              <div className="col-3">
-                                <strong>Chủ đề: </strong>
-                                <p>{topic}</p>
-                              </div>
-                              <div className="col-2">
-                                <strong>Tổng số câu:</strong>
-                                <p> {numSentence}</p>
-                              </div>
-                              <div className="col-5">
-                                <strong> Chiều dài trung bình mỗi câu:</strong>
-                                <p> {average}</p>
-                              </div>
-                              <div className="col-2">
-                                <strong> Tổng số lỗi:</strong>
-                                <p> {numErrors}</p>
-                              </div>
-                            </div>
-
-                            <Table
-                              columns={columns}
-                              dataSource={spelling}
-                              pagination={{ pageSize: 4 }}
-                            />
-                          </div>
-                        </TabPane>
-
-                        <TabPane tab="Sửa lỗi" key="3">
-                          <div
-                            className="container-fluid mt-2"
-                            style={{ fontSize: "medium", textAlign: "justify" }}
-                          >
-                            <div className="row ">{sentenceList}</div>
-                          </div>
-                        </TabPane>
-                        <TabPane tab="Phản hồi" key="4">
-                          <div style={{ height: "400px", textAlign: "center" }}>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="100"
-                              height="100"
-                              fill="#2596be"
-                              className="bi bi-mailbox"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M4 4a3 3 0 0 0-3 3v6h6V7a3 3 0 0 0-3-3zm0-1h8a4 4 0 0 1 4 4v6a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V7a4 4 0 0 1 4-4zm2.646 1A3.99 3.99 0 0 1 8 7v6h7V7a3 3 0 0 0-3-3H6.646z" />
-                              <path d="M11.793 8.5H9v-1h5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.354-.146l-.853-.854zM5 7c0 .552-.448 0-1 0s-1 .552-1 0a1 1 0 0 1 2 0z" />
-                            </svg>
-                            <br></br>
-                            <span style={{ padding: "10px", fontSize: "20px" }}>
-                              Bạn có thích bài chấm này không? <br />
-                              Hãy đánh giá và bình luận để tôi có thể hoàn thiện
-                              tốt hơn nữa nhé!
-                            </span>
-                            <br></br>
-                            <Rate
-                              className="margin"
-                              value={rate}
-                              onChange={(value) => setRate(value)}
-                              disabled={!response}
-                            />
-                            <br />
+                <div className="row bg-row margin padding ">
+                  <Breadcrumb className="mt-1" style={{ fontSize: "large" }}>
+                    <Breadcrumb.Item>
+                      <a href="/Home">Trang chủ</a>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                      <a href="/HomeStudentPage">Quản lý bài viết</a>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item style={{ color: "white" }}>
+                      Xem bài viết
+                    </Breadcrumb.Item>
+                  </Breadcrumb>
+                </div>
+                <div className="row bg-row padding">
+                  <br />
+                  <h3 className="mt-auto mb-auto" style={{ color: "white" }}>
+                    {" "}
+                    #{orderID} {titleS}
+                  </h3>
+                </div>
+              </div>
+              <div className="bg">
+                <div
+                  className="shadow-background"
+                  style={{ backgroundColor: "white", padding: "10px" }}
+                >
+                  <div className="container-fluid">
+                    {statusWriting === 3 && (
+                      <>
+                        <ProfileTeacher
+                          modal={modal}
+                          id={teacherID}
+                          onClick={handleChange}
+                        />
+                        <Tabs
+                          defaultActiveKey="1"
+                          tabBarExtraContent={nameOfTeacher}
+                        >
+                          <TabPane tab="Điểm số và đánh giá" key="1">
                             <div
-                              className="mt-3 mb-3"
-                              style={{ padding: "10px 100px 10px 100px" }}
+                              className="container-fluid mt-2"
+                              style={{
+                                marginBottom: "20px",
+                                fontSize: "medium",
+                                textAlign: "justify",
+                              }}
                             >
-                              <Input
-                                type="textarea"
-                                rows={5}
-                                placeholder="Nhập bình luận của bạn"
-                                value={comment}
-                                disabled={!response}
-                                onChange={(e) => setComment(e.target.value)}
+                              <div className="row ">
+                                <div className="col-7">
+                                  <div className="margin">
+                                    <strong>Đánh Giá</strong>
+                                    <br />
+                                    <span style={{ color: "" }}>
+                                      <p>{review}</p>
+                                    </span>
+                                  </div>
+                                  <div className="margin">
+                                    <strong>Nhận xét</strong>
+                                    <br />
+                                    <span>
+                                      <p>{commentGeneral}</p>
+                                    </span>
+                                  </div>
+                                  <div className="margin">{extraResultsUI}</div>
+                                </div>
+                                <div className="col-5">
+                                  <Card
+                                    style={{
+                                      minHeight: "150px",
+                                      padding: "10px 30px ",
+                                    }}
+                                  >
+                                    <strong>Điểm số</strong>
+                                    <div className="container-fluid">
+                                      <div
+                                        className="row"
+                                        style={{
+                                          color: "green",
+                                          paddingTop: "0px",
+                                          fontSize: "75px",
+                                        }}
+                                      >
+                                        {grade}
+                                      </div>
+                                      <div className="row">
+                                        <p>{gradeComment}</p>
+                                      </div>
+                                    </div>
+                                    {isCriteria === true && (
+                                      <strong>Điểm thành phần</strong>
+                                    )}
+                                    {criteriaResultsUI}
+                                  </Card>
+                                </div>
+                              </div>
+                            </div>
+                          </TabPane>
+                          <TabPane tab="Sửa lỗi tự động" key="2">
+                            <div
+                              className="container-fluid mt-2"
+                              style={{
+                                fontSize: "medium",
+                                textAlign: "justify",
+                              }}
+                            >
+                              <div className="row">
+                                <div className="col-3">
+                                  <strong>Chủ đề: </strong>
+                                  <p>{topic}</p>
+                                </div>
+                                <div className="col-2">
+                                  <strong>Tổng số câu:</strong>
+                                  <p> {numSentence}</p>
+                                </div>
+                                <div className="col-5">
+                                  <strong>
+                                    {" "}
+                                    Chiều dài trung bình mỗi câu:
+                                  </strong>
+                                  <p> {average}</p>
+                                </div>
+                                <div className="col-2">
+                                  <strong> Tổng số lỗi:</strong>
+                                  <p> {numErrors}</p>
+                                </div>
+                              </div>
+
+                              <Table
+                                columns={columns}
+                                dataSource={spelling}
+                                pagination={{ pageSize: 4 }}
                               />
                             </div>
-                            {response && (
-                              <Button
-                                outline
-                                color="primary"
-                                style={{ margin: "0% 44%" }}
-                                onClick={handleResponse}
+                          </TabPane>
+
+                          <TabPane tab="Sửa lỗi" key="3">
+                            <div
+                              className="container-fluid mt-2"
+                              style={{
+                                fontSize: "medium",
+                                textAlign: "justify",
+                              }}
+                            >
+                              {sentenceList}
+                            </div>
+                          </TabPane>
+                          <TabPane tab="Phản hồi" key="4">
+                            <div
+                              style={{ height: "450px", textAlign: "center" }}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="100"
+                                height="100"
+                                fill="#2596be"
+                                className="bi bi-mailbox"
+                                viewBox="0 0 16 16"
                               >
-                                {loadResponse
-                                  ? "Đang xử lý..."
-                                  : "Gửi phản hồi"}
-                              </Button>
-                            )}
-                          </div>
-                        </TabPane>
-                      </Tabs>
-                    </>
-                  )}
+                                <path d="M4 4a3 3 0 0 0-3 3v6h6V7a3 3 0 0 0-3-3zm0-1h8a4 4 0 0 1 4 4v6a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V7a4 4 0 0 1 4-4zm2.646 1A3.99 3.99 0 0 1 8 7v6h7V7a3 3 0 0 0-3-3H6.646z" />
+                                <path d="M11.793 8.5H9v-1h5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.354-.146l-.853-.854zM5 7c0 .552-.448 0-1 0s-1 .552-1 0a1 1 0 0 1 2 0z" />
+                              </svg>
+                              <br></br>
+                              <span
+                                style={{ padding: "10px", fontSize: "20px" }}
+                              >
+                                Bạn có thích bài chấm này không? <br />
+                                Hãy đánh giá và bình luận để tôi có thể hoàn
+                                thiện tốt hơn nữa nhé!
+                              </span>
+                              <br></br>
+                              <Rate
+                                className="margin"
+                                value={rate}
+                                onChange={(value) => setRate(value)}
+                                disabled={!response}
+                              />
+                              <br />
+                              <div
+                                className="mt-3 mb-3"
+                                style={{ padding: "10px 100px 10px 100px" }}
+                              >
+                                <Input
+                                  type="textarea"
+                                  rows={5}
+                                  placeholder="Nhập bình luận của bạn"
+                                  value={comment}
+                                  disabled={!response}
+                                  onChange={(e) => setComment(e.target.value)}
+                                />
+                              </div>
+                              {response && (
+                                <Button
+                                  outline
+                                  color="primary"
+                                  style={{ margin: "0% 40%" }}
+                                  onClick={handleResponse}
+                                >
+                                  {loadResponse
+                                    ? "Đang xử lý..."
+                                    : "Gửi phản hồi"}
+                                </Button>
+                              )}
+                            </div>
+                          </TabPane>
+                        </Tabs>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Spin>
     </div>
   );
 };
