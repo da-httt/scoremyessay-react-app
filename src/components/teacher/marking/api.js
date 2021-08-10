@@ -88,6 +88,7 @@ export function saveResults(
   commentGeneral,
   criteriaResults,
   extraResults,
+  comments,
   setLoadSave2
 ) {
   api
@@ -106,8 +107,26 @@ export function saveResults(
       }
     )
     .then(() => {
-      setLoadSave2(false);
-      showMessage("Bài chấm của bạn đã được lưu lại!", "success");
+      api
+        .put(
+          "/essay_comments/" + orderID,
+          {
+            comments: comments,
+          },
+          {
+            headers: { Authorization: "Bearer " + getToken() },
+          }
+        )
+        .then(() => {
+          setLoadSave2(false);
+          showMessage("Bài chấm của bạn đã được lưu lại!", "success");
+        })
+        .catch((error) => {
+          if (error.response) {
+            setLoadSave2(false);
+            showMessage(error.response.data.detail, "error");
+          }
+        });
     })
     .catch((error) => {
       if (error.response) {
@@ -126,6 +145,7 @@ export function putResults(
   commentGeneral,
   criteriaResults,
   extraResults,
+  comments,
   setLoadDone2
 ) {
   api
@@ -144,9 +164,27 @@ export function putResults(
       }
     )
     .then(() => {
-      setLoadDone2(false);
-      showMessage("Bài chấm của bạn đã chấm xong!", "success");
-      props.history.push("/HomeTeacherPage");
+      api
+        .put(
+          "/essay_comments/" + orderID,
+          {
+            comments: comments,
+          },
+          {
+            headers: { Authorization: "Bearer " + getToken() },
+          }
+        )
+        .then(() => {
+          setLoadDone2(false);
+          showMessage("Bài chấm của bạn đã chấm xong!", "success");
+          props.history.push("/HomeTeacherPage");
+        })
+        .catch((error) => {
+          if (error.response) {
+            setLoadDone2(false);
+            showMessage(error.response.data.detail, "error");
+          }
+        });
     })
     .catch((error) => {
       if (error.response) {

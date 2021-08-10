@@ -125,6 +125,7 @@ const [spinning, setSpinning] = useState(true);
       commentGeneral,
       criteriaResults,
       extraResults,
+      comments,
       setLoadSave2
     );
   };
@@ -140,6 +141,7 @@ const [spinning, setSpinning] = useState(true);
       commentGeneral,
       criteriaResults,
       extraResults,
+      comments,
       setLoadDone2
     );
   };
