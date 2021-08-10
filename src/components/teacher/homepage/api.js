@@ -1,21 +1,15 @@
 import { getBaseURL, getToken, getTokenType } from "../../../Utils/Common";
 
 const api = getBaseURL();
-export function getTypes(setTypes) {
-  api.get("/types").then((response) => {
-    const types = response.data.data;
-    setTypes(types);
-  });
-}
 
-export function getStatus(setStatus) {
+export async function getStatus(setStatus) {
   api.get("/status").then((response) => {
     const status = response.data.data;
     setStatus(status);
   });
 }
 
-export function getOrders(setOrders, setOrders2,setSpinning) {
+export async function getOrders(setOrders, setOrders2,setSpinning) {
   api
     .get("/orders", {
       headers: { Authorization: getTokenType() + " " + getToken() },
@@ -28,7 +22,7 @@ export function getOrders(setOrders, setOrders2,setSpinning) {
     });
 }
 
-export function getStatistics(setStatistic, setStatistics, setRating) {
+export async function getStatistics(setStatistic, setStatistics, setRating) {
   api
     .get("/statistics/me", {
       headers: { Authorization: "Bearer " + getToken() },
@@ -46,7 +40,7 @@ export function getStatistics(setStatistic, setStatistics, setRating) {
     });
 }
 
-export function getDeadline(setDeadline) {
+export async function getDeadline(setDeadline) {
   api
     .get("/deadlines", {
       headers: { Authorization: "Bearer " + getToken() },

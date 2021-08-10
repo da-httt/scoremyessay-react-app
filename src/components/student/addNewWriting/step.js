@@ -83,26 +83,29 @@ const Stepp = (props) => {
   const [callApiPaymentMethod, setCallApiPaymentMethod] = useState(false);
 
   useEffect(() => {
-    getLevels(setLevels);
-    getOptions(setOptions);
-    getTypes(setTypes);
+    async function fetchData() {
+      await getTypes(setTypes);
+      getLevels(setLevels);
+      getOptions(setOptions);
 
-    if (isUpdate) {
-      setSpinning(true);
-      getInfoWriting(
-        orderID,
-        setOptionsTotal,
-        setOptionTime,
-        setOptionScore,
-        setTitle,
-        setContent,
-        setType,
-        setLevel,
-        setLoading,
-        setSpinning
-      );
-      getImage(orderID, setBase64Image);
+      if (isUpdate) {
+        setSpinning(true);
+        getInfoWriting(
+          orderID,
+          setOptionsTotal,
+          setOptionTime,
+          setOptionScore,
+          setTitle,
+          setContent,
+          setType,
+          setLevel,
+          setLoading,
+          setSpinning
+        );
+        getImage(orderID, setBase64Image);
+      }
     }
+    fetchData();
   }, [isUpdate, orderID]);
 
   const levelList = levels.map((level) => (
@@ -118,7 +121,9 @@ const Stepp = (props) => {
   const typeList = types.map(
     (type) =>
       type.type_id !== 0 && (
-        <option value={type.type_id} key= {type.type_id}>{type.type_name}</option>
+        <option value={type.type_id} key={type.type_id}>
+          {type.type_name}
+        </option>
       )
   );
 
@@ -385,8 +390,8 @@ const Stepp = (props) => {
       setInfoCard,
       setCallApiPaymentMethod,
       totalPrice
-    )
-  }
+    );
+  };
 
   return (
     <Spin spinning={spinning}>
@@ -504,9 +509,7 @@ const Stepp = (props) => {
                         defaultValue={content}
                         maxLength={2500}
                       />
-                      <FormText color="muted">
-                        Độ dài tối đa: 2500.
-                      </FormText>
+                      <FormText color="muted">Độ dài tối đa: 2500.</FormText>
                     </Col>
                   </FormGroup>
                 </Form>

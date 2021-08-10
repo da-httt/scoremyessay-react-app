@@ -2,6 +2,7 @@ import { Breadcrumb, Rate, Spin, Table, Tabs, Tag } from "antd";
 import { React, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Button, Input } from "reactstrap";
+import { getTypes } from "../../api";
 import { formatNumber, showMessage } from "../../commonFormat";
 import GlobalHeader from "../header";
 import "../Teacher.css";
@@ -10,7 +11,6 @@ import {
   getOrders,
   getStatistics,
   getStatus,
-  getTypes,
 } from "./api";
 const { TabPane } = Tabs;
 
@@ -33,13 +33,13 @@ const HomeTeacher = (props) => {
     async function fetchData() {
       getTypes(setTypes);
 
-      getStatus(setStatus);
+      await getStatus(setStatus);
 
-      getOrders(setOrders, setOrders2, setSpinning);
+      await getOrders(setOrders, setOrders2, setSpinning);
 
-      getStatistics(setStatistic, setStatistics, setRating);
+      await getStatistics(setStatistic, setStatistics, setRating);
 
-      getDeadline(setDeadline);
+      await getDeadline(setDeadline);
     }
     fetchData();
   }, []);
