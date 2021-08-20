@@ -37,22 +37,22 @@ export function getOrderInfo(
 
 export function getSpellingErrors(
   orderID,
-  setTopic,
   setSpelling,
   setNumSentence,
   setAverage,
-  setNumErrors
+  setNumErrors,
+  setKeyWords
 ) {
   api
     .get("/spelling_errors/" + orderID, {
       headers: { Authorization: getTokenType() + " " + getToken() },
     })
     .then((response) => {
-      setTopic(response.data.predicted_topic);
       setSpelling(response.data.spelling_errors);
       setNumSentence(response.data.number_of_sentences);
       setAverage(response.data.average_sentence_length);
       setNumErrors(response.data.num_errors);
+      setKeyWords(response.data.keywords);
     });
 }
 

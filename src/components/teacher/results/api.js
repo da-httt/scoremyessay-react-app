@@ -50,18 +50,18 @@ export async function getOrders(orderID, setTitle, setContent, setTitleS, setSpi
 
 export async function getSpellingErrors(
   orderID,
-  setTopic,
   setSpelling,
   setNumSentence,
   setAverage,
-  setNumErrors
+  setNumErrors,
+  setKeyWords
 ) {
   await api
     .get("/spelling_errors/" + orderID, {
       headers: { Authorization: getTokenType() + " " + getToken() },
     })
     .then((response) => {
-      setTopic(response.data.predicted_topic);
+      setKeyWords(response.data.keywords);
       setSpelling(response.data.spelling_errors);
       setNumSentence(response.data.number_of_sentences);
       setAverage(response.data.average_sentence_length);
