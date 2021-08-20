@@ -37,10 +37,10 @@ const DetailResultStu = () => {
   const [sentences, setSentences] = useState([]);
   const [teacher, setTeacher] = useState();
   const [teacherID, setTeacherID] = useState();
-  const [topic, setTopic] = useState();
   const [spelling, setSpelling] = useState([]);
   const [numSentence, setNumSentence] = useState();
   const [numErrors, setNumErrors] = useState();
+  const [keyWords, setKeyWords] = useState([]);
   const [average, setAverage] = useState();
 
   const [rate, setRate] = useState(4);
@@ -78,11 +78,11 @@ const DetailResultStu = () => {
       if (statusWriting === 3) {
         getSpellingErrors(
           orderID,
-          setTopic,
           setSpelling,
           setNumSentence,
           setAverage,
-          setNumErrors
+          setNumErrors,
+          setKeyWords
         );
         getResults(
           orderID,
@@ -101,6 +101,16 @@ const DetailResultStu = () => {
     fetchData();
   }, [orderID, statusWriting]);
 
+  const showKeyWords = (keyWords) => {
+    let result = " ";
+    for (let i = 0; i < keyWords.length; i++) {
+      result = result + keyWords[i];
+      if (i !== keyWords.length - 1) {
+        result += ", ";
+      }
+    }
+    return result;
+  };
   const columns = [
     {
       title: "Vị trí câu",
@@ -404,8 +414,8 @@ const DetailResultStu = () => {
                             >
                               <div className="row">
                                 <div className="col-3">
-                                  <strong>Chủ đề: </strong>
-                                  <p>{topic}</p>
+                                  <strong>Từ khóa: </strong>
+                                  <p>{showKeyWords(keyWords)}</p>
                                 </div>
                                 <div className="col-2">
                                   <strong>Tổng số câu:</strong>

@@ -34,9 +34,9 @@ const DetailResult = () => {
   const [extraResults, setExtraResults] = useState([]);
 
   const [sentences, setSentences] = useState([]);
-  const [topic, setTopic] = useState();
   const [spelling, setSpelling] = useState([]);
   const [numSentence, setNumSentence] = useState();
+  const [keyWords, setKeyWords] = useState([]);
   const [numErrors, setNumErrors] = useState();
   const [average, setAverage] = useState();
 
@@ -59,11 +59,11 @@ const DetailResult = () => {
 
       await getSpellingErrors(
         orderID,
-        setTopic,
         setSpelling,
         setNumSentence,
         setAverage,
-        setNumErrors
+        setNumErrors,
+        setKeyWords
       );
 
       await getResults(
@@ -83,6 +83,17 @@ const DetailResult = () => {
     }
     fetchData();
   }, [orderID]);
+
+  const showKeyWords = (keyWords) => {
+    let result = " ";
+    for (let i = 0; i < keyWords.length; i++) {
+      result = result + keyWords[i];
+      if (i !== keyWords.length - 1) {
+        result += ", ";
+      }
+    }
+    return result;
+  };
 
   const columns = [
     {
@@ -356,8 +367,8 @@ const DetailResult = () => {
                         >
                           <div className="row ">
                             <div className="col-3">
-                              <strong>Chủ đề: </strong>
-                              <p>{topic}</p>
+                              <strong>Từ khóa: </strong>
+                              <p>{showKeyWords(keyWords)}</p>
                             </div>
                             <div className="col-2">
                               <strong>Tổng số câu:</strong>

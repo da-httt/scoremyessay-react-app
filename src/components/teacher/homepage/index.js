@@ -49,7 +49,7 @@ const HomeTeacher = (props) => {
       title: "ID",
       dataIndex: "order_id",
       key: "order_id",
-      width: 30,
+      width: 60,
       defaultSortOrder: "descend",
       sorter: (a, b) => a.order_id - b.order_id,
     },
@@ -57,7 +57,7 @@ const HomeTeacher = (props) => {
       title: "Thể loại",
       dataIndex: ["essay", "type_id"],
       key: ["essay", "type_id"],
-      width: 120,
+      width: 125,
       filters: [
         { text: "English Writing", value: 0 },
         { text: "IELTS WRITING TASK 1", value: 1 },
@@ -71,22 +71,36 @@ const HomeTeacher = (props) => {
       ),
     },
     {
-      title: "Tiêu đề bài viết",
+      title: "Đề bài",
       dataIndex: ["essay", "title"],
       key: ["essay", "title"],
-      width: 230,
+      width: 250,
       ellipsis: true,
     },
-
+    {
+      title: "Từ khóa",
+      dataIndex: "keywords",
+      key: "keywords",
+      width: 200,
+      ellipsis: true,
+      render: (keyWords) => {
+        let result = "";
+        for (let i = 0; i < keyWords.length; i++) {
+          result = result + keyWords[i];
+          if (i !== keyWords.length - 1) {
+            result += ", ";
+          }
+        }
+        return result;
+      },
+    },
     {
       title: "Giá tiền",
       dataIndex: "total_price",
       key: "total_price",
-      width: 50,
+      width: "150",
+      render: (money) => formatNumber(money),
       sorter: (a, b) => a.total_price - b.total_price,
-      render: (price) => {
-        formatNumber(price);
-      },
     },
     {
       title: "Hạn giao bài viết",

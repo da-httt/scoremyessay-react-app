@@ -73,9 +73,27 @@ const HomeStudent = () => {
       title: "Đề bài",
       dataIndex: ["essay", "title"],
       key: ["essay", "title"],
-      width: 310,
+      width: 250,
       ellipsis: true,
       sorter: (a, b) => a.essay.title.localeCompare(b.essay.title),
+    },
+
+    {
+      title: "Từ khóa",
+      dataIndex: "keywords",
+      key: "keywords",
+      width: 200,
+      ellipsis: true,
+      render: (keyWords) => {
+        let result = "";
+        for (let i = 0; i < keyWords.length; i++) {
+          result = result + keyWords[i];
+          if (i !== keyWords.length - 1) {
+            result += ", ";
+          }
+        }
+        return result;
+      },
     },
 
     {
