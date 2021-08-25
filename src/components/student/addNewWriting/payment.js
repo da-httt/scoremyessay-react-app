@@ -164,7 +164,7 @@ export const ContinuePayment = (props) => {
           </div>
         </div>
         <div className="row" style={{ marginBottom: "20px" }}>
-          <div className="col-6">Chủ tài khoản:</div>
+          <div className="col-6">Ngân hàng: </div>
           <div className="col-6" style={{ textAlign: "right" }}>
             {props.infoCard.provider}
           </div>

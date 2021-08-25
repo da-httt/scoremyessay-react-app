@@ -11,6 +11,7 @@ import { Alert } from "antd";
 import { withRouter } from "react-router-dom";
 import { getBaseURL, setUserSession } from "../../Utils/Common";
 import "./cardlogin.css";
+import ForgotPassword from "./ForgotPassword";
 
 const api = getBaseURL();
 
@@ -31,6 +32,8 @@ const CardLogin = (props) => {
   const [alert, setAlert] = useState(false);
   const [message, setMessage] = useState("");
   const { image, nameCard, contentCard, linkSignUp } = props;
+  const [modalForgotPass, setModalForgotPass] = useState(false);
+  const [modal, setModal] = useState(false);
 
   const handleClose = () => {
     setAlert(false);
@@ -73,9 +76,13 @@ const CardLogin = (props) => {
       });
   };
 
-  const [modal, setModal] = useState(false);
-
   const toggle = () => setModal(!modal);
+
+  const toggleForgotPass = () => setModalForgotPass(!modalForgotPass);
+  console.log('modelForgotPass: ', modalForgotPass);
+  function handleOpenForgotPass(newValue) {
+    setModalForgotPass(newValue);
+  }
   return (
     <React.Fragment>
       <>
@@ -153,7 +160,13 @@ const CardLogin = (props) => {
                     </button>
                   </div>
                   <div className="form-group form-group-login d-md-flex text-center">
-                    <a href="#">Forgot Password</a>
+                    <a onClick={toggleForgotPass} >
+                      Forgot Password
+                    </a>
+                    <ForgotPassword
+                      modal={modalForgotPass}
+                      onClick={handleOpenForgotPass}
+                    />
                   </div>
                 </form>
               </div>
