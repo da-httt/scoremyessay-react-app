@@ -126,24 +126,54 @@ export function putChangeAvatar(id, base64Image, setLoadAvt, setEditAvt) {
     });
 }
 
-export function putChangePassword(pass, setLoadPass, setEditPass){
+export function putChangePassword(pass, setLoadPass, setEditPass) {
   api
-        .put(
-          "/change_password/me?new_password=" + pass.toString(),
-          {},
-          {
-            headers: { Authorization: "Bearer " + getToken() },
-          }
-        )
-        .then((response) => {
-          setLoadPass(false);
-          showMessage("Mật khẩu của bạn đã được cập nhật!", "success");
-          setEditPass(true);
-        })
-        .catch((error) => {
-          if (error.response) {
-            setLoadPass(false);
-              showMessage(error.response.data.detail, "error");
-          }
-        });
+    .put(
+      "/change_password/me?new_password=" + pass.toString(),
+      {},
+      {
+        headers: { Authorization: "Bearer " + getToken() },
+      }
+    )
+    .then((response) => {
+      setLoadPass(false);
+      showMessage("Mật khẩu của bạn đã được cập nhật!", "success");
+      setEditPass(true);
+    })
+    .catch((error) => {
+      if (error.response) {
+        setLoadPass(false);
+        showMessage(error.response.data.detail, "error");
+      }
+    });
+}
+
+export function putChangeBankAccount(
+  bankName,
+  accountNo,
+  expiryDate,
+  setLoadBank,
+  setEditBank
+) {
+  api.put(
+    "/credit_card/me",
+    {
+      provider: bankName,
+      account_no: accountNo,
+      expiry_date: expiryDate,
+    },
+    {
+      headers: { Authorization: "Bearer " + getToken() },
+    }
+  ).then((response) => {
+    setLoadBank(false);
+    showMessage("Tài khoản ngân hàng của bạn đã được cập nhật!", "success");
+    setEditBank(true);
+  })
+  .catch((error) => {
+    if (error.response) {
+      setLoadBank(false);
+      showMessage(error.response.data.detail, "error");
+    }
+  });
 }

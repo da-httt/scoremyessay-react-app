@@ -21,6 +21,7 @@ import {
   getPersonalInfo,
   getStatistic,
   putChangeAvatar,
+  putChangeBankAccount,
   putChangeInfo,
   putChangePassword,
 } from "./api";
@@ -45,15 +46,26 @@ const PersonalInfo = () => {
   const [editAvt, setEditAvt] = useState(true);
   const [editPass, setEditPass] = useState(true);
 
+  const [editBank, setEditBank] = useState(true);
+
   const [loadInfo, setLoadInfo] = useState(false);
 
   const [loadAvt, setLoadAvt] = useState(false);
 
   const [loadPass, setLoadPass] = useState(false);
 
+  const [loadBank, setLoadBank] = useState(false);
+
+  
+
+
   const [pass, setPass] = useState();
   const [passA, setPassA] = useState();
   const [statistic, setStatistic] = useState();
+
+  const [bankName, setBankName] = useState();
+  const [accountNo, setAccountNo] = useState();
+  const [expiryDate, setExpiryDate] = useState();
 
   useEffect(() => {
     async function fetchData() {
@@ -152,6 +164,11 @@ const PersonalInfo = () => {
       putChangePassword(pass, setLoadPass, setEditPass);
     }
   };
+
+  const handleChangeBankAccount = (e) => {
+    setLoadBank(true);
+    putChangeBankAccount(bankName, accountNo, expiryDate, setLoadBank, setEditBank);
+  }
 
   return (
     <div className="student-page">
@@ -254,7 +271,13 @@ const PersonalInfo = () => {
                         color="link"
                         outline
                         block
-                        onClick={(e) => setEditAvt(false)}
+                        onClick={(e) => {
+                          setEdit(true);
+                        setEditPass(true);
+                        setEditAvt(false);
+                        setEditBank(true);
+
+                        }}
                       >
                         Thay đổi ảnh đại diện
                       </Button>
@@ -271,6 +294,7 @@ const PersonalInfo = () => {
                         setEdit(false);
                         setEditPass(true);
                         setEditAvt(true);
+                        setEditBank(true);
                       }}
                     >
                       Thay đổi thông tin cá nhân
@@ -284,11 +308,28 @@ const PersonalInfo = () => {
                       block
                       onClick={(e) => {
                         setEditPass(false);
+                        setEditBank(true);
                         setEditAvt(true);
                         setEdit(true);
                       }}
                     >
                       Thay đổi mật khẩu
+                    </Button>
+                  </div>
+                  <div className="mt-2 ml-3 mr-3">
+                    <Button
+                      className="btn-student-link"
+                      color="link"
+                      outline
+                      block
+                      onClick={(e) => {
+                        setEditBank(false);
+                        setEditPass(true);
+                        setEditAvt(true);
+                        setEdit(true);
+                      }}
+                    >
+                      Thay đổi tài khoản ngân hàng
                     </Button>
                   </div>
                 </div>
@@ -448,7 +489,7 @@ const PersonalInfo = () => {
                     )}
                   </div>
 
-                  {!editPass ? (
+                  {!editPass && (
                     <div className="row  bg-row padding margin">
                       <h5>
                         <strong>Thay đổi mật khẩu</strong>
@@ -503,54 +544,123 @@ const PersonalInfo = () => {
                         </Button>
                       </div>
                     </div>
-                  ) : (
+                  )}
+
+                  {!editBank && (
                     <div className="row  bg-row padding margin">
                       <h5>
-                        <strong>Thông tin hoạt động</strong>
+                        <strong>Thay đổi tài khoản ngân hàng</strong>
                       </h5>
-                      <br />
-                      {statistic && (
-                        <Table bordered>
-                          <tr>
-                            <th>Tổng số bài đăng</th>
-                            <td>{statistic.total_orders} bài</td>
-                          </tr>
-                          <tr>
-                            <th>Số bài được chấm</th>
-                            <td>{statistic.total_done} bài</td>
-                          </tr>
-                          <tr>
-                            <th>Tổng chi</th>
-                            <td>{formatNumber(statistic.total_payment)} VNĐ</td>
-                          </tr>
-                          <tr>
-                            <th>Trung bình chi theo tháng</th>
-                            <td>
-                              {formatNumber(statistic.monthly_payment)} VNĐ
-                            </td>
-                          </tr>
-                          <tr>
-                            <th>Tổng chi so với tháng trước</th>
-                            <td>
-                              {statistic.gross > 0 && (
-                                <i
-                                  className="fa fa-sort-up"
-                                  style={{ color: "forestgreen" }}
+                      <Container>
+                        <Form>
+                          <Row>
+                            <Col xs="12">
+                            <FormGroup style={{ fontSize: "17px" }}>
+                                <Label for="bankName">Nhập tên ngân hàng *</Label>
+                                <Input
+                                  type="text"
+                                  name="bankName"
+                                  id="bankName"
+                                  required
+                                  onChange={(e) => setBankName(e.target.value)}
                                 />
-                              )}
-                              {statistic.gross < 0 && (
-                                <i
-                                  className="fa fa-sort-down"
-                                  style={{ color: "darkorange" }}
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col xs="6">
+                              <FormGroup style={{ fontSize: "17px" }}>
+                                <Label for="accountNo">Nhập số tài khoản mới *</Label>
+                                <Input
+                                  type="text"
+                                  name="accountNo"
+                                  id="accountNo"
+                                  required
+                                  onChange={(e) => setAccountNo(e.target.value)}
                                 />
-                              )}
-                              {statistic.gross} %
-                            </td>
-                          </tr>
-                        </Table>
-                      )}
+                              </FormGroup>
+                            </Col>
+                            <Col xs="6">
+                              <FormGroup style={{ fontSize: "17px" }}>
+                                <Label for="expiryDate">
+                                  Nhập ngày hết hạn của thẻ *
+                                </Label>
+                                <Input
+                                  type="date"
+                                  name="expiryDate"
+                                  id="expiryDate"
+                                  required
+                                  onChange={(e) => setExpiryDate(e.target.value)}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                        </Form>
+                      </Container>
+                      <div className=" mt-2 mr-3 ml-auto">
+                        <Button
+                          color="primary"
+                          outline
+                          style={{ margin: "0px 7px" }}
+                          onClick={handleChangeBankAccount}
+                        >
+                          {loadBank ? "Đang xử lý..." : "Lưu lại"}
+                        </Button>
+                        <Button
+                          color="primary"
+                          outline
+                          onClick={(e) => setEditBank(true)}
+                        >
+                          Trở lại
+                        </Button>
+                      </div>
                     </div>
                   )}
+
+                  <div className="row  bg-row padding margin">
+                    <h5>
+                      <strong>Thông tin hoạt động</strong>
+                    </h5>
+                    <br />
+                    {statistic && (
+                      <Table bordered>
+                        <tr>
+                          <th>Tổng số bài đăng</th>
+                          <td>{statistic.total_orders} bài</td>
+                        </tr>
+                        <tr>
+                          <th>Số bài được chấm</th>
+                          <td>{statistic.total_done} bài</td>
+                        </tr>
+                        <tr>
+                          <th>Tổng chi</th>
+                          <td>{formatNumber(statistic.total_payment)} VNĐ</td>
+                        </tr>
+                        <tr>
+                          <th>Trung bình chi theo tháng</th>
+                          <td>{formatNumber(statistic.monthly_payment)} VNĐ</td>
+                        </tr>
+                        <tr>
+                          <th>Tổng chi so với tháng trước</th>
+                          <td>
+                            {statistic.gross > 0 && (
+                              <i
+                                className="fa fa-sort-up"
+                                style={{ color: "forestgreen" }}
+                              />
+                            )}
+                            {statistic.gross < 0 && (
+                              <i
+                                className="fa fa-sort-down"
+                                style={{ color: "darkorange" }}
+                              />
+                            )}
+                            {statistic.gross} %
+                          </td>
+                        </tr>
+                      </Table>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
